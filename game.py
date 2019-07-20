@@ -15,12 +15,13 @@ class Game:
 		self.background.fill(pygame.Color("#000000"))
 
 	def run(self):
+		bob = Enemy(self.screen, SCREEN_WIDTH, SCREEN_HEIGHT)
+		
 		while self.running:
 			self.screen.blit(self.background, (0, 0))
 			self.clock.tick(60)
 
-			bob = Enemy()
-			self.screen.blit(bob.image, (SCREEN_WIDTH/2, 0))
+			bob.update()
 
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:

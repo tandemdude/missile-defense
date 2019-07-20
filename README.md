@@ -1,11 +1,16 @@
 TODO:
-- Empty Screen - DONE
-- Create Enemies
-    - Draw Enemy Top - DONE
-    - Draw Enemy Randomly
+- Empty screen - DONE
+- Create enemies
+    - Draw enemy top - DONE
+    - Draw enemy randomly - DONE
 - Moving Enemies
+    - Move vertically downwards
+    - Disappear when at bottom of screen
+    - Move with random vector
+    - Spawn new enemy when previous reaches bottom of screen
 - Projectiles
+- Waves of enemies
 - Scoring 
-- Style Enemies
-- Implement Turrets (Towers)
+- Style enemies
+- Implement turrets (towers)
 - Highscores
