@@ -1,5 +1,5 @@
 TODO:
-- Empty Screen
+- Empty Screen - DONE
 - Create Enemies
 - Moving Enemies
 - Projectiles
