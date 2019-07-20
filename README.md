@@ -1,8 +1,11 @@
 TODO:
 - Empty Screen - DONE
 - Create Enemies
+    - Draw Enemy Top - DONE
+    - Draw Enemy Randomly
 - Moving Enemies
 - Projectiles
 - Scoring 
+- Style Enemies
 - Implement Turrets (Towers)
 - Highscores
