@@ -4,7 +4,7 @@ TODO:
     - Draw enemy top - DONE
     - Draw enemy randomly - DONE
 - Moving Enemies
-    - Move vertically downwards
+    - Move vertically downwards - DONE
     - Disappear when at bottom of screen
     - Move with random vector
     - Spawn new enemy when previous reaches bottom of screen
