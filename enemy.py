@@ -14,6 +14,7 @@ class Enemy(pygame.sprite.Sprite):
         self.game_surface = game_surface
         self.x, self.y = self.random_start_position()
         self.velocity_x, self.velocity_y = (0, 1)
+        self.visible = True
         self.image = pygame.Surface((SPRITE_WIDTH, SPRITE_HEIGHT))
         self.image.fill(pygame.Color("#ffffff"))
 
@@ -23,6 +24,11 @@ class Enemy(pygame.sprite.Sprite):
         return (random.randint(0, self.screen_width - SPRITE_WIDTH), 0)
 
     def update(self):
-        self.x += self.velocity_x
-        self.y += self.velocity_y
-        self.game_surface.blit(self.image, (self.x, self.y))
+        if self.y >= self.screen_height-SPRITE_HEIGHT:
+            self.velocity_y = 0
+            self.visible = False
+
+        if self.visible:
+            self.x += self.velocity_x
+            self.y += self.velocity_y
+            self.game_surface.blit(self.image, (self.x, self.y))

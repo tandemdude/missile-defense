@@ -5,7 +5,7 @@ TODO:
     - Draw enemy randomly - DONE
 - Moving Enemies
     - Move vertically downwards - DONE
-    - Disappear when at bottom of screen
+    - Disappear when at bottom of screen - DONE
     - Move with random vector
     - Spawn new enemy when previous reaches bottom of screen
 - Projectiles
@@ -14,3 +14,9 @@ TODO:
 - Style enemies
 - Implement turrets (towers)
 - Highscores
+    - JSON?
+    - Database?
+        - SQLite?
+        - MySQL?
+        - PostgreSQL?
+        - Mongo?
