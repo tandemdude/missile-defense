@@ -1,11 +1,13 @@
 import pygame
 import random
+import unittest
 
 SPRITE_WIDTH = 20
 SPRITE_HEIGHT = 20
 
 
 class Enemy(pygame.sprite.Sprite):
+
     def __init__(self, game_surface, screen_width, screen_height):
         super().__init__()
 
@@ -13,7 +15,8 @@ class Enemy(pygame.sprite.Sprite):
         self.screen_height = screen_height
         self.game_surface = game_surface
         self.x, self.y = self.random_start_position()
-        self.velocity_x, self.velocity_y = (0, 1)
+        self.end_x, self.end_y = self.random_aim_position()
+        self.velocity_x, self.velocity_y = self.velocity_from_positions()
         self.visible = True
         self.image = pygame.Surface((SPRITE_WIDTH, SPRITE_HEIGHT))
         self.image.fill(pygame.Color("#ffffff"))
@@ -22,6 +25,13 @@ class Enemy(pygame.sprite.Sprite):
 
     def random_start_position(self):
         return (random.randint(0, self.screen_width - SPRITE_WIDTH), 0)
+
+    def random_aim_position(self):
+        return (random.randint(0, self.screen_width - SPRITE_WIDTH), self.screen_height - SPRITE_HEIGHT)
+
+    def velocity_from_positions(self):
+        velocity_x = (self.end_x - self.x) / (self.end_y - self.y)
+        return (velocity_x, 1)
 
     def update(self):
         if self.y >= self.screen_height-SPRITE_HEIGHT:
@@ -32,3 +42,34 @@ class Enemy(pygame.sprite.Sprite):
             self.x += self.velocity_x
             self.y += self.velocity_y
             self.game_surface.blit(self.image, (self.x, self.y))
+
+
+class EnemyTests(unittest.TestCase):
+
+    def test_velocity_from_positions_no_x_difference(self):
+        e = Enemy(None, 200, 100)
+        e.x, e.y = (10, 0)
+        e.end_x, e.end_y = (10, 10)
+        x_vel, y_vel = e.velocity_from_positions()
+        self.assertEqual(x_vel, 0)
+        self.assertEqual(y_vel, 1)
+
+    def test_velocity_from_positions_positive_x_difference(self):
+        e = Enemy(None, 200, 100)
+        e.x, e.y = (0, 0)
+        e.end_x, e.end_y = (100, 10)
+        x_vel, y_vel = e.velocity_from_positions()
+        self.assertEqual(x_vel, 10)
+        self.assertEqual(y_vel, 1)
+
+    def test_velocity_from_positions_negative_x_difference(self):
+        e = Enemy(None, 200, 100)
+        e.x, e.y = (100, 0)
+        e.end_x, e.end_y = (0, 10)
+        x_vel, y_vel = e.velocity_from_positions()
+        self.assertEqual(x_vel, -10)
+        self.assertEqual(y_vel, 1)
+
+
+if __name__ == '__main__':
+    unittest.main()

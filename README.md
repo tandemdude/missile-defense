@@ -6,7 +6,7 @@ TODO:
 - Moving Enemies
     - Move vertically downwards - DONE
     - Disappear when at bottom of screen - DONE
-    - Move with random vector
+    - Move with random vector - DONE
     - Spawn new enemy when previous reaches bottom of screen
 - Projectiles
 - Waves of enemies
