@@ -1,5 +1,6 @@
 import pygame
 from enemy import Enemy
+from reticle import Reticle
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
@@ -24,7 +25,10 @@ class Game:
 			for enemy in enemies:
 				enemy.update()
 
-			for event in pygame.event.get():
+			events = pygame.event.get()
+			# reticle.process_events(events)
+
+			for event in events:
 				if event.type == pygame.QUIT:
 					self.running = False
 

@@ -7,10 +7,14 @@ TODO:
     - Move vertically downwards - DONE
     - Disappear when at bottom of screen - DONE
     - Move with random vector - DONE
-    - Spawn new enemy when previous reaches bottom of screen
+    - Spawn new enemy when previous reaches bottom of screen - "DONE"
+- Player's turret
+    - Reticle
+    - Keyup/keydown events
+    - Draw turret
 - Projectiles
 - Waves of enemies
-- Scoring 
+- Scoring
 - Style enemies
 - Implement turrets (towers)
 - Highscores
