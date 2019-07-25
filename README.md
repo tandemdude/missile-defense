@@ -9,8 +9,8 @@ TODO:
     - Move with random vector - DONE
     - Spawn new enemy when previous reaches bottom of screen - "DONE"
 - Player's turret
-    - Reticle
-    - Keyup/keydown events
+    - Reticle - DONE
+    - Keyup/keydown events - DONE
     - Draw turret
 - Projectiles
 - Waves of enemies
