@@ -1,5 +1,6 @@
 import pygame
 import os
+from missile import Missile
 
 
 class Reticle:
@@ -16,10 +17,13 @@ class Reticle:
         self.move_down = False
         self.move_left = False
         self.move_right = False
+        self.update_missile = False
 
         self.image = pygame.Surface((self.asset_width, self.asset_height), pygame.SRCALPHA)
         self.image.blit(self.asset, (0, 0))
         self.image = pygame.transform.scale(self.image, (50, 50))
+
+        self.missile = None
 
     def update(self):
         if self.move_up:
@@ -33,22 +37,29 @@ class Reticle:
 
         self.game_surface.blit(self.image, (self.x - self.image.get_width() // 2, self.y - self.image.get_height() // 2))
 
+        if self.update_missile:
+            self.missile.update()
+
     def process_event(self, event):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 self.move_left = True
-            if event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT:
                 self.move_right = True
-            if event.key == pygame.K_UP:
+            elif event.key == pygame.K_UP:
                 self.move_up = True
-            if event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN:
                 self.move_down = True
+            elif event.key == pygame.K_SPACE:
+                self.missile = Missile(self.game_surface, self.screen_width, self.screen_height, self.x, self.y)
+                self.update_missile = True
+
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 self.move_left = False
-            if event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT:
                 self.move_right = False
-            if event.key == pygame.K_UP:
+            elif event.key == pygame.K_UP:
                 self.move_up = False
-            if event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN:
                 self.move_down = False

@@ -28,7 +28,7 @@ class Enemy(pygame.sprite.Sprite):
     def random_aim_position(self):
         return (random.randint(0, self.screen_width - SPRITE_WIDTH), self.screen_height - SPRITE_HEIGHT)
 
-    def velocity_from_positions(self):
+    def vector_from_positions(self):
         velocity_x = (self.end_x - self.x) / (self.end_y - self.y)
         #return (velocity_x, random.randint(1,5))
         return (velocity_x, 1)
@@ -36,7 +36,7 @@ class Enemy(pygame.sprite.Sprite):
     def generate_positions_and_velocities(self):
         self.x, self.y = self.random_start_position()
         self.end_x, self.end_y = self.random_aim_position()
-        self.velocity_x, self.velocity_y = self.velocity_from_positions()
+        self.velocity_x, self.velocity_y = self.vector_from_positions()
 
     def move(self):
         self.x += self.velocity_x
@@ -61,7 +61,7 @@ class EnemyTests(unittest.TestCase):
         e = Enemy(None, 200, 100)
         e.x, e.y = (10, 0)
         e.end_x, e.end_y = (10, 10)
-        x_vel, y_vel = e.velocity_from_positions()
+        x_vel, y_vel = e.vector_from_positions()
         self.assertEqual(x_vel, 0)
         self.assertEqual(y_vel, 1)
 
@@ -69,7 +69,7 @@ class EnemyTests(unittest.TestCase):
         e = Enemy(None, 200, 100)
         e.x, e.y = (0, 0)
         e.end_x, e.end_y = (100, 10)
-        x_vel, y_vel = e.velocity_from_positions()
+        x_vel, y_vel = e.vector_from_positions()
         self.assertEqual(x_vel, 10)
         self.assertEqual(y_vel, 1)
 
@@ -77,7 +77,7 @@ class EnemyTests(unittest.TestCase):
         e = Enemy(None, 200, 100)
         e.x, e.y = (100, 0)
         e.end_x, e.end_y = (0, 10)
-        x_vel, y_vel = e.velocity_from_positions()
+        x_vel, y_vel = e.vector_from_positions()
         self.assertEqual(x_vel, -10)
         self.assertEqual(y_vel, 1)
 
