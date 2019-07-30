@@ -1,4 +1,5 @@
 import pygame
+import unittest
 import os
 from missile import Missile
 
@@ -13,53 +14,44 @@ class Reticle:
         self.screen_width, self.screen_height = screen_width, screen_height
         self.x, self.y = game_surface.get_rect().center
 
-        self.move_up = False
-        self.move_down = False
-        self.move_left = False
-        self.move_right = False
-        self.update_missile = False
+        self.moving_up = False
+        self.moving_down = False
+        self.moving_left = False
+        self.moving_right = False
 
         self.image = pygame.Surface((self.asset_width, self.asset_height), pygame.SRCALPHA)
         self.image.blit(self.asset, (0, 0))
         self.image = pygame.transform.scale(self.image, (50, 50))
 
-        self.missile = None
+    def current_position(self):
+        return (self.x, self.y)
+
+    def up(self, enable: bool=True):
+        self.moving_up = enable
+
+    def down(self, enable: bool=True):
+        self.moving_down = enable
+
+    def left(self, enable: bool=True):
+        self.moving_left = enable
+
+    def right(self, enable: bool=True):
+        self.moving_right = enable
+
+    def clamp(self, n, maxn, minn=0):
+        return max(min(maxn, n), minn)
 
     def update(self):
-        if self.move_up:
+        if self.moving_up:
             self.y -= 5
-        if self.move_down:
+        if self.moving_down:
             self.y += 5
-        if self.move_left:
+        if self.moving_left:
             self.x -= 5
-        if self.move_right:
+        if self.moving_right:
             self.x += 5
 
+        self.x = self.clamp(self.x, self.screen_width)
+        self.y = self.clamp(self.y, self.screen_height)
+
         self.game_surface.blit(self.image, (self.x - self.image.get_width() // 2, self.y - self.image.get_height() // 2))
-
-        if self.update_missile:
-            self.missile.update()
-
-    def process_event(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                self.move_left = True
-            elif event.key == pygame.K_RIGHT:
-                self.move_right = True
-            elif event.key == pygame.K_UP:
-                self.move_up = True
-            elif event.key == pygame.K_DOWN:
-                self.move_down = True
-            elif event.key == pygame.K_SPACE:
-                self.missile = Missile(self.game_surface, self.screen_width, self.screen_height, self.x, self.y)
-                self.update_missile = True
-
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
-                self.move_left = False
-            elif event.key == pygame.K_RIGHT:
-                self.move_right = False
-            elif event.key == pygame.K_UP:
-                self.move_up = False
-            elif event.key == pygame.K_DOWN:
-                self.move_down = False

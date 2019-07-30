@@ -13,6 +13,9 @@ TODO:
     - Keyup/keydown events - DONE
     - Draw turret
 - Projectiles
+- Control/communication redesign
+    - Control scheme - DONE
+    - "Link/communicator class" - DONE
 - Waves of enemies
 - Scoring
 - Style enemies

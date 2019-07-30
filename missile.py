@@ -12,6 +12,7 @@ class Missile(pygame.sprite.Sprite):
 
         self.game_surface = game_surface
         self.visible = True
+        self.moving = False
         self.x, self.y = screen_width // 2, screen_height
         self.end_x, self.end_y = reticle_x, reticle_y
         self.velocity_x, self.velocity_y = self.vector_from_positions()
@@ -26,6 +27,9 @@ class Missile(pygame.sprite.Sprite):
         return (velocity_x, MISSILE_VELOCITY)
 
     def update(self):
-        self.x += self.velocity_x
-        self.y += self.velocity_y
-        self.game_surface.blit(self.image, (self.x, self.y))
+        if self.moving:
+            self.x += self.velocity_x
+            self.y += self.velocity_y
+            
+        if self.visible:
+            self.game_surface.blit(self.image, (self.x, self.y))
