@@ -3,6 +3,9 @@ import unittest
 import os
 from missile import Missile
 
+def clamp(n, maxn, minn=0):
+    return max(min(maxn, n), minn)
+
 
 class Reticle:
     
@@ -38,9 +41,6 @@ class Reticle:
     def right(self, enable: bool=True):
         self.moving_right = enable
 
-    def clamp(self, n, maxn, minn=0):
-        return max(min(maxn, n), minn)
-
     def update(self):
         if self.moving_up:
             self.y -= 5
@@ -51,7 +51,7 @@ class Reticle:
         if self.moving_right:
             self.x += 5
 
-        self.x = self.clamp(self.x, self.screen_width)
-        self.y = self.clamp(self.y, self.screen_height)
+        self.x = clamp(self.x, self.screen_width)
+        self.y = clamp(self.y, self.screen_height)
 
         self.game_surface.blit(self.image, (self.x - self.image.get_width() // 2, self.y - self.image.get_height() // 2))
