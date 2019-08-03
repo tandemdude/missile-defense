@@ -39,12 +39,14 @@ class Controller:
         self.control_scheme = ControlScheme()
         self.reticle = Reticle(self.game_surface, self.screen_width, self.screen_height)
         self.enemies = [Enemy(self.game_surface, self.screen_width, self.screen_height) for _ in range(6)]
-
+        self.missiles = []
+        
         self.to_be_updated = self.enemies + [self.reticle]
 
     def trigger_fire_missile(self, aim_point):
         # Do something here to fire a missile
         print(f"Pew: fired towards {aim_point}")
+        self.to_be_updated.append(Missile(self.game_surface, self.screen_width, self.screen_height, self.reticle.x, self.reticle.y))
 
     def process_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -69,7 +71,17 @@ class Controller:
             elif event.key == self.control_scheme.down:
                 self.reticle.down(False)
 
+    def check_collisions(self):
+        for enemy in self.enemies:
+            enemy_rect = enemy.image.get_rect()
+            enemy_rect.x, enemy_rect.y = enemy.x, enemy.y
+            reticle_rect = self.reticle.image.get_rect()
+            reticle_rect.center = (self.reticle.x, self.reticle.y)
+            if enemy_rect.colliderect(reticle_rect):
+                enemy.visible = False
+
     def update_all(self):
         for instance in self.to_be_updated:
             instance.update()
+        self.check_collisions()
 

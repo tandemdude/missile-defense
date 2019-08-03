@@ -16,6 +16,9 @@ TODO:
 - Control/communication redesign
     - Control scheme - DONE
     - "Link/communicator class" - DONE
+- Collisions
+    - Enemy kill
+    - Missile explosion + AOE
 - Waves of enemies
 - Scoring
 - Style enemies
