@@ -3,6 +3,8 @@ from enemy import Enemy
 from reticle import Reticle
 from missile import Missile
 
+MAX_MISSILES = 5
+
 
 class ControlScheme:
 
@@ -44,9 +46,8 @@ class Controller:
         self.to_be_updated = self.enemies + [self.reticle]
 
     def trigger_fire_missile(self, aim_point):
-        # Do something here to fire a missile
-        print(f"Pew: fired towards {aim_point}")
-        self.to_be_updated.append(Missile(self.game_surface, self.screen_width, self.screen_height, self.reticle.x, self.reticle.y))
+        if len(self.missiles) < MAX_MISSILES:
+            self.missiles.append(Missile(self.game_surface, self.screen_width, self.screen_height, self.reticle.x, self.reticle.y))
 
     def process_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -72,16 +73,24 @@ class Controller:
                 self.reticle.down(False)
 
     def check_collisions(self):
-        for enemy in self.enemies:
-            enemy_rect = enemy.image.get_rect()
-            enemy_rect.x, enemy_rect.y = enemy.x, enemy.y
-            reticle_rect = self.reticle.image.get_rect()
-            reticle_rect.center = (self.reticle.x, self.reticle.y)
-            if enemy_rect.colliderect(reticle_rect):
-                enemy.visible = False
+        hit_enemy = False
+        for missile in self.missiles[:]:
+            hit_enemy = False
+            missile_rect = missile.image.get_rect()
+            missile_rect.x, missile_rect.y = missile.x, missile.y
+            for enemy in self.enemies:
+                enemy_rect = enemy.image.get_rect()
+                enemy_rect.x, enemy_rect.y = enemy.x, enemy.y
+                if missile_rect.colliderect(enemy_rect):
+                    enemy.visible = False
+                    hit_enemy = True
+            if hit_enemy:
+                self.missiles.remove(missile)
+            if (0 > missile.x > self.screen_width) or (missile.y < 0):
+                self.missiles.remove(missile)
 
     def update_all(self):
-        for instance in self.to_be_updated:
+        for instance in (self.to_be_updated + self.missiles):
             instance.update()
         self.check_collisions()
 

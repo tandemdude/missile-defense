@@ -17,7 +17,7 @@ TODO:
     - Control scheme - DONE
     - "Link/communicator class" - DONE
 - Collisions
-    - Enemy kill
+    - Enemy kill - DONE
     - Missile explosion + AOE
 - Waves of enemies
 - Scoring

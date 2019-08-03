@@ -22,6 +22,8 @@ class Reticle:
         self.moving_left = False
         self.moving_right = False
 
+        self.speed = 5
+
         self.image = pygame.Surface((self.asset_width, self.asset_height), pygame.SRCALPHA)
         self.image.blit(self.asset, (0, 0))
         self.image = pygame.transform.scale(self.image, (50, 50))
@@ -43,15 +45,15 @@ class Reticle:
 
     def update(self):
         if self.moving_up:
-            self.y -= 5
+            self.y -= self.speed
         if self.moving_down:
-            self.y += 5
+            self.y += self.speed
         if self.moving_left:
-            self.x -= 5
+            self.x -= self.speed
         if self.moving_right:
-            self.x += 5
+            self.x += self.speed
 
         self.x = clamp(self.x, self.screen_width)
-        self.y = clamp(self.y, self.screen_height)
+        self.y = clamp(self.y, self.screen_height-self.speed)
 
         self.game_surface.blit(self.image, (self.x - self.image.get_width() // 2, self.y - self.image.get_height() // 2))

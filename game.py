@@ -15,16 +15,11 @@ class Game:
 		self.background.fill(pygame.Color("#000000"))
 
 	def run(self):
-		# enemies = [Enemy(self.screen, SCREEN_WIDTH, SCREEN_HEIGHT) for i in range(6)]
-		# reticle = Reticle(self.screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 		controller = Controller(self.screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 
 		while self.running:
 			self.screen.blit(self.background, (0, 0))
 			self.clock.tick(60)
-
-			# for enemy in enemies:
-			# 	enemy.update()
 
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -32,8 +27,6 @@ class Game:
 
 				controller.process_event(event)
 			controller.update_all()
-			# 	reticle.process_event(event)
-			# reticle.update()
 
 			pygame.display.flip()
 
