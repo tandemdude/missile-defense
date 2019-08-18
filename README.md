@@ -7,12 +7,13 @@ TODO:
     - Move vertically downwards - DONE
     - Disappear when at bottom of screen - DONE
     - Move with random vector - DONE
-    - Spawn new enemy when previous reaches bottom of screen - "DONE"
+    - Spawn new enemy when previous reaches bottom of screen - DONE
 - Player's turret
     - Reticle - DONE
     - Keyup/keydown events - DONE
     - Draw turret
 - Projectiles
+    - Player's missiles - DONE
 - Control/communication redesign
     - Control scheme - DONE
     - "Link/communicator class" - DONE
@@ -20,7 +21,18 @@ TODO:
     - Enemy kill - DONE
     - Missile explosion + AOE
 - Waves of enemies
+    - Start - DONE
+    - Spawn enemies once one dies - DONE
+    - Spawn rate/period
 - Scoring
+    - Score class - DONE
+    - Incrementing score - DONE
+    - Enemy value - DONE
+- Game start, game over, display and reset scoring
+
+###################### Game VER 1 Complete #####################
+
+- Refactor Controller.check_collisions AND Controller.update_all
 - Style enemies
 - Implement turrets (towers)
 - Highscores

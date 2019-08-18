@@ -1,8 +1,9 @@
 import pygame
+import math
 
 SPRITE_WIDTH = 10
 SPRITE_HEIGHT = 10
-MISSILE_VELOCITY = -5
+MISSILE_VELOCITY = 5
 
 
 class Missile(pygame.sprite.Sprite):
@@ -23,8 +24,12 @@ class Missile(pygame.sprite.Sprite):
         pygame.draw.rect(self.image, pygame.Color("#ff0000"), (0, 0, SPRITE_WIDTH, SPRITE_HEIGHT))
 
     def vector_from_positions(self):
-        velocity_x = MISSILE_VELOCITY * ((self.end_x - self.x) / (self.end_y - self.y))
-        return (velocity_x, MISSILE_VELOCITY)
+        velocity_x = MISSILE_VELOCITY * (self.end_x - self.x) / math.sqrt(((self.end_y - self.y)**2) + ((self.end_x - self.x)**2))
+        velocity_y = MISSILE_VELOCITY * (self.end_y - self.y) / math.sqrt(((self.end_y - self.y)**2) + ((self.end_x - self.x)**2))
+        return (velocity_x, velocity_y)
+
+    def explode(self):
+        raise NotImplementedError
 
     def update(self):
         if self.moving:

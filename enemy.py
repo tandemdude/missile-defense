@@ -16,9 +16,10 @@ class Enemy(pygame.sprite.Sprite):
         self.game_surface = game_surface
         self.generate_positions_and_velocities()
         self.visible = True
-        self.respawn = True
+        self.respawn = False
         self.image = pygame.Surface((SPRITE_WIDTH, SPRITE_HEIGHT))
         self.image.fill(pygame.Color("#ffffff"))
+        self.value = 150
 
         pygame.draw.rect(self.image, pygame.Color("#ff00ff"), (0, 0, SPRITE_WIDTH, SPRITE_HEIGHT))
 
@@ -30,7 +31,6 @@ class Enemy(pygame.sprite.Sprite):
 
     def vector_from_positions(self):
         velocity_x = (self.end_x - self.x) / (self.end_y - self.y)
-        #return (velocity_x, random.randint(1,5))
         return (velocity_x, 1)
 
     def generate_positions_and_velocities(self):
