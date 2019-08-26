@@ -16,6 +16,7 @@ class Enemy(pygame.sprite.Sprite):
         self.generate_positions_and_velocities()
         self.visible = True
         self.respawn = False
+        self.hit_ground = False
         self.image = pygame.Surface((SPRITE_WIDTH, SPRITE_HEIGHT))
         self.image.fill(pygame.Color("#ffffff"))
         self.value = 150
@@ -49,6 +50,7 @@ class Enemy(pygame.sprite.Sprite):
     def update(self):
         if self.y >= self.screen_height - SPRITE_HEIGHT:
             self.velocity_y = 0
+            self.hit_ground = True
             self.visible = False
 
         if self.visible:

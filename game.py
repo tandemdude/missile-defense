@@ -28,11 +28,11 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                if event.type == pygame.KEYDOWN:
+                if event.type == pygame.KEYDOWN and controller.game_over:
                     if event.key == pygame.K_y:
                         self.restart = True
                         self.running = False
-                    elif event.key == pygame.K_n:
+                    elif event.key == pygame.K_n and controller.game_over:
                         self.restart = False
                         self.running = False
 

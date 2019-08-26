@@ -1,4 +1,5 @@
 import pygame
+import os
 from enemy import Enemy
 from reticle import Reticle
 from missile import Missile
@@ -11,6 +12,7 @@ ENEMY_CONSTANT = 0.5
 TIME_BETWEEN_WAVES = 1
 FRAME_RATE = 60
 LIVES = 3
+FONT_SIZE = 24
 
 
 def calculate_enemies_for_wave(initial_enemies, wave_number, constant):
@@ -26,21 +28,6 @@ class ControlScheme:
         self.right = pygame.K_RIGHT
         self.fire = pygame.K_SPACE
 
-        """
-        self.events = {pygame.KEYDOWN: {self.up: ,
-                                        self.down: ,
-                                        self.left: ,
-                                        self.right: ,
-                                        self.fire: 
-                                       }
-                       pygame.KEYUP: {self.up: ,
-                                      self.down: ,
-                                      self.left: ,
-                                      self.right: 
-                                     }
-                       }
-        """
-
 
 class Controller:
     
@@ -51,26 +38,51 @@ class Controller:
 
         self.control_scheme = ControlScheme()
         self.reticle = Reticle(self.game_surface, self.screen_width, self.screen_height)
-        #self.enemies = [Enemy(self.game_surface, self.screen_width, self.screen_height) for _ in range(6)]
         self.missiles = []
 
         self.wave_number = 0
         self.current_wave = None
         self.frames_to_next_wave = 0
 
+        self.lives = LIVES
         self.game_over = False
 
         self.score = Score(self.game_surface, self.screen_width, self.screen_height)
+        self.font = pygame.font.Font(os.path.join("fonts", "SevenSegment.ttf"), FONT_SIZE)
+
+    def enemy_hit_ground(self):
+        self.lives -= 1 if self.lives > 0 else 0
 
     def create_new_wave(self):
         number_of_enemies = calculate_enemies_for_wave(INITIAL_ENEMIES, self.wave_number, ENEMY_CONSTANT)
-        self.current_wave = Wave(number_of_enemies, None, self.game_surface, self.screen_width, self.screen_height)
+        self.current_wave = Wave(number_of_enemies, None, self.game_surface, self.screen_width, self.screen_height, self.enemy_hit_ground)
         self.wave_number += 1
+
+    def draw_lives(self):
+        text_surface = self.font.render(
+            f"Lives: {self.lives}", True, pygame.Color("#ffffff")
+        )
+        text_rect = text_surface.get_rect()
+        text_rect.topleft = (2, 2)
+        self.game_surface.blit(text_surface, text_rect)
+
+    def draw_game_over(self):
+        game_over_surface = self.font.render(
+            "GAME OVER", True, pygame.Color("#ff0000")
+        )
+        game_over_rect = game_over_surface.get_rect()
+        game_over_rect.center = self.game_surface.get_rect().center
+        self.game_surface.blit(game_over_surface, game_over_rect)
+        restart_msg_surface = self.font.render(
+            "Press [Y] to restart or [N] to quit", True, pygame.Color("#ff0000")
+        )
+        restart_msg_rect = restart_msg_surface.get_rect()
+        restart_msg_rect.center = (game_over_rect.center[0], game_over_rect.center[1] + FONT_SIZE)
+        self.game_surface.blit(restart_msg_surface, restart_msg_rect)
 
     def trigger_fire_missile(self, aim_point):
         if len(self.missiles) < MAX_MISSILES:
             self.missiles.append(Missile(self.game_surface, self.screen_width, self.screen_height, self.reticle.x, self.reticle.y))
-        #print(f"{len(self.missiles)} active missiles")
 
     def process_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -111,18 +123,20 @@ class Controller:
                             self.score.increment(enemy.value)
                             enemy.visible = False
                             hit_enemy = True
+
                 if hit_enemy:
                     self.missiles.remove(missile)
             if 0 > missile.x or missile.x > self.screen_width or missile.y < 0:
                 self.missiles.remove(missile)
 
     def get_what_needs_to_be_updated(self):
-        to_be_updated = self.missiles + [self.reticle, self.score]
-        if self.current_wave is not None:
-            to_be_updated += [self.current_wave]
-            return to_be_updated
+        if self.game_over:
+            to_be_updated = [self.score]
         else:
-            return to_be_updated        
+            to_be_updated = self.missiles + [self.reticle, self.score]
+            if self.current_wave is not None:
+                to_be_updated += [self.current_wave]
+        return to_be_updated
 
     def create_new_wave_if_required(self):
         if self.frames_to_next_wave > 0:
@@ -141,14 +155,15 @@ class Controller:
                 self.counting_down = True
 
     def update_all(self):
-        self.create_new_wave_if_required()
+        if self.lives == 0:
+            self.game_over = True
+            self.draw_game_over()
+        else:
+            self.create_new_wave_if_required()
+            self.check_collisions()
+            self.check_if_wave_finished()
 
         to_be_updated = self.get_what_needs_to_be_updated()
-
         for instance in to_be_updated:
             instance.update()
-
-        self.check_collisions()
-        self.check_if_wave_finished()
-
-
+        self.draw_lives()
