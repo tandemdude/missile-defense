@@ -10,6 +10,7 @@ INITIAL_ENEMIES = 5
 ENEMY_CONSTANT = 0.5
 TIME_BETWEEN_WAVES = 1
 FRAME_RATE = 60
+LIVES = 3
 
 
 def calculate_enemies_for_wave(initial_enemies, wave_number, constant):
@@ -57,6 +58,8 @@ class Controller:
         self.current_wave = None
         self.frames_to_next_wave = 0
 
+        self.game_over = False
+
         self.score = Score(self.game_surface, self.screen_width, self.screen_height)
 
     def create_new_wave(self):
@@ -67,7 +70,7 @@ class Controller:
     def trigger_fire_missile(self, aim_point):
         if len(self.missiles) < MAX_MISSILES:
             self.missiles.append(Missile(self.game_surface, self.screen_width, self.screen_height, self.reticle.x, self.reticle.y))
-        print(f"{len(self.missiles)} active missiles")
+        #print(f"{len(self.missiles)} active missiles")
 
     def process_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -119,9 +122,9 @@ class Controller:
             to_be_updated += [self.current_wave]
             return to_be_updated
         else:
-            return to_be_updated
+            return to_be_updated        
 
-    def update_all(self):
+    def create_new_wave_if_required(self):
         if self.frames_to_next_wave > 0:
             self.frames_to_next_wave -= 1
         else:
@@ -130,16 +133,22 @@ class Controller:
         if self.current_wave is None and self.frames_to_next_wave == 0:
             self.create_new_wave()
 
+    def check_if_wave_finished(self):
+        if self.current_wave is None or self.current_wave.finished:
+            self.current_wave = None
+            if not self.counting_down:
+                self.frames_to_next_wave = TIME_BETWEEN_WAVES * FRAME_RATE
+                self.counting_down = True
+
+    def update_all(self):
+        self.create_new_wave_if_required()
+
         to_be_updated = self.get_what_needs_to_be_updated()
 
         for instance in to_be_updated:
             instance.update()
 
         self.check_collisions()
+        self.check_if_wave_finished()
 
-        if self.current_wave is None or self.current_wave.finished:
-            self.current_wave = None
-            if not self.counting_down:
-                self.frames_to_next_wave = TIME_BETWEEN_WAVES * FRAME_RATE
-                self.counting_down = True
 

@@ -10,9 +10,13 @@ class Game:
 		pygame.init()
 		self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 		self.running = True
+		self.restart = False
 		self.clock = pygame.time.Clock()
 		self.background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 		self.background.fill(pygame.Color("#000000"))
+
+	def quit(self):
+		pygame.quit()
 
 	def run(self):
 		controller = Controller(self.screen, SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -24,18 +28,27 @@ class Game:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					self.running = False
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_y:
+						self.restart = True
+						self.running = False
+					elif event.key == pygame.K_n:
+						self.restart = False
+						self.running = False
 
 				controller.process_event(event)
 			controller.update_all()
 
 			pygame.display.flip()
 
-		pygame.quit()
-
 
 def main():
-	game = Game()
-	game.run()
+	while True:
+		game = Game()
+		game.run()
+		if not game.restart:
+			game.quit()
+			break
 
 if __name__ == "__main__":
 	main()
