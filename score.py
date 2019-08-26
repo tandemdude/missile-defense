@@ -1,4 +1,5 @@
 import pygame
+import os
 
 PADDING = 2
 SCORE_LENGTH = 10
@@ -9,7 +10,7 @@ class Score:
         self.game_surface = game_surface
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.font_name = pygame.font.match_font("futura")
+        self.font = pygame.font.Font(os.path.join("fonts", "SevenSegment.ttf"), 24)
         self.value = 0
 
     def reset(self):
@@ -24,8 +25,7 @@ class Score:
         return zero_padding + str_score
 
     def update(self):
-        font = pygame.font.Font(self.font_name, 20)
-        text_surface = font.render(self.score_to_text(), True, pygame.Color("#ffffff"))
+        text_surface = self.font.render(self.score_to_text(), True, pygame.Color("#ffffff"))
         text_rect = text_surface.get_rect()
         text_rect.topright = (self.screen_width - PADDING, PADDING)
         self.game_surface.blit(text_surface, text_rect)

@@ -3,6 +3,9 @@ import unittest
 import os
 from missile import Missile
 
+RETICLE_SPEED = 6.5
+
+
 def clamp(n, maxn, minn=0):
     return max(min(maxn, n), minn)
 
@@ -22,7 +25,7 @@ class Reticle:
         self.moving_left = False
         self.moving_right = False
 
-        self.speed = 5
+        self.speed = RETICLE_SPEED
 
         self.image = pygame.Surface((self.asset_width, self.asset_height), pygame.SRCALPHA)
         self.image.blit(self.asset, (0, 0))

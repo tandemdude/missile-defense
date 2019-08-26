@@ -32,7 +32,8 @@ TODO:
 
 ###################### Game VER 1 Complete #####################
 
-- Refactor Controller.check_collisions AND Controller.update_all
+- Refactor Controller.check_collisions
+- Refactor Controller.update_all DONE
 - Style enemies
 - Implement turrets (towers)
 - Highscores
