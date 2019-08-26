@@ -7,7 +7,6 @@ MISSILE_VELOCITY = 5
 
 
 class Missile(pygame.sprite.Sprite):
-    
     def __init__(self, game_surface, screen_width, screen_height, reticle_x, reticle_y):
         super().__init__()
 
@@ -21,11 +20,21 @@ class Missile(pygame.sprite.Sprite):
         self.image = pygame.Surface((SPRITE_WIDTH, SPRITE_HEIGHT))
         self.image.fill(pygame.Color("#000000"))
 
-        pygame.draw.rect(self.image, pygame.Color("#ff0000"), (0, 0, SPRITE_WIDTH, SPRITE_HEIGHT))
+        pygame.draw.rect(
+            self.image, pygame.Color("#ff0000"), (0, 0, SPRITE_WIDTH, SPRITE_HEIGHT)
+        )
 
     def vector_from_positions(self):
-        velocity_x = MISSILE_VELOCITY * (self.end_x - self.x) / math.sqrt(((self.end_y - self.y)**2) + ((self.end_x - self.x)**2))
-        velocity_y = MISSILE_VELOCITY * (self.end_y - self.y) / math.sqrt(((self.end_y - self.y)**2) + ((self.end_x - self.x)**2))
+        velocity_x = (
+            MISSILE_VELOCITY
+            * (self.end_x - self.x)
+            / math.sqrt(((self.end_y - self.y) ** 2) + ((self.end_x - self.x) ** 2))
+        )
+        velocity_y = (
+            MISSILE_VELOCITY
+            * (self.end_y - self.y)
+            / math.sqrt(((self.end_y - self.y) ** 2) + ((self.end_x - self.x) ** 2))
+        )
         return (velocity_x, velocity_y)
 
     def explode(self):
@@ -35,6 +44,6 @@ class Missile(pygame.sprite.Sprite):
         if self.moving:
             self.x += self.velocity_x
             self.y += self.velocity_y
-            
+
         if self.visible:
             self.game_surface.blit(self.image, (self.x, self.y))

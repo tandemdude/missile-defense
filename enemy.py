@@ -7,7 +7,6 @@ SPRITE_HEIGHT = 20
 
 
 class Enemy(pygame.sprite.Sprite):
-
     def __init__(self, game_surface, screen_width, screen_height):
         super().__init__()
 
@@ -21,13 +20,18 @@ class Enemy(pygame.sprite.Sprite):
         self.image.fill(pygame.Color("#ffffff"))
         self.value = 150
 
-        pygame.draw.rect(self.image, pygame.Color("#ff00ff"), (0, 0, SPRITE_WIDTH, SPRITE_HEIGHT))
+        pygame.draw.rect(
+            self.image, pygame.Color("#ff00ff"), (0, 0, SPRITE_WIDTH, SPRITE_HEIGHT)
+        )
 
     def random_start_position(self):
         return (random.randint(0, self.screen_width - SPRITE_WIDTH), 0)
 
     def random_aim_position(self):
-        return (random.randint(0, self.screen_width - SPRITE_WIDTH), self.screen_height - SPRITE_HEIGHT)
+        return (
+            random.randint(0, self.screen_width - SPRITE_WIDTH),
+            self.screen_height - SPRITE_HEIGHT,
+        )
 
     def vector_from_positions(self):
         velocity_x = (self.end_x - self.x) / (self.end_y - self.y)
@@ -43,7 +47,7 @@ class Enemy(pygame.sprite.Sprite):
         self.y += self.velocity_y
 
     def update(self):
-        if self.y >= self.screen_height-SPRITE_HEIGHT:
+        if self.y >= self.screen_height - SPRITE_HEIGHT:
             self.velocity_y = 0
             self.visible = False
 
@@ -56,7 +60,6 @@ class Enemy(pygame.sprite.Sprite):
 
 
 class EnemyTests(unittest.TestCase):
-
     def test_velocity_from_positions_no_x_difference(self):
         e = Enemy(None, 200, 100)
         e.x, e.y = (10, 0)
@@ -82,5 +85,5 @@ class EnemyTests(unittest.TestCase):
         self.assertEqual(y_vel, 1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
