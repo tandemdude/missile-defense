@@ -2,8 +2,8 @@ import pygame
 import math
 import os
 
-SPRITE_WIDTH = 10
-SPRITE_HEIGHT = 10
+SPRITE_WIDTH = 15
+SPRITE_HEIGHT = 25
 MISSILE_VELOCITY = 7
 
 
@@ -30,27 +30,15 @@ class Missile(pygame.sprite.Sprite):
             (self.asset_width, self.asset_height), pygame.SRCALPHA
         )
         self.image.blit(self.asset, (0, 0))
-        self.image = pygame.transform.scale(self.image, (25, 75))
+        self.image = pygame.transform.scale(self.image, (SPRITE_WIDTH, SPRITE_HEIGHT))
 
-        angle = self.get_angle_positions()
-        print('angle:', angle * 180/math.pi)
-        self.image = pygame.transform.rotate(self.image, angle * 180/math.pi)
-
-        #self.image = pygame.Surface((SPRITE_WIDTH, SPRITE_HEIGHT))
-        #self.image.fill(pygame.Color("#000000"))
-
-        #pygame.draw.rect(
-        #    self.image, pygame.Color("#ff0000"), (0, 0, SPRITE_WIDTH, SPRITE_HEIGHT)
-        #)
+        self.image = pygame.transform.rotate(self.image, self.get_angle_positions())
 
     def get_angle_positions(self):
-        y_diff = (self.end_y - self.y)
-        x_diff = (self.end_x - self.x)
-        if x_diff == 0:
-            angle = 0
-        else:
-            angle = math.pi/2 - math.atan(y_diff / x_diff)
-        return angle
+        radius, angle = pygame.math.Vector2(
+            self.end_x - self.x, self.end_y - self.y
+        ).as_polar()
+        return -angle - 90
 
     def vector_from_positions(self):
         velocity_x = (
