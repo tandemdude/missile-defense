@@ -5,6 +5,7 @@ from missile import Missile
 from wave import Wave
 from score import Score
 from lives import Lives
+from game_over import GameOver
 
 MAX_MISSILES = 5
 INITIAL_ENEMIES = 5
@@ -27,6 +28,7 @@ def get_rect_of_instance(instance):
 
 def is_colliding(rect1, rect2):
     return rect1.colliderect(rect2)
+
 
 class ControlScheme:
 
@@ -55,6 +57,7 @@ class Controller:
         self.counting_down = False
 
         self.lives = Lives(self.game_surface, self.screen_width, self.screen_height, FONT_SIZE, LIVES)
+        self.game_over_screen = GameOver(self.game_surface, self.screen_width, self.screen_height, FONT_SIZE)
         self.decrement_lives = self.lives.decrement
         self.game_over = False
 
@@ -76,22 +79,6 @@ class Controller:
         )
 
         self.wave_number += 1
-
-
-
-    def draw_game_over(self):
-        game_over_surface = self.font.render(
-            "GAME OVER", True, pygame.Color("#ff0000")
-        )
-        game_over_rect = game_over_surface.get_rect()
-        game_over_rect.center = self.game_surface.get_rect().center
-        self.game_surface.blit(game_over_surface, game_over_rect)
-        restart_msg_surface = self.font.render(
-            "Press [Y] to restart or [N] to quit", True, pygame.Color("#ff0000")
-        )
-        restart_msg_rect = restart_msg_surface.get_rect()
-        restart_msg_rect.center = (game_over_rect.center[0], game_over_rect.center[1] + FONT_SIZE)
-        self.game_surface.blit(restart_msg_surface, restart_msg_rect)
 
     def trigger_fire_missile(self, aim_point):
         if len(self.missiles) < MAX_MISSILES:
@@ -145,7 +132,7 @@ class Controller:
 
     def get_what_needs_to_be_updated(self):
         if self.game_over:
-            to_be_updated = [self.score, self.lives]
+            to_be_updated = [self.score, self.lives, self.game_over_screen]
         else:
             to_be_updated = self.missiles + [self.reticle, self.score, self.lives]
             if self.current_wave is not None:
@@ -171,7 +158,6 @@ class Controller:
     def update_all(self):
         if self.lives == 0:
             self.game_over = True
-            self.draw_game_over()
         else:
             self.create_new_wave_if_required()
             self.check_collisions()
