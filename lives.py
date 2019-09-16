@@ -11,8 +11,8 @@ class Lives:
         self.lives = lives
         self.font = self.font = pygame.font.Font(os.path.join("fonts", "SevenSegment.ttf"), 24)
 
-    def __int__(self):
-        return self.lives
+    def __eq__(self, value):
+        return self.lives == value
 
     def decrement(self):
         self.lives -= 1 if self.lives > 0 else 0
