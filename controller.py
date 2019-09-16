@@ -169,7 +169,7 @@ class Controller:
                 self.counting_down = True
 
     def update_all(self):
-        if int(self.lives) == 0:
+        if self.lives == 0:
             self.game_over = True
             self.draw_game_over()
         else:
