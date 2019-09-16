@@ -17,7 +17,7 @@ FONT_SIZE = 24
 
 
 def calculate_enemies_for_wave(initial_enemies, wave_number, constant):
-    return round(initial_enemies + (wave_number**2 * constant))
+    return round(initial_enemies + (wave_number ** 2 * constant))
 
 
 def get_rect_of_instance(instance):
@@ -31,7 +31,6 @@ def is_colliding(rect1, rect2):
 
 
 class ControlScheme:
-
     def __init__(self):
         self.up = pygame.K_UP
         self.down = pygame.K_DOWN
@@ -41,7 +40,6 @@ class ControlScheme:
 
 
 class Controller:
-    
     def __init__(self, game_surface, screen_width, screen_height):
         self.game_surface = game_surface
         self.screen_width = screen_width
@@ -56,31 +54,39 @@ class Controller:
         self.frames_to_next_wave = 0
         self.counting_down = False
 
-        self.lives = Lives(self.game_surface, self.screen_width, self.screen_height, FONT_SIZE, LIVES)
-        self.game_over_screen = GameOver(self.game_surface, self.screen_width, self.screen_height, FONT_SIZE)
+        self.lives = Lives(
+            self.game_surface, self.screen_width, self.screen_height, FONT_SIZE, LIVES
+        )
+        self.game_over_screen = GameOver(
+            self.game_surface, self.screen_width, self.screen_height, FONT_SIZE
+        )
         self.decrement_lives = self.lives.decrement
         self.game_over = False
 
         self.score = Score(self.game_surface, self.screen_width, self.screen_height)
-        self.font = pygame.font.Font(os.path.join("fonts", "SevenSegment.ttf"), FONT_SIZE)
+        self.font = pygame.font.Font(
+            os.path.join("fonts", "SevenSegment.ttf"), FONT_SIZE
+        )
 
     def enemy_hit_ground(self):
         self.lives.decrement()
 
     def create_new_wave(self):
-        number_of_enemies = calculate_enemies_for_wave(INITIAL_ENEMIES, self.wave_number, ENEMY_CONSTANT)
+        number_of_enemies = calculate_enemies_for_wave(
+            INITIAL_ENEMIES, self.wave_number, ENEMY_CONSTANT
+        )
         self.current_wave = Wave(
             number_of_enemies,
             None,
             self.game_surface,
             self.screen_width,
             self.screen_height,
-            self.enemy_hit_ground
+            self.enemy_hit_ground,
         )
 
         self.wave_number += 1
 
-    def trigger_fire_missile(self, aim_point):
+    def trigger_fire_missile(self):
         if len(self.missiles) < MAX_MISSILES:
             self.missiles.append(
                 Missile(
@@ -88,7 +94,7 @@ class Controller:
                     self.screen_width,
                     self.screen_height,
                     self.reticle.x,
-                    self.reticle.y
+                    self.reticle.y,
                 )
             )
 
@@ -103,7 +109,7 @@ class Controller:
             elif event.key == self.control_scheme.down:
                 self.reticle.down()
             elif event.key == self.control_scheme.fire:
-                self.trigger_fire_missile(self.reticle.current_position())
+                self.trigger_fire_missile()
 
         elif event.type == pygame.KEYUP:
             if event.key == self.control_scheme.left:
@@ -121,7 +127,9 @@ class Controller:
             missile_rect = get_rect_of_instance(missile)
             if self.current_wave is not None:
                 for enemy in self.current_wave.enemies:
-                    if enemy.visible and is_colliding(missile_rect, get_rect_of_instance(enemy)):
+                    if enemy.visible and is_colliding(
+                        missile_rect, get_rect_of_instance(enemy)
+                    ):
                         self.score.increment(enemy.value)
                         enemy.visible = False
                         hit_enemy = True
