@@ -28,11 +28,11 @@ TODO:
     - Score class - DONE
     - Incrementing score - DONE
     - Enemy value - DONE
-- Game start, game over, display and reset scoring
+- Game start, game over, display and reset scoring - DONE
 
-###################### Game VER 1 Complete #####################
+#__Game VER 1 Complete__
 
-- Refactor Controller.check_collisions
+- Refactor Controller.check_collisions - DOING
 - Refactor Controller.update_all DONE
 - Style enemies
 - Implement turrets (towers)
