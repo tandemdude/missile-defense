@@ -1,10 +1,10 @@
 import pygame
 import os
-from enemy import Enemy
 from reticle import Reticle
 from missile import Missile
 from wave import Wave
 from score import Score
+from lives import Lives
 
 MAX_MISSILES = 5
 INITIAL_ENEMIES = 5
@@ -18,6 +18,15 @@ FONT_SIZE = 24
 def calculate_enemies_for_wave(initial_enemies, wave_number, constant):
     return round(initial_enemies + (wave_number**2 * constant))
 
+
+def get_rect_of_instance(instance):
+    rect = instance.image.get_rect()
+    rect.x, rect.y = instance.x, instance.y
+    return rect
+
+
+def is_colliding(rect1, rect2):
+    return rect1.colliderect(rect2)
 
 class ControlScheme:
 
@@ -43,28 +52,32 @@ class Controller:
         self.wave_number = 0
         self.current_wave = None
         self.frames_to_next_wave = 0
+        self.counting_down = False
 
-        self.lives = LIVES
+        self.lives = Lives(self.game_surface, self.screen_width, self.screen_height, FONT_SIZE, LIVES)
+        self.decrement_lives = self.lives.decrement
         self.game_over = False
 
         self.score = Score(self.game_surface, self.screen_width, self.screen_height)
         self.font = pygame.font.Font(os.path.join("fonts", "SevenSegment.ttf"), FONT_SIZE)
 
     def enemy_hit_ground(self):
-        self.lives -= 1 if self.lives > 0 else 0
+        self.lives.decrement()
 
     def create_new_wave(self):
         number_of_enemies = calculate_enemies_for_wave(INITIAL_ENEMIES, self.wave_number, ENEMY_CONSTANT)
-        self.current_wave = Wave(number_of_enemies, None, self.game_surface, self.screen_width, self.screen_height, self.enemy_hit_ground)
+        self.current_wave = Wave(
+            number_of_enemies,
+            None,
+            self.game_surface,
+            self.screen_width,
+            self.screen_height,
+            self.enemy_hit_ground
+        )
+
         self.wave_number += 1
 
-    def draw_lives(self):
-        text_surface = self.font.render(
-            f"Lives: {self.lives}", True, pygame.Color("#ffffff")
-        )
-        text_rect = text_surface.get_rect()
-        text_rect.topleft = (2, 2)
-        self.game_surface.blit(text_surface, text_rect)
+
 
     def draw_game_over(self):
         game_over_surface = self.font.render(
@@ -82,7 +95,15 @@ class Controller:
 
     def trigger_fire_missile(self, aim_point):
         if len(self.missiles) < MAX_MISSILES:
-            self.missiles.append(Missile(self.game_surface, self.screen_width, self.screen_height, self.reticle.x, self.reticle.y))
+            self.missiles.append(
+                Missile(
+                    self.game_surface,
+                    self.screen_width,
+                    self.screen_height,
+                    self.reticle.x,
+                    self.reticle.y
+                )
+            )
 
     def process_event(self, event):
         if event.type == pygame.KEYDOWN:
@@ -110,20 +131,13 @@ class Controller:
     def check_collisions(self):
         for missile in self.missiles[:]:
             hit_enemy = False
-            missile_rect = missile.image.get_rect()
-            missile_rect.x, missile_rect.y = missile.x, missile.y
+            missile_rect = get_rect_of_instance(missile)
             if self.current_wave is not None:
                 for enemy in self.current_wave.enemies:
-                    if not enemy.visible:
-                        continue
-                    else:
-                        enemy_rect = enemy.image.get_rect()
-                        enemy_rect.x, enemy_rect.y = enemy.x, enemy.y
-                        if missile_rect.colliderect(enemy_rect):
-                            self.score.increment(enemy.value)
-                            enemy.visible = False
-                            hit_enemy = True
-
+                    if enemy.visible and is_colliding(missile_rect, get_rect_of_instance(enemy)):
+                        self.score.increment(enemy.value)
+                        enemy.visible = False
+                        hit_enemy = True
                 if hit_enemy:
                     self.missiles.remove(missile)
             if 0 > missile.x or missile.x > self.screen_width or missile.y < 0:
@@ -131,9 +145,9 @@ class Controller:
 
     def get_what_needs_to_be_updated(self):
         if self.game_over:
-            to_be_updated = [self.score]
+            to_be_updated = [self.score, self.lives]
         else:
-            to_be_updated = self.missiles + [self.reticle, self.score]
+            to_be_updated = self.missiles + [self.reticle, self.score, self.lives]
             if self.current_wave is not None:
                 to_be_updated += [self.current_wave]
         return to_be_updated
@@ -155,7 +169,7 @@ class Controller:
                 self.counting_down = True
 
     def update_all(self):
-        if self.lives == 0:
+        if int(self.lives) == 0:
             self.game_over = True
             self.draw_game_over()
         else:
@@ -166,4 +180,3 @@ class Controller:
         to_be_updated = self.get_what_needs_to_be_updated()
         for instance in to_be_updated:
             instance.update()
-        self.draw_lives()
