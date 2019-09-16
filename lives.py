@@ -9,7 +9,9 @@ class Lives:
         self.screen_height = screen_height
         self.font_size = font_size
         self.lives = lives
-        self.font = self.font = pygame.font.Font(os.path.join("fonts", "SevenSegment.ttf"), self.font_size)
+        self.font = self.font = pygame.font.Font(
+            os.path.join("fonts", "SevenSegment.ttf"), self.font_size
+        )
 
     def __eq__(self, value):
         return self.lives == value
