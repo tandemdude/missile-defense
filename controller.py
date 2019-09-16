@@ -123,6 +123,10 @@ class Controller:
 
     def check_collisions(self):
         for missile in self.missiles[:]:
+            if 0 > missile.x or missile.x > self.screen_width or missile.y < 0:
+                self.missiles.remove(missile)
+                continue
+
             hit_enemy = False
             missile_rect = get_rect_of_instance(missile)
             if self.current_wave is not None:
@@ -135,8 +139,6 @@ class Controller:
                         hit_enemy = True
                 if hit_enemy:
                     self.missiles.remove(missile)
-            if 0 > missile.x or missile.x > self.screen_width or missile.y < 0:
-                self.missiles.remove(missile)
 
     def get_what_needs_to_be_updated(self):
         if self.game_over:
