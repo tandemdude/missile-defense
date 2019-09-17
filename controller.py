@@ -63,7 +63,7 @@ class Controller:
         self.decrement_lives = self.lives.decrement
         self.game_over = False
 
-        self.score = Score(self.game_surface, self.screen_width, self.screen_height)
+        self.score = Score(self.game_surface, self.screen_width, self.screen_height, FONT_SIZE)
         self.font = pygame.font.Font(
             os.path.join("fonts", "SevenSegment.ttf"), FONT_SIZE
         )
@@ -82,6 +82,8 @@ class Controller:
             self.screen_width,
             self.screen_height,
             self.enemy_hit_ground,
+            self.wave_number,
+            FONT_SIZE
         )
 
         self.wave_number += 1

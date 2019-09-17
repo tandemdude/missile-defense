@@ -1,5 +1,6 @@
 import pygame
 from enemy import Enemy
+import os
 
 
 class Wave:
@@ -11,6 +12,8 @@ class Wave:
         screen_width,
         screen_height,
         hit_ground_func,
+        wave_num,
+        font_size
     ):
         self.number_of_enemies = number_of_enemies
         self.time_limit = None
@@ -21,6 +24,8 @@ class Wave:
         self.enemies = []
         self.finished = False
         self.register_enemies()
+        self.num = wave_num + 1
+        self.font = pygame.font.Font(os.path.join("fonts", "SevenSegment.ttf"), font_size)
 
     def register_enemies(self):
         for _ in range(self.number_of_enemies):
@@ -33,9 +38,17 @@ class Wave:
             Enemy(self.game_surface, self.screen_width, self.screen_height)
         )
 
+    def draw_wave_number(self):
+        text_surface = self.font.render(
+            f"Wave {self.num}", True, pygame.Color("#ffffff")
+        )
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = self.game_surface.get_rect().midtop
+        self.game_surface.blit(text_surface, text_rect)
+
     def update(self):
-        # if len(self.enemies) == self.number_of_enemies:
-        #    self.finished = True
+        self.draw_wave_number()
+
         self.finished = True
         for enemy in self.enemies:
             enemy.update()
