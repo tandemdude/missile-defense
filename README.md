@@ -23,18 +23,19 @@ TODO:
 - Waves of enemies
     - Start - DONE
     - Spawn enemies once one dies - DONE
-    - Spawn rate/period
+    - Spawn rate/period - DONE
 - Scoring
     - Score class - DONE
     - Incrementing score - DONE
     - Enemy value - DONE
 - Game start, game over, display and reset scoring - DONE
 
-#__Game VER 1 Complete__
+###################### Game VER 1 Complete ##########################
 
 - Refactor Controller.check_collisions - DOING
-- Refactor Controller.update_all DONE
-- Style enemies
+- Refactor Controller.update_all - DONE
+- Style enemies - DONE
+- Fix too many lives being removed bug - DONE               IMPORTANT
 - Implement turrets (towers)
 - Highscores
     - JSON?
