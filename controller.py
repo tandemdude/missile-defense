@@ -69,7 +69,7 @@ class Controller:
 
         self.game_over = False
 
-        self.score = Score(self.game_surface, self.screen_width, self.screen_height)
+        self.score = Score(self.game_surface, self.screen_width, self.screen_height, FONT_SIZE)
         self.font = pygame.font.Font(
             os.path.join("fonts", "SevenSegment.ttf"), FONT_SIZE
         )
@@ -137,16 +137,15 @@ class Controller:
 
             hit_enemy = False
             missile_rect = get_rect_of_instance(missile)
-            if self.current_wave is not None:
-                for enemy in self.current_wave.enemies:
-                    if enemy.visible and is_colliding(
-                        missile_rect, get_rect_of_instance(enemy)
-                    ):
-                        self.score.increment(enemy.value)
-                        enemy.visible = False
-                        hit_enemy = True
-                if hit_enemy:
-                    self.missiles.remove(missile)
+            for enemy in [] if self.current_wave is None else self.current_wave.enemies:
+                if enemy.visible and is_colliding(
+                    missile_rect, get_rect_of_instance(enemy)
+                ):
+                    self.score.increment(enemy.value)
+                    enemy.visible = False
+                    hit_enemy = True
+            if hit_enemy:
+                self.missiles.remove(missile)
 
     def get_what_needs_to_be_updated(self):
         if self.game_over:
