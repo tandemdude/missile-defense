@@ -1,18 +1,19 @@
 import pygame
-import unittest
 import os
-from missile import Missile
+import typing
 
+# Constants
 RETICLE_SPEED = 6.5
 
 
-def clamp(n, maxn, minn=0):
+def clamp(n: typing.Union[int, float], maxn: int, minn: int = 0) -> int:
     return max(min(maxn, n), minn)
 
 
 class Reticle:
-    def __init__(self, game_surface, screen_width, screen_height):
-
+    def __init__(
+        self, game_surface: pygame.Surface, screen_width: int, screen_height: int
+    ) -> None:
         self.asset = pygame.image.load(
             os.path.join("images", "reticle.png")
         ).convert_alpha()
@@ -37,22 +38,22 @@ class Reticle:
         self.image.blit(self.asset, (0, 0))
         self.image = pygame.transform.scale(self.image, (50, 50))
 
-    def current_position(self):
+    def current_position(self) -> tuple:
         return (self.x, self.y)
 
-    def up(self, enable: bool = True):
+    def up(self, enable: bool = True) -> None:
         self.moving_up = enable
 
-    def down(self, enable: bool = True):
+    def down(self, enable: bool = True) -> None:
         self.moving_down = enable
 
-    def left(self, enable: bool = True):
+    def left(self, enable: bool = True) -> None:
         self.moving_left = enable
 
-    def right(self, enable: bool = True):
+    def right(self, enable: bool = True) -> None:
         self.moving_right = enable
 
-    def update(self):
+    def update(self) -> None:
         if self.moving_up:
             self.y -= self.speed
         if self.moving_down:

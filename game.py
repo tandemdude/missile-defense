@@ -7,7 +7,7 @@ SCREEN_HEIGHT = 600
 
 
 class Game:
-    def __init__(self):
+    def __init__(self) -> None:
         pygame.init()
         pygame.display.set_caption("Missile Defense")
         # Create a display with the resolution specified by the constants
@@ -20,10 +20,10 @@ class Game:
         self.background.fill(pygame.Color("#000000"))
 
     @staticmethod
-    def quit():
+    def quit() -> None:
         # Quit out of pygame. Method can be static as it does not require access
         # to any attributes defined in self
-        pygame.quit()        
+        pygame.quit()
 
     def run(self):
         # Initialise an instance of the Controller class, which manages communication
@@ -57,7 +57,7 @@ class Game:
             pygame.display.flip()
 
 
-def main():
+def main() -> None:
     while True:
         # Create a new instance of Game each loop to slightly increase memory
         # efficiency and performance; prevents a backup of thousands of references
@@ -68,7 +68,7 @@ def main():
         # out of the overseer loop
         if not game.restart:
             game.quit()
-            break
+            return
 
 
 if __name__ == "__main__":

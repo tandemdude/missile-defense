@@ -1,4 +1,5 @@
 import pygame
+import typing
 import math
 import os
 
@@ -8,7 +9,14 @@ MISSILE_VELOCITY = 7
 
 
 class Missile(pygame.sprite.Sprite):
-    def __init__(self, game_surface, screen_width, screen_height, reticle_x, reticle_y):
+    def __init__(
+        self,
+        game_surface: pygame.Surface,
+        screen_width: int,
+        screen_height: int,
+        reticle_x: typing.Union[int, float],
+        reticle_y: typing.Union[int, float],
+    ) -> None:
         super().__init__()
 
         self.asset = pygame.image.load(
@@ -34,13 +42,13 @@ class Missile(pygame.sprite.Sprite):
 
         self.image = pygame.transform.rotate(self.image, self.get_angle_positions())
 
-    def get_angle_positions(self):
+    def get_angle_positions(self) -> float:
         radius, angle = pygame.math.Vector2(
             self.end_x - self.x, self.end_y - self.y
         ).as_polar()
         return -angle - 90
 
-    def vector_from_positions(self):
+    def vector_from_positions(self) -> tuple:
         velocity_x = (
             MISSILE_VELOCITY
             * (self.end_x - self.x)
@@ -53,10 +61,7 @@ class Missile(pygame.sprite.Sprite):
         )
         return (velocity_x, velocity_y)
 
-    def explode(self):
-        raise NotImplementedError
-
-    def update(self):
+    def update(self) -> None:
         if self.moving:
             self.x += self.velocity_x
             self.y += self.velocity_y
