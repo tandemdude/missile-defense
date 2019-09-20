@@ -30,12 +30,13 @@ TODO:
     - Enemy value - DONE
 - Game start, game over, display and reset scoring - DONE
 
-###################### Game VER 1 Complete ##########################
+----------------------- Game VER 1 Complete -----------------------
 
 - Refactor Controller.check_collisions - DOING
 - Refactor Controller.update_all - DONE
 - Style enemies - DONE
-- Fix too many lives being removed bug - DONE               IMPORTANT
+- Fix too many lives being removed bug - DONE
+- Add start game prompt
 - Implement turrets (towers)
 - Highscores
     - JSON?
