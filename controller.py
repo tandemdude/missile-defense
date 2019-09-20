@@ -1,5 +1,6 @@
 import pygame
 import os
+import math
 from reticle import Reticle
 from missile import Missile
 from wave import Wave
@@ -18,6 +19,10 @@ FONT_SIZE = 24
 
 def calculate_enemies_for_wave(initial_enemies, wave_number, constant):
     return round(initial_enemies + (wave_number ** 2 * constant))
+
+
+def calculate_wave_spawn_period(wave_number):
+    return 5 * math.sqrt(4 * wave_number) + 5
 
 
 def get_rect_of_instance(instance):
@@ -57,13 +62,14 @@ class Controller:
         self.lives = Lives(
             self.game_surface, self.screen_width, self.screen_height, FONT_SIZE, LIVES
         )
+
         self.game_over_screen = GameOver(
             self.game_surface, self.screen_width, self.screen_height, FONT_SIZE
         )
-        self.decrement_lives = self.lives.decrement
+
         self.game_over = False
 
-        self.score = Score(self.game_surface, self.screen_width, self.screen_height, FONT_SIZE)
+        self.score = Score(self.game_surface, self.screen_width, self.screen_height)
         self.font = pygame.font.Font(
             os.path.join("fonts", "SevenSegment.ttf"), FONT_SIZE
         )
@@ -77,7 +83,7 @@ class Controller:
         )
         self.current_wave = Wave(
             number_of_enemies,
-            None,
+            calculate_wave_spawn_period(self.wave_number) * FRAME_RATE,
             self.game_surface,
             self.screen_width,
             self.screen_height,
@@ -131,15 +137,16 @@ class Controller:
 
             hit_enemy = False
             missile_rect = get_rect_of_instance(missile)
-            for enemy in [] if self.current_wave is None else self.current_wave.enemies:
-                if enemy.visible and is_colliding(
-                    missile_rect, get_rect_of_instance(enemy)
-                ):
-                    self.score.increment(enemy.value)
-                    enemy.visible = False
-                    hit_enemy = True
-            if hit_enemy:
-                self.missiles.remove(missile)
+            if self.current_wave is not None:
+                for enemy in self.current_wave.enemies:
+                    if enemy.visible and is_colliding(
+                        missile_rect, get_rect_of_instance(enemy)
+                    ):
+                        self.score.increment(enemy.value)
+                        enemy.visible = False
+                        hit_enemy = True
+                if hit_enemy:
+                    self.missiles.remove(missile)
 
     def get_what_needs_to_be_updated(self):
         if self.game_over:
