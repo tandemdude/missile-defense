@@ -21,11 +21,13 @@ class Game:
 
     @staticmethod
     def quit() -> None:
-        # Quit out of pygame. Method can be static as it does not require access
-        # to any attributes defined in self
+        """
+        Quit out of pygame. Method can be static as it does not require access
+        to any attributes defined in self
+        """
         pygame.quit()
 
-    def run(self):
+    def run(self) -> None:
         # Initialise an instance of the Controller class, which manages communication
         # between all other instances used during the running of the game
         controller = Controller(self.screen, SCREEN_WIDTH, SCREEN_HEIGHT)

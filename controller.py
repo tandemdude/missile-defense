@@ -21,31 +21,42 @@ FONT_SIZE = 24
 def calculate_enemies_for_wave(
     initial_enemies: int, wave_number: int, constant: float
 ) -> int:
-    # Equation to calculate the number of enemies for any given wave
-    # Exponential equation ensures the difficulty progression is non-linear
-    # meaning the number of enemies does not increase at a constant rate
+    """
+    Equation to calculate the number of enemies for any given wave
+    Exponential equation ensures the difficulty progression is non-linear
+    meaning the number of enemies does not increase at a constant rate
+    """
     return round(initial_enemies + (wave_number ** 2 * constant))
 
 
 def calculate_wave_spawn_period(wave_number: int) -> float:
-    # Equation to calculate the amount of time enemies have to spawn for any given wave
-    # 5√(4x) + 5
-    # This gives a surd curve meaning that for the first 5 waves, the amount of time increases
-    # at a faster rate than for later waves, hence increasing the late-game difficulty
+    """
+    Equation to calculate the amount of time enemies have to spawn for any given wave
+    Equates to 5√(4x) + 5 where x is the wave number
+    This gives a surd curve meaning that for the first 5 waves, the amount of time increases
+    at a faster rate than for later waves, hence increasing the late-game difficulty
+    """
     return 5 * math.sqrt(4 * wave_number) + 5
 
 
 def get_rect_of_instance(instance) -> pygame.Rect:
-    # Gets the pygame.Rect of a given instance's image attribute
-    # Returns a pygame.Rect in the correct position
+    """
+    Gets the pygame.Rect of a given instance's image attribute
+    Returns a pygame.Rect in the correct position
+    """
     rect = instance.image.get_rect()
     rect.x, rect.y = instance.x, instance.y
     return rect
 
 
 def is_colliding(rect1: pygame.Rect, rect2: pygame.Rect) -> bool:
-    # Takes two pygame.Rect instances and returns a bool indicating
-    # whether or not they are currently colliding
+    """
+    Takes two pygame.Rect instances and returns a bool indicating
+    whether or not they are currently colliding
+
+    The pygame colliderect function already provides this functionality,
+    this implementation simply makes it easier to read, more 'pythonic'
+    """
     return rect1.colliderect(rect2)
 
 
@@ -93,8 +104,10 @@ class Controller:
         )
 
     def enemy_hit_ground(self) -> None:
-        # Callback function passed into Wave on instantiation. Provides a method for the enemies to
-        # tell the Controller class when to decrement the lives counter
+        """
+        Callback function passed into Wave on instantiation. Provides a method for the enemies to
+        tell the Controller class when to decrement the lives counter
+        """
         self.lives.decrement()
 
     def create_new_wave(self) -> None:
@@ -116,8 +129,10 @@ class Controller:
         self.wave_number += 1
 
     def trigger_fire_missile(self) -> None:
-        # Check if the maximum amount of missiles are already on the screen and
-        # instantiate a new one if the limit have not been reached
+        """
+        Check if the maximum amount of missiles are already on the screen and
+        instantiate a new one if the limit have not been reached
+        """
         if len(self.missiles) < MAX_MISSILES:
             self.missiles.append(
                 Missile(
@@ -130,8 +145,10 @@ class Controller:
             )
 
     def process_event(self, event: pygame.event.Event) -> None:
-        # Process the passed in event, sending a signal to the reticle,
-        # or firing a missile if necessary
+        """
+        Process the passed in event, sending a signal to the reticle,
+        or firing a missile if necessary
+        """
         if event.type == pygame.KEYDOWN:
             if event.key == self.control_scheme.left:
                 self.reticle.left()
@@ -173,9 +190,11 @@ class Controller:
                 self.missiles.remove(missile)
 
     def get_what_needs_to_be_updated(self) -> list:
-        # Return a list of all the instances that need to be updated in any given frame
-        # Only updates what needs to be updated
-        # ie, does not update the game_over screen if the game_over conditions have not been met
+        """
+        Return a list of all the instances that need to be updated in any given frame
+        Only updates what needs to be updated
+        ie, does not update the game_over screen if the game_over conditions have not been met
+        """
         if self.game_over:
             to_be_updated = [self.score, self.lives, self.game_over_screen]
         else:
@@ -186,8 +205,10 @@ class Controller:
         return to_be_updated
 
     def create_new_wave_if_required(self) -> None:
-        # Checks if the conditions for the creation of a new wave have been met
-        # Calls create_new_wave when required
+        """
+        Checks if the conditions for the creation of a new wave have been met
+        Calls create_new_wave when required
+        """
         if self.frames_to_next_wave > 0:
             self.frames_to_next_wave -= 1
         else:
@@ -198,8 +219,10 @@ class Controller:
             self.create_new_wave()
 
     def check_if_wave_finished(self) -> None:
-        # Checks if the current wave is complete, ie, all the enemies have either hit the bottom
-        # of the screen or been hit by a missile
+        """
+        Checks if the current wave is complete, ie, all the enemies have either hit the bottom
+        of the screen or been hit by a missile
+        """
         if self.current_wave is None or self.current_wave.finished:
             self.current_wave = None
             # Begins the between wave timer if the wave has been completed

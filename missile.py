@@ -3,9 +3,12 @@ import typing
 import math
 import os
 
+import utils
+
 SPRITE_WIDTH = 15
 SPRITE_HEIGHT = 25
 MISSILE_VELOCITY = 7
+ANGLE_OFFSET = 90
 
 
 class Missile(pygame.sprite.Sprite):
@@ -32,7 +35,9 @@ class Missile(pygame.sprite.Sprite):
         self.moving = True
         self.x, self.y = screen_width // 2, screen_height
         self.end_x, self.end_y = reticle_x, reticle_y
-        self.velocity_x, self.velocity_y = self.vector_from_positions()
+        self.velocity_x, self.velocity_y = utils.vector_from_positions(
+            self.x, self.y, self.end_x, self.end_y, MISSILE_VELOCITY
+        )
 
         self.image = pygame.Surface(
             (self.asset_width, self.asset_height), pygame.SRCALPHA
@@ -40,26 +45,12 @@ class Missile(pygame.sprite.Sprite):
         self.image.blit(self.asset, (0, 0))
         self.image = pygame.transform.scale(self.image, (SPRITE_WIDTH, SPRITE_HEIGHT))
 
-        self.image = pygame.transform.rotate(self.image, self.get_angle_positions())
-
-    def get_angle_positions(self) -> float:
-        radius, angle = pygame.math.Vector2(
-            self.end_x - self.x, self.end_y - self.y
-        ).as_polar()
-        return -angle - 90
-
-    def vector_from_positions(self) -> tuple:
-        velocity_x = (
-            MISSILE_VELOCITY
-            * (self.end_x - self.x)
-            / math.sqrt(((self.end_y - self.y) ** 2) + ((self.end_x - self.x) ** 2))
+        self.image = pygame.transform.rotate(
+            self.image,
+            utils.get_angle_positions(
+                self.x, self.y, self.end_x, self.end_y, ANGLE_OFFSET
+            ),
         )
-        velocity_y = (
-            MISSILE_VELOCITY
-            * (self.end_y - self.y)
-            / math.sqrt(((self.end_y - self.y) ** 2) + ((self.end_x - self.x) ** 2))
-        )
-        return (velocity_x, velocity_y)
 
     def update(self) -> None:
         if self.moving:

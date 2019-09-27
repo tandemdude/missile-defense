@@ -1,12 +1,16 @@
 import pygame
 import random
 import unittest
+import math
 import os
+
+import utils
 
 # Constants
 SPRITE_WIDTH = 25
 SPRITE_HEIGHT = 30
-VERTICAL_VELOCITY = 2
+ENEMY_VELOCITY = 2
+ANGLE_OFFSET = 270
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -40,13 +44,12 @@ class Enemy(pygame.sprite.Sprite):
         self.image.blit(self.asset, (0, 0))
         self.image = pygame.transform.scale(self.image, (SPRITE_WIDTH, SPRITE_HEIGHT))
 
-        self.image = pygame.transform.rotate(self.image, self.get_angle_positions())
-
-    def get_angle_positions(self) -> float:
-        radius, angle = pygame.math.Vector2(
-            self.end_x - self.x, self.end_y - self.y
-        ).as_polar()
-        return -angle - 270
+        self.image = pygame.transform.rotate(
+            self.image,
+            utils.get_angle_positions(
+                self.x, self.y, self.end_x, self.end_y, ANGLE_OFFSET
+            ),
+        )
 
     def random_start_position(self) -> tuple:
         return (random.randint(0, self.screen_width - SPRITE_WIDTH), 0)
@@ -57,14 +60,12 @@ class Enemy(pygame.sprite.Sprite):
             self.screen_height - SPRITE_HEIGHT,
         )
 
-    def vector_from_positions(self) -> tuple:
-        velocity_x = (self.end_x - self.x) / (self.end_y - self.y)
-        return (velocity_x, VERTICAL_VELOCITY)
-
     def generate_positions_and_velocities(self) -> None:
         self.x, self.y = self.random_start_position()
         self.end_x, self.end_y = self.random_aim_position()
-        self.velocity_x, self.velocity_y = self.vector_from_positions()
+        self.velocity_x, self.velocity_y = utils.vector_from_positions(
+            self.x, self.y, self.end_x, self.end_y, ENEMY_VELOCITY
+        )
 
     def move(self) -> None:
         self.x += self.velocity_x
