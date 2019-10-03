@@ -1,6 +1,7 @@
 import pygame
 import os
 import math
+
 from reticle import Reticle
 from missile import Missile
 from wave import Wave
@@ -65,6 +66,7 @@ class ControlScheme:
     Class to contain the current keybinds for
     actions that occur in the game.
     """
+
     def __init__(self) -> None:
         self.up = pygame.K_UP
         self.down = pygame.K_DOWN
@@ -85,6 +87,7 @@ class Controller:
     unless other classes are directly related, such as the
     Wave and Enemy class.
     """
+
     def __init__(
         self, game_surface: pygame.Surface, screen_width: int, screen_height: int
     ) -> None:
@@ -199,7 +202,7 @@ class Controller:
         Check if any sprites are colliding such that
         a missile or enemy needs to be removed from the display
         """
-        for missile in self.missiles[:]: # Loop through a copy of self.missiles
+        for missile in self.missiles[:]:  # Loop through a copy of self.missiles
             # Check if a missile has flown out of bounds and remove it if necessary
             if 0 > missile.x or missile.x > self.screen_width or missile.y < 0:
                 self.missiles.remove(missile)
@@ -233,7 +236,7 @@ class Controller:
             to_be_updated = [self.score, self.lives, self.game_over_screen]
         else:
             to_be_updated = self.missiles + [self.reticle, self.score, self.lives]
-            # Ensures that update_all does not attempt a NoneType item
+            # Ensures that update_all does not attempt to update NoneType
             if self.current_wave is not None:
                 to_be_updated += [self.current_wave]
         return to_be_updated
