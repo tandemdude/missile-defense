@@ -77,6 +77,8 @@ class Controller:
         self.screen_width = screen_width
         self.screen_height = screen_height
 
+        self.running = False
+
         self.control_scheme = ControlScheme()
         self.reticle = Reticle(self.game_surface, self.screen_width, self.screen_height)
         self.missiles = []
@@ -149,6 +151,9 @@ class Controller:
         Process the passed in event, sending a signal to the reticle,
         or firing a missile if necessary
         """
+        if not self.running:
+            return
+
         if event.type == pygame.KEYDOWN:
             if event.key == self.control_scheme.left:
                 self.reticle.left()
@@ -232,6 +237,9 @@ class Controller:
 
     def update_all(self) -> None:
         # Transfers game into the game_over state if all lives have been lost, or runs wave logic
+        if not self.running:
+            return
+
         if self.lives == 0:
             self.game_over = True
         else:

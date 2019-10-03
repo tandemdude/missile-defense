@@ -14,8 +14,8 @@ class GameOver:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.font_size = font_size
-        self.font = self.font = pygame.font.Font(
-            os.path.join("fonts", "SevenSegment.ttf"), self.font_size
+        self.font = pygame.font.Font(
+            os.path.join("fonts", "fixedsys.ttf"), self.font_size
         )
 
     def update(self) -> None:

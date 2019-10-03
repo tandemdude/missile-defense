@@ -16,7 +16,7 @@ TODO:
     - Player's missiles - DONE
 - Control/communication redesign
     - Control scheme - DONE
-    - "Link/communicator class" - DONE
+    - Controller class - DONE
 - Collisions
     - Enemy kill - DONE
     - Missile explosion + AOE
@@ -36,7 +36,7 @@ TODO:
 - Refactor Controller.update_all - DONE
 - Style enemies - DONE
 - Fix too many lives being removed bug - DONE
-- Add start game prompt
+- Add start game prompt - DONE
 - Implement turrets (towers)
 - Highscores
     - JSON?

@@ -27,12 +27,10 @@ class Wave:
         self.finished = False
         self.frames_since_start = 0
         self.num = wave_num + 1
-        self.font = pygame.font.Font(
-            os.path.join("fonts", "SevenSegment.ttf"), font_size
-        )
+        self.font = pygame.font.Font(os.path.join("fonts", "fixedsys.ttf"), font_size)
         self.enemy_spawn_times = [
             round(random.random() * self.time_limit_in_frames)
-            for i in range(number_of_enemies)
+            for _ in range(number_of_enemies)
         ]
 
     def register_enemies(self) -> None:
@@ -48,7 +46,7 @@ class Wave:
 
     def register_new_enemy_if_required(self) -> None:
         if self.frames_since_start in self.enemy_spawn_times:
-            for i in range(self.enemy_spawn_times.count(self.frames_since_start)):
+            for _ in range(self.enemy_spawn_times.count(self.frames_since_start)):
                 self.register_enemy()
 
     def draw_wave_number(self) -> None:
