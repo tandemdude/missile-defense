@@ -61,6 +61,10 @@ def is_colliding(rect1: pygame.Rect, rect2: pygame.Rect) -> bool:
 
 
 class ControlScheme:
+    """
+    Class to contain the current keybinds for
+    actions that occur in the game.
+    """
     def __init__(self) -> None:
         self.up = pygame.K_UP
         self.down = pygame.K_DOWN
@@ -70,6 +74,17 @@ class ControlScheme:
 
 
 class Controller:
+    """
+    Link class which acts as a bridge between the main game
+    and all other instances being used throughout the game.
+
+    Prevents classes knowing about other classes which are
+    unrelated, reducing code complexity.
+
+    All classes communicate to each other through this class,
+    unless other classes are directly related, such as the
+    Wave and Enemy class.
+    """
     def __init__(
         self, game_surface: pygame.Surface, screen_width: int, screen_height: int
     ) -> None:
@@ -150,6 +165,9 @@ class Controller:
         """
         Process the passed in event, sending a signal to the reticle,
         or firing a missile if necessary
+
+        TODO: Reformat this to use switch/case type syntax to prevent
+        large IF blocks?
         """
         if not self.running:
             return
@@ -177,21 +195,32 @@ class Controller:
                 self.reticle.down(False)
 
     def check_collisions(self) -> None:
-        for missile in self.missiles[:]:
+        """
+        Check if any sprites are colliding such that
+        a missile or enemy needs to be removed from the display
+        """
+        for missile in self.missiles[:]: # Loop through a copy of self.missiles
+            # Check if a missile has flown out of bounds and remove it if necessary
             if 0 > missile.x or missile.x > self.screen_width or missile.y < 0:
                 self.missiles.remove(missile)
                 continue
 
             hit_enemy = False
             missile_rect = get_rect_of_instance(missile)
+            # Loop through a list of enemies if there is currently a wave
+            # else loop though an empty list meaning the loop does not occur
             for enemy in [] if self.current_wave is None else self.current_wave.enemies:
+                # Check if the enemy is colliding with the missile
                 if enemy.visible and is_colliding(
                     missile_rect, get_rect_of_instance(enemy)
                 ):
+                    # Increment score and toggle enemy visibility, mark the missile
+                    # to be removed at the end of this iteration
                     self.score.increment(enemy.value)
                     enemy.visible = False
                     hit_enemy = True
             if hit_enemy:
+                # Remove the missile from self.missiles if it hit an enemy
                 self.missiles.remove(missile)
 
     def get_what_needs_to_be_updated(self) -> list:
