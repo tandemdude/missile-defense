@@ -212,7 +212,9 @@ class Controller:
             missile_rect = get_rect_of_instance(missile)
             # Loop through a list of enemies if there is currently a wave
             # else loop though an empty list meaning the loop does not occur
-            for enemy in [] if self.current_wave is None else self.current_wave.enemies:
+            for enemy in (
+                [] if self.current_wave is None else self.current_wave.enemies.sprites()
+            ):
                 # Check if the enemy is colliding with the missile
                 if enemy.visible and is_colliding(
                     missile_rect, get_rect_of_instance(enemy)

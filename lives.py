@@ -25,7 +25,7 @@ class Lives:
 
     def update(self) -> None:
         white, red = pygame.Color("#ffffff"), pygame.Color("#ff0000")
-        colour = red if self.lives == 1 else white
+        colour = red if self.lives <= 1 else white
         lives_text_surface = self.font.render("LIVES", True, white)
         lives_text_rect = lives_text_surface.get_rect()
         lives_text_rect.topleft = (2, 2)

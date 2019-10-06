@@ -3,6 +3,7 @@ import random
 import unittest
 import math
 import os
+import typing
 
 import utils
 
@@ -11,45 +12,51 @@ SPRITE_WIDTH = 25
 SPRITE_HEIGHT = 30
 ENEMY_VELOCITY = 2
 ANGLE_OFFSET = 270
+NUMBER_OF_FRAMES = 14
+FRAME_SIZE = (210, 387)
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(
-        self, game_surface: pygame.Surface, screen_width: int, screen_height: int
-    ) -> None:
-        super().__init__()
+    spritesheet = None
 
-        self.asset = pygame.image.load(
-            os.path.join("images", "enemy.png")
-        ).convert_alpha()
-        self.asset_width, self.asset_height = (
-            self.asset.get_width(),
-            self.asset.get_height(),
-        )
+    def __init__(
+        self,
+        sprite_group: pygame.sprite.Group,
+        game_surface: pygame.Surface,
+        screen_width: int,
+        screen_height: int,
+        hit_ground_func: typing.Callable,
+        mark_wave_uncomplete_func: typing.Callable,
+    ) -> None:
+        super().__init__(sprite_group)
+
+        if Enemy.spritesheet is None:
+            Enemy.spritesheet = pygame.image.load(
+                os.path.join("images", "enemy_spritesheet.png")
+            ).convert_alpha()
+        self.asset = Enemy.spritesheet
 
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.game_surface = game_surface
+        self.hit_ground_func = hit_ground_func
+        self.mark_wave_uncomplete_func = mark_wave_uncomplete_func
         self.generate_positions_and_velocities()
         self.visible = True
         self.respawn = False
         self.hit_ground = False
-        self.image = pygame.Surface((SPRITE_WIDTH, SPRITE_HEIGHT))
-        self.image.fill(pygame.Color("#ffffff"))
+        self.current_frame = 0
         self.value = 150
 
-        self.image = pygame.Surface(
-            (self.asset_width, self.asset_height), pygame.SRCALPHA
-        )
-        self.image.blit(self.asset, (0, 0))
-        self.image = pygame.transform.scale(self.image, (SPRITE_WIDTH, SPRITE_HEIGHT))
+        self.frames = []
+        self.create_animation_frames()
+        self.rotate_all_frames()
 
-        self.image = pygame.transform.rotate(
-            self.image,
-            utils.get_angle_positions(
-                self.x, self.y, self.end_x, self.end_y, ANGLE_OFFSET
-            ),
-        )
+        self.image: pygame.Surface
+
+    def create_animation_frames(self) -> None:
+        for x in range(NUMBER_OF_FRAMES):
+            self.frames.append(self.asset.subsurface(((5 + x * 220, 5), FRAME_SIZE)))
 
     def random_start_position(self) -> tuple:
         return (random.randint(0, self.screen_width - SPRITE_WIDTH), 0)
@@ -71,6 +78,30 @@ class Enemy(pygame.sprite.Sprite):
         self.x += self.velocity_x
         self.y += self.velocity_y
 
+    def rotate_all_frames(self) -> None:
+        fixed_frames = []
+        for frame in self.frames:
+            frame = pygame.transform.scale(frame, (SPRITE_WIDTH, SPRITE_HEIGHT))
+            frame = pygame.transform.rotate(
+                frame,
+                utils.get_angle_positions(
+                    self.x, self.y, self.end_x, self.end_y, ANGLE_OFFSET
+                ),
+            )
+            fixed_frames.append(frame)
+        self.frames = fixed_frames
+
+    def next_frame(self) -> None:
+        self.current_frame += 1
+        if self.current_frame >= len(self.frames):
+            self.current_frame = 0
+
+    def draw_frame(self) -> None:
+        current_frame_image = self.frames[self.current_frame]
+        self.image = current_frame_image
+        self.game_surface.blit(current_frame_image, (self.x, self.y))
+        self.next_frame()
+
     def update(self) -> None:
         if self.y >= self.screen_height - SPRITE_HEIGHT:
             self.velocity_y = 0
@@ -78,7 +109,13 @@ class Enemy(pygame.sprite.Sprite):
 
         if self.visible:
             self.move()
-            self.game_surface.blit(self.image, (self.x, self.y))
+            self.draw_frame()
         elif self.respawn:
             self.generate_positions_and_velocities()
             self.visible = True
+
+        if self.hit_ground and self.visible:
+            self.hit_ground_func()
+            self.visible = False
+        if self.visible:
+            self.mark_wave_uncomplete_func()

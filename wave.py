@@ -23,7 +23,7 @@ class Wave:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.hit_ground_func = hit_ground_func
-        self.enemies = []
+        self.enemies = pygame.sprite.Group()
         self.finished = False
         self.frames_since_start = 0
         self.num = wave_num + 1
@@ -35,13 +35,27 @@ class Wave:
 
     def register_enemies(self) -> None:
         for _ in range(self.number_of_enemies):
-            self.enemies.append(
-                Enemy(self.game_surface, self.screen_width, self.screen_height)
+            self.enemies.add(
+                Enemy(
+                    self.enemies,
+                    self.game_surface,
+                    self.screen_width,
+                    self.screen_height,
+                    self.hit_ground_func,
+                    self.mark_incomplete,
+                )
             )
 
     def register_enemy(self) -> None:
-        self.enemies.append(
-            Enemy(self.game_surface, self.screen_width, self.screen_height)
+        self.enemies.add(
+            Enemy(
+                self.enemies,
+                self.game_surface,
+                self.screen_width,
+                self.screen_height,
+                self.hit_ground_func,
+                self.mark_incomplete,
+            )
         )
 
     def register_new_enemy_if_required(self) -> None:
@@ -57,21 +71,19 @@ class Wave:
         text_rect.midtop = self.game_surface.get_rect().midtop
         self.game_surface.blit(text_surface, text_rect)
 
+    def mark_incomplete(self) -> None:
+        self.finished = False
+
     def update(self) -> None:
         self.draw_wave_number()
         self.register_new_enemy_if_required()
 
-        if len(self.enemies) > 0 and len(self.enemies) <= self.number_of_enemies:
+        current_enemies = self.enemies.sprites()
+        if len(current_enemies) > 0 and len(current_enemies) <= self.number_of_enemies:
             self.finished = True
-            for enemy in self.enemies:
-                enemy.update()
-                if enemy.hit_ground and enemy.visible:
-                    self.hit_ground_func()
-                    enemy.visible = False
-                if enemy.visible:
-                    self.finished = False
+            self.enemies.update()
 
-        if len(self.enemies) != self.number_of_enemies:
+        if len(current_enemies) != self.number_of_enemies:
             self.finished = False
 
         self.frames_since_start += 1

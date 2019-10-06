@@ -12,6 +12,8 @@ ANGLE_OFFSET = 90
 
 
 class Missile(pygame.sprite.Sprite):
+    asset = None
+
     def __init__(
         self,
         game_surface: pygame.Surface,
@@ -22,13 +24,11 @@ class Missile(pygame.sprite.Sprite):
     ) -> None:
         super().__init__()
 
-        self.asset = pygame.image.load(
-            os.path.join("images", "missile.png")
-        ).convert_alpha()
-        self.asset_width, self.asset_height = (
-            self.asset.get_width(),
-            self.asset.get_height(),
-        )
+        if Missile.asset is None:
+            Missile.asset = pygame.image.load(
+                os.path.join("images", "missile.png")
+            ).convert_alpha()
+        self.asset = Missile.asset
 
         self.game_surface = game_surface
         self.visible = True
@@ -40,7 +40,7 @@ class Missile(pygame.sprite.Sprite):
         )
 
         self.image = pygame.Surface(
-            (self.asset_width, self.asset_height), pygame.SRCALPHA
+            (self.asset.get_width(), self.asset.get_height()), pygame.SRCALPHA
         )
         self.image.blit(self.asset, (0, 0))
         self.image = pygame.transform.scale(self.image, (SPRITE_WIDTH, SPRITE_HEIGHT))
