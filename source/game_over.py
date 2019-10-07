@@ -14,6 +14,7 @@ class GameOver:
         font_size: int,
     ) -> None:
         """
+        
         :param game_surface: The surface to draw the text onto
         :param screen_width: Int width of the window in pixels
         :param screen_height: Int height of the window in pixels

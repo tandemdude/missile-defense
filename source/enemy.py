@@ -31,6 +31,7 @@ class Enemy(pygame.sprite.Sprite):
         mark_wave_incomplete_func: typing.Callable,
     ) -> None:
         """
+        
         :param sprite_group: The sprite group that the enemy is a part of
         :param game_surface: The surface to blit the sprite onto
         :param screen_width: Int width of the screen in pixels

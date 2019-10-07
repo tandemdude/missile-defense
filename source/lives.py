@@ -14,6 +14,14 @@ class Lives:
         font_size: int,
         lives: int,
     ) -> None:
+        """
+
+        :param game_surface: The surface on which to draw the lives counter
+        :param screen_width: Int width of the window in pixels
+        :param screen_height: Int height of the window in pixels
+        :param font_size: Int font size in pixels
+        :param lives: Int amount of starting lives
+        """
         self.game_surface = game_surface
         self.screen_width = screen_width
         self.screen_height = screen_height

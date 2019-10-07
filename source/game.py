@@ -15,6 +15,7 @@ class Game:
     """
     def __init__(self, start_screen) -> None:
         """
+        
         :param start_screen: Instance of the StartScreen class to display when game begins
         """
         pygame.init()

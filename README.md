@@ -37,6 +37,7 @@ TODO:
 - Style enemies - DONE
 - Fix too many lives being removed bug - DONE
 - Add start game prompt - DONE
+- Finish docstrings for reticle, score, start_screen, wave
 - Implement turrets (towers)
 - Highscores
     - JSON?

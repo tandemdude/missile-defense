@@ -105,6 +105,7 @@ class Controller:
         self, game_surface: pygame.Surface, screen_width: int, screen_height: int
     ) -> None:
         """
+        
         :param game_surface: The game's window where sprites will be drawn
         :param screen_width: Int width of the window in pixels
         :param screen_height: Int height of the window in pixels
