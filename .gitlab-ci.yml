@@ -5,7 +5,7 @@ stages:
 windows job:
   stage: make
   script:
-    - docs/make.bat html
+    - chmod +x docs/make.bat html
 
 pages:
   stage: post
