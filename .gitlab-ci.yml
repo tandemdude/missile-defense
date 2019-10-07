@@ -1,0 +1,8 @@
+pages:
+    script:
+        - mv docs/build/html public 
+    artifacts:
+        paths:
+            - public
+    only:
+        - master
