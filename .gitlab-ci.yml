@@ -12,6 +12,7 @@ default:
     - . venv/bin/activate
     - python3 -V
     - python3 -m pip install sphinx
+    - python3 -m pip install pygame
   script:
     - python3 -m sphinx.cmd.build docs/source docs/build -b html
 
