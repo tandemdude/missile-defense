@@ -11,67 +11,67 @@ Welcome to A-Level-Project's documentation!
    :caption: Contents:
 
 
-A-Level-Project game
-====================
+game.py
+=======
 .. automodule:: source.game
    :members:
 
 
-A-Level-Project controller
-==========================
+controller.py
+=============
 .. automodule:: source.controller
    :members:
 
 
-A-Level-Project wave
-====================
+wave.py
+=======
 .. automodule:: source.wave
    :members:
 
 
-A-Level-Project enemy
-=====================
+enemy.py
+========
 .. automodule:: source.enemy
    :members:
 
 
-A-Level-Project missile
-=======================
+missile.py
+==========
 .. automodule:: source.missile
    :members:
 
 
-A-Level-Project reticle
-=======================
+reticle.py
+==========
 .. automodule:: source.reticle
    :members:
 
 
-A-Level-Project lives
-=====================
+lives.py
+========
 .. automodule:: source.lives
    :members:
 
 
-A-Level-Project score
-=====================
+score.py
+========
 .. automodule:: source.score
    :members:
 
 
-A-Level-Project game_over
-=========================
+game_over.py
+============
 .. automodule:: source.game_over
    :members:
 
 
-A-Level-Project start_screen
-============================
+start_screen.py
+===============
 .. automodule:: source.start_screen
    :members:
 
 
-A-Level-Project utils
-=====================
+utils.py
+========
 .. automodule:: source.utils
    :members:
