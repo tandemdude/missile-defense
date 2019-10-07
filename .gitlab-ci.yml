@@ -1,5 +1,5 @@
-default:
-  before_script:
+windows job:
+  script:
     - call docs/make.bat html
 
 pages:
