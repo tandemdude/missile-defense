@@ -1,9 +1,8 @@
 import pygame
 import typing
-import math
 import os
 
-import utils
+from source import utils
 
 SPRITE_WIDTH = 15
 SPRITE_HEIGHT = 25
@@ -12,6 +11,9 @@ ANGLE_OFFSET = 90
 
 
 class Missile(pygame.sprite.Sprite):
+    """
+    Class to represent a fired missile sprite.
+    """
     asset = None
 
     def __init__(
@@ -53,6 +55,12 @@ class Missile(pygame.sprite.Sprite):
         )
 
     def update(self) -> None:
+        """
+        Moves the sprite on the game surface if required and draws it if the missile
+        is currently visible.
+
+        :return: None
+        """
         if self.moving:
             self.x += self.velocity_x
             self.y += self.velocity_y

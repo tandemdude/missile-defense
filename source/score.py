@@ -6,6 +6,9 @@ SCORE_LENGTH = 10
 
 
 class Score:
+    """
+    Class to contain score counter functionality.
+    """
     def __init__(
         self,
         game_surface: pygame.Surface,
@@ -20,17 +23,38 @@ class Score:
         self.value = 0
 
     def reset(self) -> None:
+        """
+        Resets the score counter to 0.
+
+        :return: None
+        """
         self.value = 0
 
     def increment(self, amt: int) -> None:
+        """
+        Increments the score counter by a given amount.
+
+        :param amt: Int to increase the score by
+        :return: None
+        """
         self.value += amt
 
     def score_to_text(self) -> str:
+        """
+        Converts the score value to a padded string to be rendered
+
+        :return: Str formatted score
+        """
         str_score = str(self.value)
         zero_padding = "0" * (SCORE_LENGTH - len(str_score))
         return "SCORE " + zero_padding + str_score
 
     def update(self) -> None:
+        """
+        Renders the score onto the game surface.
+
+        :return: None
+        """
         text_surface = self.font.render(
             self.score_to_text(), True, pygame.Color("#ffffff")
         )

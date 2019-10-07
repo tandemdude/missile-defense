@@ -1,7 +1,7 @@
 import pygame
 import os
-from controller import Controller
-from start_screen import StartScreen
+from source.controller import Controller
+from source.start_screen import StartScreen
 
 # Constants
 SCREEN_WIDTH = 800
@@ -9,6 +9,10 @@ SCREEN_HEIGHT = 600
 
 
 class Game:
+    """
+    Class to initialise pygame and contain the main game loop.
+    Initialises the game surface and the pygame Clock.
+    """
     def __init__(self, start_screen) -> None:
         pygame.init()
         pygame.display.set_caption("Missile Defense")
@@ -27,11 +31,20 @@ class Game:
     def quit() -> None:
         """
         Quit out of pygame. Method can be static as it does not require access
-        to any attributes defined in self
+        to any attributes defined in self.
+
+        :return: None
         """
         pygame.quit()
 
     def run(self) -> None:
+        """
+        Runs the game. Instantiates a Controller object then creates the
+        game loop. Handles passing of events to the controller as well
+        as flipping the display each frame.
+
+        :return: None
+        """
         # Initialise an instance of the Controller class, which manages communication
         # between all other instances used during the running of the game
         controller = Controller(self.screen, SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -76,6 +89,12 @@ class Game:
 
 
 def main() -> None:
+    """
+    Creates a while loop to instantiate a new Game object each time the user
+    restarts, or quits out of the program when prompted.
+
+    :return: None
+    """
     start_screen = StartScreen(SCREEN_WIDTH, SCREEN_HEIGHT)
 
     while True:

@@ -3,6 +3,9 @@ import os
 
 
 class Lives:
+    """
+    Class to contain current lives counter functionality.
+    """
     def __init__(
         self,
         game_surface: pygame.Surface,
@@ -18,12 +21,29 @@ class Lives:
         self.font = pygame.font.Font(os.path.join("fonts", "fixedsys.ttf"), font_size)
 
     def __eq__(self, value: int) -> bool:
+        """
+        Compares the lives value against a specified amount.
+
+        :param value: Int to check current lives against.
+        :return: Bool representing if the current life count is equal to the value.
+        """
         return self.lives == value
 
     def decrement(self) -> None:
+        """
+        Decrements the current life count by 1 each time it is called. Life count
+        cannot be less than 0.
+
+        :return: None
+        """
         self.lives -= 1 if self.lives > 0 else 0
 
     def update(self) -> None:
+        """
+        Draws the life counter onto the game surface each time this is called.
+
+        :return: None
+        """
         white, red = pygame.Color("#ffffff"), pygame.Color("#ff0000")
         colour = red if self.lives <= 1 else white
         lives_text_surface = self.font.render("LIVES", True, white)

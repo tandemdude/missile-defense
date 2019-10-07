@@ -3,6 +3,9 @@ import os
 
 
 class GameOver:
+    """
+    Class to contain game_over screen functionality.
+    """
     def __init__(
         self,
         game_surface: pygame.Surface,
@@ -19,6 +22,11 @@ class GameOver:
         )
 
     def update(self) -> None:
+        """
+        Draws the game_over text onto the game surface each time this is called.
+
+        :return: None
+        """
         game_over_surface = self.font.render("GAME OVER", True, pygame.Color("#ff0000"))
         game_over_rect = game_over_surface.get_rect()
         game_over_rect.center = self.game_surface.get_rect().center

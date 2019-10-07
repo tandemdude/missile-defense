@@ -2,6 +2,9 @@ import pygame
 
 
 class StartScreen:
+    """
+    Class to contain game_over screen functionality.
+    """
     def __init__(self, screen_width: int, screen_height: int) -> None:
         self.screen_width = screen_width
         self.screen_height = screen_height
@@ -9,6 +12,13 @@ class StartScreen:
         self.exited = False
 
     def update(self, surface: pygame.Surface, font: pygame.font.Font) -> None:
+        """
+        Renders the start_screen text and draws it onto the game surface.
+
+        :param surface: Surface to draw the text onto
+        :param font: Font to render the text with
+        :return: None
+        """
         welcome_surface = font.render(
             "Welcome to Missile Defense", True, pygame.Color("#ffffff")
         )

@@ -2,12 +2,12 @@ import pygame
 import os
 import math
 
-from reticle import Reticle
-from missile import Missile
-from wave import Wave
-from score import Score
-from lives import Lives
-from game_over import GameOver
+from source.reticle import Reticle
+from source.missile import Missile
+from source.wave import Wave
+from source.score import Score
+from source.lives import Lives
+from source.game_over import GameOver
 
 # Constants
 MAX_MISSILES = 5
@@ -23,19 +23,27 @@ def calculate_enemies_for_wave(
     initial_enemies: int, wave_number: int, constant: float
 ) -> int:
     """
-    Equation to calculate the number of enemies for any given wave
+    Equation to calculate the number of enemies for any given wave.
     Exponential equation ensures the difficulty progression is non-linear
-    meaning the number of enemies does not increase at a constant rate
+    meaning the number of enemies does not increase at a constant rate.
+
+    :param initial_enemies: The starting number of enemies for the zeroth wave
+    :param wave_number: The current wave number
+    :param constant: The enemy constant, usually a float between 0 and 1
+    :return: Integer number of enemies for the given wave
     """
     return round(initial_enemies + (wave_number ** 2 * constant))
 
 
 def calculate_wave_spawn_period(wave_number: int) -> float:
     """
-    Equation to calculate the amount of time enemies have to spawn for any given wave
-    Equates to 5√(4x) + 5 where x is the wave number
+    Equation to calculate the amount of time enemies have to spawn for any given wave.
+    Equates to ``5√(4x) + 5`` where ``x`` is the wave number.
     This gives a surd curve meaning that for the first 5 waves, the amount of time increases
-    at a faster rate than for later waves, hence increasing the late-game difficulty
+    at a faster rate than for later waves, hence increasing the late-game difficulty.
+
+    :param wave_number: The current wave number
+    :return: Float amount of seconds that enemies will spawn over
     """
     return 5 * math.sqrt(4 * wave_number) + 5
 
@@ -43,7 +51,10 @@ def calculate_wave_spawn_period(wave_number: int) -> float:
 def get_rect_of_instance(instance) -> pygame.Rect:
     """
     Gets the pygame.Rect of a given instance's image attribute
-    Returns a pygame.Rect in the correct position
+    Returns a pygame.Rect in the correct position.
+
+    :param instance: An object that has an image attribute
+    :return: pygame.Rect in the correct position
     """
     rect = instance.image.get_rect()
     rect.x, rect.y = instance.x, instance.y
@@ -53,20 +64,23 @@ def get_rect_of_instance(instance) -> pygame.Rect:
 def is_colliding(rect1: pygame.Rect, rect2: pygame.Rect) -> bool:
     """
     Takes two pygame.Rect instances and returns a bool indicating
-    whether or not they are currently colliding
+    whether or not they are currently colliding.
 
     The pygame colliderect function already provides this functionality,
-    this implementation simply makes it easier to read, more 'pythonic'
+    this implementation simply makes it easier to read, more pythonic.
+
+    :param rect1: pygame.Rect instance
+    :param rect2: pygame.Rect instance
+    :return: Bool to indicate whether or not the rects are colliding
     """
     return rect1.colliderect(rect2)
 
 
 class ControlScheme:
     """
-    Class to contain the current keybinds for
-    actions that occur in the game.
+    Class to contain the current keybindings for
+    any actions that occur during gameplay.
     """
-
     def __init__(self) -> None:
         self.up = pygame.K_UP
         self.down = pygame.K_DOWN
@@ -87,7 +101,6 @@ class Controller:
     unless other classes are directly related, such as the
     Wave and Enemy class.
     """
-
     def __init__(
         self, game_surface: pygame.Surface, screen_width: int, screen_height: int
     ) -> None:
@@ -126,11 +139,20 @@ class Controller:
     def enemy_hit_ground(self) -> None:
         """
         Callback function passed into Wave on instantiation. Provides a method for the enemies to
-        tell the Controller class when to decrement the lives counter
+        tell the Controller class when to decrement the lives counter.
+
+        :return: None
         """
         self.lives.decrement()
 
     def create_new_wave(self) -> None:
+        """
+        Instantiate a new wave object after calculating the correct number
+        of enemies to be spawned in the wave.
+        Increments the current wave number by 1.
+
+        :return: None
+        """
         number_of_enemies = calculate_enemies_for_wave(
             INITIAL_ENEMIES, self.wave_number, ENEMY_CONSTANT
         )
@@ -151,7 +173,9 @@ class Controller:
     def trigger_fire_missile(self) -> None:
         """
         Check if the maximum amount of missiles are already on the screen and
-        instantiate a new one if the limit have not been reached
+        instantiate a new one if the limit have not been reached.
+
+        :return: None
         """
         if len(self.missiles) < MAX_MISSILES:
             self.missiles.append(
@@ -167,10 +191,12 @@ class Controller:
     def process_event(self, event: pygame.event.Event) -> None:
         """
         Process the passed in event, sending a signal to the reticle,
-        or firing a missile if necessary
+        or firing a missile if necessary.
 
-        TODO: Reformat this to use switch/case type syntax to prevent
-        large IF blocks?
+        TODO: Reformat this to use switch/case type syntax to prevent large IF blocks?
+
+        :param event: Any pygame.event.Event instance
+        :return: None
         """
         if not self.running:
             return
@@ -200,7 +226,9 @@ class Controller:
     def check_collisions(self) -> None:
         """
         Check if any sprites are colliding such that
-        a missile or enemy needs to be removed from the display
+        a missile or enemy needs to be removed from the display.
+
+        :return: None
         """
         for missile in self.missiles[:]:  # Loop through a copy of self.missiles
             # Check if a missile has flown out of bounds and remove it if necessary
@@ -230,9 +258,11 @@ class Controller:
 
     def get_what_needs_to_be_updated(self) -> list:
         """
-        Return a list of all the instances that need to be updated in any given frame
-        Only updates what needs to be updated
-        ie, does not update the game_over screen if the game_over conditions have not been met
+        Return a list of all the instances that need to be updated in any given frame.
+        Only updates what needs to be updated,
+        ie, does not update the game_over screen if the game_over conditions have not been met.
+
+        :return: List of all instances that need to be updated in a given frame
         """
         if self.game_over:
             to_be_updated = [self.score, self.lives, self.game_over_screen]
@@ -245,8 +275,10 @@ class Controller:
 
     def create_new_wave_if_required(self) -> None:
         """
-        Checks if the conditions for the creation of a new wave have been met
-        Calls create_new_wave when required
+        Checks if the conditions for the creation of a new wave have been met.
+        Calls create_new_wave when required.
+
+        :return: None
         """
         if self.frames_to_next_wave > 0:
             self.frames_to_next_wave -= 1
@@ -260,7 +292,9 @@ class Controller:
     def check_if_wave_finished(self) -> None:
         """
         Checks if the current wave is complete, ie, all the enemies have either hit the bottom
-        of the screen or been hit by a missile
+        of the screen or been hit by a missile.
+
+        :return: None
         """
         if self.current_wave is None or self.current_wave.finished:
             self.current_wave = None
@@ -270,10 +304,16 @@ class Controller:
                 self.counting_down = True
 
     def update_all(self) -> None:
-        # Transfers game into the game_over state if all lives have been lost, or runs wave logic
+        """
+        Updates all instances fetched by get_what_needs_to_be_updated() and
+        runs game_over logic.
+
+        :return: None
+        """
         if not self.running:
             return
 
+        # Transfers game into the game_over state if all lives have been lost, or runs wave logic
         if self.lives == 0:
             self.game_over = True
         else:

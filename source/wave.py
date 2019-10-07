@@ -2,10 +2,14 @@ import pygame
 import random
 import os
 import typing
-from enemy import Enemy
+from source.enemy import Enemy
 
 
 class Wave:
+    """
+    Class to represent a 'wave' of enemies. Controls how enemies are spawned over a specific time frame
+    using a sprite group to contain all enemies for any specific wave.
+    """
     def __init__(
         self,
         number_of_enemies: int,
@@ -34,6 +38,14 @@ class Wave:
         ]
 
     def register_enemies(self) -> None:
+        """
+        Adds a specific amount of enemies to the sprite group, all are spawned at the same time.
+
+        .. note::
+            This method is no longer used.
+
+        :return: None
+        """
         for _ in range(self.number_of_enemies):
             self.enemies.add(
                 Enemy(
@@ -47,6 +59,11 @@ class Wave:
             )
 
     def register_enemy(self) -> None:
+        """
+        Adds a single enemy to the sprite group. Enemies spawn as soon as they are registered.
+
+        :return: None
+        """
         self.enemies.add(
             Enemy(
                 self.enemies,
@@ -59,11 +76,23 @@ class Wave:
         )
 
     def register_new_enemy_if_required(self) -> None:
+        """
+        Checks whether sufficient time has passed to spawn a new enemy.
+        If it has, a new enemy is registered.
+
+        :return: None
+        """
         if self.frames_since_start in self.enemy_spawn_times:
             for _ in range(self.enemy_spawn_times.count(self.frames_since_start)):
                 self.register_enemy()
 
     def draw_wave_number(self) -> None:
+        """
+        Renders and draws the current wave number onto the game surface.
+        Acts as an indicator to the user as to when the wave ends/a new wave begins.
+
+        :return: None
+        """
         text_surface = self.font.render(
             f"Wave {self.num}", True, pygame.Color("#ffffff")
         )
@@ -72,9 +101,20 @@ class Wave:
         self.game_surface.blit(text_surface, text_rect)
 
     def mark_incomplete(self) -> None:
+        """
+        Marks the wave as unfinished.
+
+        :return: None
+        """
         self.finished = False
 
     def update(self) -> None:
+        """
+        Calls the update method on the enemies sprite group and increments the frames since start counter.
+        Draws the wave counter onto the surface.
+
+        :return: None
+        """
         self.draw_wave_number()
         self.register_new_enemy_if_required()
 
