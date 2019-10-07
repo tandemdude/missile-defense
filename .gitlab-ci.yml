@@ -1,12 +1,12 @@
 Windows:
-    before_script:
-		    - call docs/make.bat html
+  before_script:
+    - call docs/make.bat html
 
 pages:
-    script:
-        - mv docs/build/html public 
-    artifacts:
-        paths:
-            - public
-    only:
-        - master
+  script:
+    - mv docs/build/html public 
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
