@@ -1,6 +1,8 @@
-Windows:
+default:
   before_script:
     - call docs/make.bat html
+  only:
+    - master
 
 pages:
   script:
