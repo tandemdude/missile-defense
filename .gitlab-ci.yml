@@ -1,3 +1,7 @@
+Windows:
+	before_script:
+		- call docs/make.bat html
+
 pages:
     script:
         - mv docs/build/html public 
