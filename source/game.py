@@ -14,6 +14,9 @@ class Game:
     Initialises the game surface and the pygame Clock.
     """
     def __init__(self, start_screen) -> None:
+        """
+        :param start_screen: Instance of the StartScreen class to display when game begins
+        """
         pygame.init()
         pygame.display.set_caption("Missile Defense")
         # Create a display with the dimensions specified by the constants

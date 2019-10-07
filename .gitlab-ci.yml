@@ -2,11 +2,10 @@ stages:
   - make
   - post
 
-windows job:
+default:
   stage: make
   script:
-    - chmod +x docs/make.bat
-    - docs/make.bat html
+    - python3 -m sphinx.cmd.build docs/source docs/build -b html
 
 pages:
   stage: post

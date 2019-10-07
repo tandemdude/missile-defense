@@ -28,8 +28,16 @@ class Enemy(pygame.sprite.Sprite):
         screen_width: int,
         screen_height: int,
         hit_ground_func: typing.Callable,
-        mark_wave_uncomplete_func: typing.Callable,
+        mark_wave_incomplete_func: typing.Callable,
     ) -> None:
+        """
+        :param sprite_group: The sprite group that the enemy is a part of
+        :param game_surface: The surface to blit the sprite onto
+        :param screen_width: Int width of the screen in pixels
+        :param screen_height: Int height of the screen in pixels
+        :param hit_ground_func: Method called when the enemy reaches the bottom of the screen
+        :param mark_wave_incomplete_func: Method called to mark the wave incomplete while the enemy is still visible
+        """
         super().__init__(sprite_group)
 
         if Enemy.spritesheet is None:
@@ -42,7 +50,7 @@ class Enemy(pygame.sprite.Sprite):
         self.screen_height = screen_height
         self.game_surface = game_surface
         self.hit_ground_func = hit_ground_func
-        self.mark_wave_uncomplete_func = mark_wave_uncomplete_func
+        self.mark_wave_incomplete_func = mark_wave_incomplete_func
         self.generate_positions_and_velocities()
         self.visible = True
         self.respawn = False
@@ -168,4 +176,4 @@ class Enemy(pygame.sprite.Sprite):
             self.hit_ground_func()
             self.visible = False
         if self.visible:
-            self.mark_wave_uncomplete_func()
+            self.mark_wave_incomplete_func()
