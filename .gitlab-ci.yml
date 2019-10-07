@@ -5,6 +5,7 @@ stages:
 default:
   stage: make
   script:
+    - python3 -m pip install sphinx
     - python3 -m sphinx.cmd.build docs/source docs/build -b html
 
 pages:
