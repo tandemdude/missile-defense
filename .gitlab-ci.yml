@@ -1,10 +1,16 @@
+stages:
+  - make
+  - post
+
 windows job:
+  stage: make
   script:
-    - call docs/make.bat html
+    - docs/make.bat html
 
 pages:
+  stage: post
   script:
-    - mv docs/build/html public 
+    - mv docs/build/html public
   artifacts:
     paths:
       - public
