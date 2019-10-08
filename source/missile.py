@@ -12,8 +12,9 @@ ANGLE_OFFSET = 90
 
 class Missile(pygame.sprite.Sprite):
     """
-    Class to represent a fired missile sprite.
+    Class to represent a fired missile :class:`pygame.sprite.Sprite`.
     """
+
     asset = None
 
     def __init__(
@@ -56,7 +57,7 @@ class Missile(pygame.sprite.Sprite):
 
     def update(self) -> None:
         """
-        Moves the sprite on the game surface if required and draws it if the missile
+        Moves the :class:`pygame.sprite.Sprite` on the game surface if required and draws it if the missile
         is currently visible.
 
         :return: None

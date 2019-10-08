@@ -8,8 +8,9 @@ from source.enemy import Enemy
 class Wave:
     """
     Class to represent a 'wave' of enemies. Controls how enemies are spawned over a specific time frame
-    using a sprite group to contain all enemies for any specific wave.
+    using a :class:`pygame.sprite.Group` to contain all enemies for any specific wave.
     """
+
     def __init__(
         self,
         number_of_enemies: int,
@@ -39,7 +40,7 @@ class Wave:
 
     def register_enemies(self) -> None:
         """
-        Adds a specific amount of enemies to the sprite group, all are spawned at the same time.
+        Adds a specific amount of enemies to the :attr:`Wave.enemies` :class:`pygame.sprite.Group`, all are spawned at the same time.
 
         .. note::
             This method is no longer used.
@@ -60,7 +61,7 @@ class Wave:
 
     def register_enemy(self) -> None:
         """
-        Adds a single enemy to the sprite group. Enemies spawn as soon as they are registered.
+        Adds a single :class:`source.enemy.Enemy` to the :attr:`Wave.enemies` :class:`pygame.sprite.Group`. Enemies spawn as soon as they are registered.
 
         :return: None
         """
@@ -77,7 +78,7 @@ class Wave:
 
     def register_new_enemy_if_required(self) -> None:
         """
-        Checks whether sufficient time has passed to spawn a new enemy.
+        Checks whether sufficient time has passed to spawn a new :class:`source.enemy.Enemy`.
         If it has, a new enemy is registered.
 
         :return: None
@@ -110,7 +111,7 @@ class Wave:
 
     def update(self) -> None:
         """
-        Calls the update method on the enemies sprite group and increments the frames since start counter.
+        Calls the update method on the :attr:`Wave.enemies` :class:`pygame.sprite.Group` and increments the frames since start counter.
         Draws the wave counter onto the surface.
 
         :return: None

@@ -6,7 +6,9 @@ import typing
 RETICLE_SPEED = 6.5
 
 
-def clamp(n: typing.Union[int, float], maxn: int, minn: int = 0) -> typing.Union[int, float]:
+def clamp(
+    n: typing.Union[int, float], maxn: int, minn: int = 0
+) -> typing.Union[int, float]:
     """
     Ensures that a given number, n, if between a set of upper and lower
     bounds.
@@ -23,6 +25,7 @@ class Reticle:
     """
     Class to represent the player's targeting reticle.
     """
+
     def __init__(
         self, game_surface: pygame.Surface, screen_width: int, screen_height: int
     ) -> None:

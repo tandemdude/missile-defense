@@ -9,6 +9,7 @@ class Score:
     """
     Class to contain score counter functionality.
     """
+
     def __init__(
         self,
         game_surface: pygame.Surface,

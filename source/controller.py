@@ -38,7 +38,7 @@ def calculate_enemies_for_wave(
 def calculate_wave_spawn_period(wave_number: int) -> float:
     """
     Equation to calculate the amount of time enemies have to spawn for any given wave.
-    Equates to ``5√(4x) + 5`` where ``x`` is the wave number.
+    Equates to :math:`5√(4x) + 5` where :math:`x` is the wave number.
     This gives a surd curve meaning that for the first 5 waves, the amount of time increases
     at a faster rate than for later waves, hence increasing the late-game difficulty.
 
@@ -69,8 +69,8 @@ def is_colliding(rect1: pygame.Rect, rect2: pygame.Rect) -> bool:
     The pygame colliderect function already provides this functionality,
     this implementation simply makes it easier to read, more pythonic.
 
-    :param rect1: pygame.Rect instance
-    :param rect2: pygame.Rect instance
+    :param rect1: :class:`pygame.Rect` instance
+    :param rect2: :class:`pygame.Rect` instance
     :return: Bool to indicate whether or not the rects are colliding
     """
     return rect1.colliderect(rect2)
@@ -81,6 +81,7 @@ class ControlScheme:
     Class to contain the current keybindings for
     any actions that occur during gameplay.
     """
+
     def __init__(self) -> None:
         self.up = pygame.K_UP
         self.down = pygame.K_DOWN
@@ -99,12 +100,13 @@ class Controller:
 
     All classes communicate to each other through this class,
     unless other classes are directly related, such as the
-    Wave and Enemy class.
+    :class:`source.wave.Wave` and :class:`source.enemy.Enemy` class.
 
     :param game_surface: The game's window where sprites will be drawn
     :param screen_width: Int width of the window in pixels
     :param screen_height: Int height of the window in pixels
     """
+
     def __init__(
         self, game_surface: pygame.Surface, screen_width: int, screen_height: int
     ) -> None:
@@ -143,7 +145,7 @@ class Controller:
     def enemy_hit_ground(self) -> None:
         """
         Callback function passed into Wave on instantiation. Provides a method for the enemies to
-        tell the Controller class when to decrement the lives counter.
+        tell the :class:`source.controller.Controller` class when to decrement the lives counter.
 
         :return: None
         """
@@ -151,7 +153,7 @@ class Controller:
 
     def create_new_wave(self) -> None:
         """
-        Instantiate a new wave object after calculating the correct number
+        Instantiate a new :class:`source.wave.Wave` object after calculating the correct number
         of enemies to be spawned in the wave.
         Increments the current wave number by 1.
 
@@ -160,7 +162,7 @@ class Controller:
         number_of_enemies = calculate_enemies_for_wave(
             INITIAL_ENEMIES, self.wave_number, ENEMY_CONSTANT
         )
-        # Instantiate a new Wave from given parameters
+        # Instantiate a new :class:`souce.wave.Wave` from given parameters
         self.current_wave = Wave(
             number_of_enemies,
             calculate_wave_spawn_period(self.wave_number) * FRAME_RATE,
@@ -177,7 +179,7 @@ class Controller:
     def trigger_fire_missile(self) -> None:
         """
         Check if the maximum amount of missiles are already on the screen and
-        instantiate a new one if the limit have not been reached.
+        instantiate a new one if the limit has not been reached.
 
         :return: None
         """
@@ -199,7 +201,7 @@ class Controller:
 
         TODO: Reformat this to use switch/case type syntax to prevent large IF blocks?
 
-        :param event: Any pygame.event.Event instance
+        :param event: Any :class:`pygame.event.Event` instance
         :return: None
         """
         if not self.running:

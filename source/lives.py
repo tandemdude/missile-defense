@@ -6,12 +6,13 @@ class Lives:
     """
     Class to contain life counter functionality.
 
-    :param game_surface: The surface on which to draw the lives counter
+    :param game_surface: The :class:`pygame.Surface` on which to draw the lives counter
     :param screen_width: Int width of the window in pixels
     :param screen_height: Int height of the window in pixels
     :param font_size: Int font size in pixels
     :param lives: Int amount of starting lives
     """
+
     def __init__(
         self,
         game_surface: pygame.Surface,

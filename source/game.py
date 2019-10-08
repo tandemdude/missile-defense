@@ -13,8 +13,9 @@ class Game:
     Class to initialise pygame and contain the main game loop.
     Initialises the game surface and the pygame Clock.
 
-    :param start_screen: Instance of the StartScreen class to display when game begins
+    :param start_screen: Instance of the :class:`source.start_screen.StartScreen` class to display when game begins
     """
+
     def __init__(self, start_screen) -> None:
         pygame.init()
         pygame.display.set_caption("Missile Defense")
@@ -41,7 +42,7 @@ class Game:
 
     def run(self) -> None:
         """
-        Runs the game. Instantiates a Controller object then creates the
+        Runs the game. Instantiates a :class:`source.controller.Controller` object then creates the
         game loop. Handles passing of events to the controller as well
         as flipping the display each frame.
 
