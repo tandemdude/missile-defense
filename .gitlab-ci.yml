@@ -1,9 +1,4 @@
-stages:
-  - make
-  - post
-
-default:
-  stage: make
+pages:
   before_script:
     - apt-get -qq update && apt-get -qq install -y python3
     - apt-get -qq update
@@ -15,11 +10,7 @@ default:
     - python3 -m pip install pygame
   script:
     - python3 -m sphinx.cmd.build docs/source docs/build -b html
-
-pages:
-  stage: post
-  script:
-    - mv docs/build/html public
+    - mv docs/build public
   artifacts:
     paths:
       - public
