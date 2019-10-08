@@ -5,6 +5,11 @@ import os
 class GameOver:
     """
     Class to contain game_over screen functionality.
+
+    :param game_surface: The surface to draw the text onto
+    :param screen_width: Int width of the window in pixels
+    :param screen_height: Int height of the window in pixels
+    :param font_size: Int height of the font in pixels
     """
     def __init__(
         self,
@@ -13,13 +18,6 @@ class GameOver:
         screen_height: int,
         font_size: int,
     ) -> None:
-        """
-        
-        :param game_surface: The surface to draw the text onto
-        :param screen_width: Int width of the window in pixels
-        :param screen_height: Int height of the window in pixels
-        :param font_size: Int height of the font in pixels
-        """
         self.game_surface = game_surface
         self.screen_width = screen_width
         self.screen_height = screen_height

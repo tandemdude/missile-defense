@@ -100,16 +100,14 @@ class Controller:
     All classes communicate to each other through this class,
     unless other classes are directly related, such as the
     Wave and Enemy class.
+
+    :param game_surface: The game's window where sprites will be drawn
+    :param screen_width: Int width of the window in pixels
+    :param screen_height: Int height of the window in pixels
     """
     def __init__(
         self, game_surface: pygame.Surface, screen_width: int, screen_height: int
     ) -> None:
-        """
-        
-        :param game_surface: The game's window where sprites will be drawn
-        :param screen_width: Int width of the window in pixels
-        :param screen_height: Int height of the window in pixels
-        """
         self.game_surface = game_surface
         self.screen_width = screen_width
         self.screen_height = screen_height

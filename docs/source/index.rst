@@ -1,77 +1,97 @@
-.. A-Level-Project documentation master file, created by
-   sphinx-quickstart on Mon Oct  7 19:57:06 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to A-Level-Project's documentation!
-===========================================
+===============================
+Missile Defense's documentation
+===============================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :glob:
+   :titlesonly:
+
+   *
+
+----
 
 
-game.py
-=======
+Game
+====
 .. automodule:: source.game
    :members:
 
+----
 
-controller.py
-=============
+
+Controller
+==========
 .. automodule:: source.controller
    :members:
 
+----
 
-wave.py
-=======
+
+Wave
+====
 .. automodule:: source.wave
    :members:
 
+----
 
-enemy.py
-========
+
+Enemy
+=====
 .. automodule:: source.enemy
    :members:
 
+----
 
-missile.py
-==========
+
+Missile
+=======
 .. automodule:: source.missile
    :members:
 
+----
 
-reticle.py
-==========
+
+Reticle
+=======
 .. automodule:: source.reticle
    :members:
 
+----
 
-lives.py
-========
+
+Lives
+=====
 .. automodule:: source.lives
    :members:
 
+----
 
-score.py
-========
+
+Score
+=====
 .. automodule:: source.score
    :members:
 
+----
 
-game_over.py
-============
+
+GameOver
+========
 .. automodule:: source.game_over
    :members:
 
+----
 
-start_screen.py
-===============
+
+StartScreen
+===========
 .. automodule:: source.start_screen
    :members:
 
+----
 
-utils.py
-========
+
+Utils
+=====
 .. automodule:: source.utils
    :members:
