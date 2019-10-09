@@ -4,6 +4,9 @@ import pygame
 class StartScreen:
     """
     Class to contain start screen functionality.
+
+    :param screen_width: Int width of the window in pixels
+    :param screen_height: Int height of the window in pixels
     """
 
     def __init__(self, screen_width: int, screen_height: int) -> None:

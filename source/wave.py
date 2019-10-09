@@ -9,8 +9,16 @@ class Wave:
     """
     Class to represent a 'wave' of enemies. Controls how enemies are spawned over a specific time frame
     using a :class:`pygame.sprite.Group` to contain all enemies for any specific wave.
-    """
 
+    :param number_of_enemies: Int amount of enemies to be spawned during the wave
+    :param time_limit: Length of the enemy spawn period in frames
+    :param game_surface: The :class:`pygame.Surface` to draw wave number and blit enemies
+    :param screen_width: Int width of the window in pixels
+    :param screen_height: Int height of the window in pixels
+    :param hit_ground_func: Procedure called when any :class:`source.enemy.Enemy` reaches the bottom of the screen
+    :param wave_num: Int number of the the current wave
+    :param font_size: Int height of the font in pixels
+    """
     def __init__(
         self,
         number_of_enemies: int,
