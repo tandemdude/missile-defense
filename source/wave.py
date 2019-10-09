@@ -19,6 +19,7 @@ class Wave:
     :param wave_num: Int number of the the current wave
     :param font_size: Int height of the font in pixels
     """
+
     def __init__(
         self,
         number_of_enemies: int,
@@ -128,7 +129,7 @@ class Wave:
         self.register_new_enemy_if_required()
 
         current_enemies = self.enemies.sprites()
-        if len(current_enemies) > 0 and len(current_enemies) <= self.number_of_enemies:
+        if 0 < len(current_enemies) <= self.number_of_enemies:
             self.finished = True
             self.enemies.update()
 

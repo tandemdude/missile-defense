@@ -27,7 +27,7 @@ def vector_from_positions(
     velocity_y = (
         constant * (end_y - y) / math.sqrt(((end_y - y) ** 2) + ((end_x - x) ** 2))
     )
-    return (velocity_x, velocity_y)
+    return velocity_x, velocity_y
 
 
 def get_angle_positions(

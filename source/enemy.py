@@ -79,7 +79,7 @@ class Enemy(pygame.sprite.Sprite):
 
         :return: Tuple x, y coordinate
         """
-        return (random.randint(0, self.screen_width - SPRITE_WIDTH), 0)
+        return random.randint(0, self.screen_width - SPRITE_WIDTH), 0
 
     def random_aim_position(self) -> tuple:
         """

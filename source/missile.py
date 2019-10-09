@@ -13,6 +13,12 @@ ANGLE_OFFSET = 90
 class Missile(pygame.sprite.Sprite):
     """
     Class to represent a fired missile :class:`pygame.sprite.Sprite`.
+
+    :param game_surface: The :class:`pygame.Surface` to blit the missile onto
+    :param screen_width: Int width of the window in pixels
+    :param screen_height: Int height of the window in pixels
+    :param reticle_x: Current :math:`x` position of the reticle
+    :param reticle_y: Current :math:`y` position of the reticle
     """
 
     asset = None

@@ -14,6 +14,7 @@ class Score:
     :param screen_height: Int height of the window in pixels
     :param font_size: Int height of the font in pixels
     """
+
     def __init__(
         self,
         game_surface: pygame.Surface,
