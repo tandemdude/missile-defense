@@ -25,7 +25,7 @@ class Lives:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.lives = lives
-        self.font = pygame.font.Font(os.path.join("fonts", "fixedsys.ttf"), font_size)
+        self.font = pygame.font.Font(os.path.join("..", "fonts", "fixedsys.ttf"), font_size)
 
     def __eq__(self, value: int) -> bool:
         """
