@@ -41,7 +41,7 @@ class Wave:
         self.finished = False
         self.frames_since_start = 0
         self.num = wave_num + 1
-        self.font = pygame.font.Font(os.path.join("fonts", "fixedsys.ttf"), font_size)
+        self.font = pygame.font.Font(os.path.join("..", "fonts", "fixedsys.ttf"), font_size)
         self.enemy_spawn_times = [
             round(random.random() * self.time_limit_in_frames)
             for _ in range(number_of_enemies)
@@ -117,6 +117,14 @@ class Wave:
         :return: None
         """
         self.finished = False
+
+    def get_all_enemies(self):
+        """
+        Function to get all enemies for the wave
+
+        :return: List of all wave enemies
+        """
+        return self.enemies.sprites()
 
     def update(self) -> None:
         """
