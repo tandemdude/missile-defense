@@ -25,7 +25,7 @@ class Game:
         self.running = True
         self.restart = False
         self.clock = pygame.time.Clock()
-        self.font = pygame.font.Font(os.path.join("fonts", "fixedsys.ttf"), 24)
+        self.font = pygame.font.Font(os.path.join("..", "fonts", "fixedsys.ttf"), 24)
         # Create the background surface and fill it with a solid colour (black)
         self.background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.background.fill(pygame.Color("#000000"))
