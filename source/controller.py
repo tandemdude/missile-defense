@@ -8,6 +8,7 @@ from source.wave import Wave
 from source.score import Score
 from source.lives import Lives
 from source.game_over import GameOver
+from source.tower import Tower
 
 # Constants
 MAX_MISSILES = 5
@@ -118,6 +119,7 @@ class Controller:
 
         self.control_scheme = ControlScheme()
         self.reticle = Reticle(self.game_surface, self.screen_width, self.screen_height)
+        self.tower = Tower(self.game_surface, self.screen_width, self.screen_height)
         self.missiles = []
 
         self.wave_number = 0
@@ -137,9 +139,6 @@ class Controller:
 
         self.score = Score(
             self.game_surface, self.screen_width, self.screen_height, FONT_SIZE
-        )
-        self.font = pygame.font.Font(
-            os.path.join("fonts", "SevenSegment.ttf"), FONT_SIZE
         )
 
     def enemy_hit_ground(self) -> None:
@@ -273,7 +272,7 @@ class Controller:
         if self.game_over:
             to_be_updated = [self.score, self.lives, self.game_over_screen]
         else:
-            to_be_updated = self.missiles + [self.reticle, self.score, self.lives]
+            to_be_updated = self.missiles + [self.reticle, self.score, self.lives, self.tower]
             # Ensures that update_all does not attempt to update NoneType
             if self.current_wave is not None:
                 to_be_updated += [self.current_wave]
