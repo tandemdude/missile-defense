@@ -35,7 +35,7 @@ class Missile(pygame.sprite.Sprite):
 
         if Missile.asset is None:
             Missile.asset = pygame.image.load(
-                os.path.join("images", "missile.png")
+                os.path.join("..", "images", "missile.png")
             ).convert_alpha()
         self.asset = Missile.asset
 
