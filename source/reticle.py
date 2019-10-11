@@ -36,7 +36,7 @@ class Reticle:
         self, game_surface: pygame.Surface, screen_width: int, screen_height: int
     ) -> None:
         self.asset = pygame.image.load(
-            os.path.join("images", "reticle.png")
+            os.path.join("..", "images", "reticle.png")
         ).convert_alpha()
         self.asset_width, self.asset_height = (
             self.asset.get_width(),
