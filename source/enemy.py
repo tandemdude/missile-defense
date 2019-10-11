@@ -42,7 +42,7 @@ class Enemy(pygame.sprite.Sprite):
 
         if Enemy.spritesheet is None:
             Enemy.spritesheet = pygame.image.load(
-                os.path.join("images", "enemy_spritesheet.png")
+                os.path.join("..", "images", "enemy_spritesheet.png")
             ).convert_alpha()
         self.asset = Enemy.spritesheet
 
