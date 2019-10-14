@@ -2,7 +2,7 @@ import pygame
 import typing
 import os
 
-from source import utils
+import utils
 
 SPRITE_WIDTH = 15
 SPRITE_HEIGHT = 25
@@ -28,8 +28,10 @@ class Missile(pygame.sprite.Sprite):
         game_surface: pygame.Surface,
         screen_width: int,
         screen_height: int,
-        reticle_x: typing.Union[int, float],
-        reticle_y: typing.Union[int, float],
+        start_x: typing.Union[int, float],
+        start_y: typing.Union[int, float],
+        end_x: typing.Union[int, float],
+        end_y: typing.Union[int, float],
     ) -> None:
         super().__init__()
 
@@ -42,8 +44,9 @@ class Missile(pygame.sprite.Sprite):
         self.game_surface = game_surface
         self.visible = True
         self.moving = True
-        self.x, self.y = screen_width // 2, screen_height
-        self.end_x, self.end_y = reticle_x, reticle_y
+        self.screen_width, self.screen_height = screen_width, screen_height
+        self.x, self.y = start_x, start_y
+        self.end_x, self.end_y = end_x, end_y
         self.velocity_x, self.velocity_y = utils.vector_from_positions(
             self.x, self.y, self.end_x, self.end_y, MISSILE_VELOCITY
         )
@@ -71,6 +74,9 @@ class Missile(pygame.sprite.Sprite):
         if self.moving:
             self.x += self.velocity_x
             self.y += self.velocity_y
+
+        if 0 > self.x or self.x > self.screen_width or self.y < 0 or self.y > self.screen_height:
+            self.visible = False
 
         if self.visible:
             self.game_surface.blit(self.image, (self.x, self.y))

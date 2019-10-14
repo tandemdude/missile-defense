@@ -1,14 +1,15 @@
 import pygame
 import os
 import math
+import typing
 
-from source.reticle import Reticle
-from source.missile import Missile
-from source.wave import Wave
-from source.score import Score
-from source.lives import Lives
-from source.game_over import GameOver
-from source.tower import Tower
+from reticle import Reticle
+from missile import Missile
+from wave import Wave
+from score import Score
+from lives import Lives
+from game_over import GameOver
+from tower import Tower
 
 # Constants
 MAX_MISSILES = 5
@@ -119,7 +120,7 @@ class Controller:
 
         self.control_scheme = ControlScheme()
         self.reticle = Reticle(self.game_surface, self.screen_width, self.screen_height)
-        self.tower = Tower(self.game_surface, self.screen_width, self.screen_height)
+        self.tower = Tower(self.game_surface, self.screen_width, self.screen_height, self.get_current_enemies)
         self.missiles = []
 
         self.wave_number = 0
@@ -149,6 +150,15 @@ class Controller:
         :return: None
         """
         self.lives.decrement()
+
+    def get_current_enemies(self) -> typing.Optional[typing.List]:
+        """
+        Function passed to :class:`source.tower.Tower` on init. When called, returns a list
+        of all enemies in the current wave.
+
+        :return: List of all enemies in the current wave
+        """
+        return None if self.current_wave is None else self.current_wave.get_all_enemies()
 
     def create_new_wave(self) -> None:
         """
@@ -187,6 +197,8 @@ class Controller:
                 Missile(
                     self.game_surface,
                     self.screen_width,
+                    self.screen_height,
+                    self.screen_width // 2,
                     self.screen_height,
                     self.reticle.x,
                     self.reticle.y,
@@ -228,17 +240,17 @@ class Controller:
             elif event.key == self.control_scheme.down:
                 self.reticle.down(False)
 
-    def check_collisions(self) -> None:
+    def check_collisions(self, missile_list) -> None:
         """
         Check if any sprites are colliding such that
         a missile or enemy needs to be removed from the display.
 
         :return: None
         """
-        for missile in self.missiles[:]:  # Loop through a copy of self.missiles
+        for missile in missile_list[:]:  # Loop through a copy of self.missiles
             # Check if a missile has flown out of bounds and remove it if necessary
-            if 0 > missile.x or missile.x > self.screen_width or missile.y < 0:
-                self.missiles.remove(missile)
+            if not missile.visible:
+                missile_list.remove(missile)
                 continue
 
             hit_enemy = False
@@ -259,7 +271,7 @@ class Controller:
                     hit_enemy = True
             if hit_enemy:
                 # Remove the missile from self.missiles if it hit an enemy
-                self.missiles.remove(missile)
+                missile_list.remove(missile)
 
     def get_what_needs_to_be_updated(self) -> list:
         """
@@ -323,7 +335,8 @@ class Controller:
             self.game_over = True
         else:
             self.create_new_wave_if_required()
-            self.check_collisions()
+            self.check_collisions(self.missiles)
+            self.check_collisions(self.tower.missiles)
             self.check_if_wave_finished()
 
         # Gets all instances that need to be updated in a given frame and calls update() on each in turn

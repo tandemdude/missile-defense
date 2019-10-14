@@ -1,7 +1,7 @@
 import pygame
 import os
-from source.controller import Controller
-from source.start_screen import StartScreen
+from controller import Controller
+from start_screen import StartScreen
 
 # Constants
 SCREEN_WIDTH = 800
@@ -11,7 +11,7 @@ SCREEN_HEIGHT = 600
 class Game:
     """
     Class to initialise pygame and contain the main game loop.
-    Initialises the game surface and the pygame Clock.
+    Initialises the game surface and the :class:`pygame.time.Clock`.
 
     :param start_screen: Instance of the :class:`source.start_screen.StartScreen` class to display when game begins
     """
@@ -93,7 +93,7 @@ class Game:
 
 def main() -> None:
     """
-    Creates a while loop to instantiate a new Game object each time the user
+    Creates a while loop to instantiate a new :class:`source.game.Game` object each time the user
     restarts, or quits out of the program when prompted.
 
     :return: None

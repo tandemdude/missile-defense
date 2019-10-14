@@ -2,7 +2,7 @@ import pygame
 import random
 import os
 import typing
-from source.enemy import Enemy
+from enemy import Enemy
 
 
 class Wave:
@@ -118,7 +118,7 @@ class Wave:
         """
         self.finished = False
 
-    def get_all_enemies(self):
+    def get_all_enemies(self) -> typing.Optional[typing.List]:
         """
         Function to get all enemies for the wave
 

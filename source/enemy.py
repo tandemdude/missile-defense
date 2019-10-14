@@ -3,7 +3,7 @@ import random
 import os
 import typing
 
-from source import utils
+import utils
 
 # Constants
 SPRITE_WIDTH = 25
