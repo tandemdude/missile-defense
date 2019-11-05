@@ -1,5 +1,8 @@
 import pygame
 import os
+from importlib import resources
+
+from . import utils
 
 PADDING = 2
 SCORE_LENGTH = 10
@@ -10,9 +13,9 @@ class Score:
     Class to contain score counter functionality.
 
     :param game_surface: The :class:`pygame.Surface` to draw the score onto
-    :param screen_width: Int width of the window in pixels
-    :param screen_height: Int height of the window in pixels
-    :param font_size: Int height of the font in pixels
+    :param screen_width: :class:`int` width of the window in pixels
+    :param screen_height: :class:`int` height of the window in pixels
+    :param font_size: :class:`int` height of the font in pixels
     """
 
     def __init__(
@@ -25,7 +28,7 @@ class Score:
         self.game_surface = game_surface
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.font = pygame.font.Font(os.path.join("..", "fonts", "fixedsys.ttf"), font_size)
+        self.font = utils.load_font("source.fonts", "fixedsys.ttf", font_size)
         self.value = 0
 
     def reset(self) -> None:
@@ -40,7 +43,7 @@ class Score:
         """
         Increments the score counter by a given amount.
 
-        :param amt: Int to increase the score by
+        :param amt: :class:`int` to increase the score by
         :return: None
         """
         self.value += amt
@@ -49,7 +52,7 @@ class Score:
         """
         Converts the score value to a padded string to be rendered
 
-        :return: Str formatted score
+        :return: :class:`str` formatted score
         """
         str_score = str(self.value)
         zero_padding = "0" * (SCORE_LENGTH - len(str_score))

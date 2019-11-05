@@ -2,7 +2,10 @@ import pygame
 import random
 import os
 import typing
-from enemy import Enemy
+from importlib import resources
+
+from .enemy import Enemy
+from . import utils
 
 
 class Wave:
@@ -13,11 +16,11 @@ class Wave:
     :param number_of_enemies: Int amount of enemies to be spawned during the wave
     :param time_limit: Length of the enemy spawn period in frames
     :param game_surface: The :class:`pygame.Surface` to draw wave number and blit enemies
-    :param screen_width: Int width of the window in pixels
-    :param screen_height: Int height of the window in pixels
+    :param screen_width: :class:`int` width of the window in pixels
+    :param screen_height: :class:`int` height of the window in pixels
     :param hit_ground_func: Procedure called when any :class:`source.enemy.Enemy` reaches the bottom of the screen
-    :param wave_num: Int number of the the current wave
-    :param font_size: Int height of the font in pixels
+    :param wave_num: :class:`int` number of the the current wave
+    :param font_size: :class:`int` height of the font in pixels
     """
 
     def __init__(
@@ -41,7 +44,7 @@ class Wave:
         self.finished = False
         self.frames_since_start = 0
         self.num = wave_num + 1
-        self.font = pygame.font.Font(os.path.join("..", "fonts", "fixedsys.ttf"), font_size)
+        self.font = utils.load_font("source.fonts", "fixedsys.ttf", font_size)
         self.enemy_spawn_times = [
             round(random.random() * self.time_limit_in_frames)
             for _ in range(number_of_enemies)
@@ -122,7 +125,7 @@ class Wave:
         """
         Function to get all enemies for the wave
 
-        :return: List of all wave enemies
+        :return: Optional[:class:`list`] of all wave enemies
         """
         return self.enemies.sprites()
 

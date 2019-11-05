@@ -1,5 +1,8 @@
 import pygame
 import os
+from importlib import resources
+
+from . import utils
 
 
 class Lives:
@@ -7,10 +10,10 @@ class Lives:
     Class to contain life counter functionality.
 
     :param game_surface: The :class:`pygame.Surface` on which to draw the lives counter
-    :param screen_width: Int width of the window in pixels
-    :param screen_height: Int height of the window in pixels
-    :param font_size: Int font size in pixels
-    :param lives: Int amount of starting lives
+    :param screen_width: :class:`int` width of the window in pixels
+    :param screen_height: :class:`int` height of the window in pixels
+    :param font_size: :class:`int` font size in pixels
+    :param lives: :class:`int` amount of starting lives
     """
 
     def __init__(
@@ -25,14 +28,14 @@ class Lives:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.lives = lives
-        self.font = pygame.font.Font(os.path.join("..", "fonts", "fixedsys.ttf"), font_size)
+        self.font = utils.load_font("source.fonts", "fixedsys.ttf", font_size)
 
     def __eq__(self, value: int) -> bool:
         """
         Compares the lives value against a specified amount.
 
-        :param value: Int to check current lives against.
-        :return: Bool representing if the current life count is equal to the value.
+        :param value: :class:`int` to check current lives against.
+        :return: :class:`bool` representing if the current life count is equal to the value.
         """
         return self.lives == value
 

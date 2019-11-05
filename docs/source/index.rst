@@ -35,6 +35,14 @@ Wave
 ----
 
 
+Tower
+=====
+.. automodule:: source.tower
+    :members:
+
+----
+
+
 Enemy
 =====
 .. automodule:: source.enemy

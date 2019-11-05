@@ -1,7 +1,10 @@
 import pygame
 import os
-from controller import Controller
-from start_screen import StartScreen
+from importlib import resources
+
+from .controller import Controller
+from .start_screen import StartScreen
+from . import utils
 
 # Constants
 SCREEN_WIDTH = 800
@@ -25,7 +28,7 @@ class Game:
         self.running = True
         self.restart = False
         self.clock = pygame.time.Clock()
-        self.font = pygame.font.Font(os.path.join("..", "fonts", "fixedsys.ttf"), 24)
+        self.font = utils.load_font("source.fonts", "fixedsys.ttf", 24)
         # Create the background surface and fill it with a solid colour (black)
         self.background = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.background.fill(pygame.Color("#000000"))

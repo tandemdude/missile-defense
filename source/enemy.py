@@ -3,7 +3,7 @@ import random
 import os
 import typing
 
-import utils
+from . import utils
 
 # Constants
 SPRITE_WIDTH = 25
@@ -21,8 +21,8 @@ class Enemy(pygame.sprite.Sprite):
 
     :param sprite_group: The :class:`pygame.sprite.Group` that the enemy is a part of
     :param game_surface: The :class:`pygame.Surface` to blit the sprite onto
-    :param screen_width: Int width of the screen in pixels
-    :param screen_height: Int height of the screen in pixels
+    :param screen_width: :class:`int` width of the screen in pixels
+    :param screen_height: :class:`int` height of the screen in pixels
     :param hit_ground_func: Method called when the enemy reaches the bottom of the screen
     :param mark_wave_incomplete_func: Method called to mark the wave incomplete while the enemy is still visible
     """
@@ -41,9 +41,7 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__(sprite_group)
 
         if Enemy.spritesheet is None:
-            Enemy.spritesheet = pygame.image.load(
-                os.path.join("..", "images", "enemy_spritesheet.png")
-            ).convert_alpha()
+            Enemy.spritesheet = utils.load_image("source.images", "enemy_spritesheet.png").convert_alpha()
         self.asset = Enemy.spritesheet
 
         self.screen_width = screen_width
@@ -77,7 +75,7 @@ class Enemy(pygame.sprite.Sprite):
         """
         Defines a random x coordinate at the top of the screen where the enemy spawns.
 
-        :return: Tuple x, y coordinate
+        :return: :class:`tuple` x, y coordinate
         """
         return random.randint(0, self.screen_width - SPRITE_WIDTH), 0
 
@@ -86,7 +84,7 @@ class Enemy(pygame.sprite.Sprite):
         Defines a random x coordinate at the bottom of the screen where the enemy
         is aimed towards.
 
-        :return: Tuple x, y coordinate
+        :return: :class:`tuple` x, y coordinate
         """
         return (
             random.randint(0, self.screen_width - SPRITE_WIDTH),
@@ -137,7 +135,7 @@ class Enemy(pygame.sprite.Sprite):
         """
         Defines the index of the current frame, looping back to 0 once all frames have been shown.
 
-        :return:
+        :return: None
         """
         self.current_frame += 1
         if self.current_frame >= len(self.frames):
@@ -159,7 +157,7 @@ class Enemy(pygame.sprite.Sprite):
         Updates the enemy's position on the screen, also checks
         whether or not it has reached the bottom of the screen.
 
-        :return:
+        :return: None
         """
         if self.y >= self.screen_height - SPRITE_HEIGHT:
             self.velocity_y = 0

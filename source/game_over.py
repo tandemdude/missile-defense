@@ -1,5 +1,8 @@
 import pygame
 import os
+from importlib import resources
+
+from . import utils
 
 
 class GameOver:
@@ -7,9 +10,9 @@ class GameOver:
     Class to contain game_over screen functionality.
 
     :param game_surface: The :class:`pygame.Surface` to draw the text onto
-    :param screen_width: Int width of the window in pixels
-    :param screen_height: Int height of the window in pixels
-    :param font_size: Int height of the font in pixels
+    :param screen_width: :class:`int` width of the window in pixels
+    :param screen_height: :class:`int` height of the window in pixels
+    :param font_size: :class:`int` height of the font in pixels
     """
 
     def __init__(
@@ -23,9 +26,7 @@ class GameOver:
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.font_size = font_size
-        self.font = pygame.font.Font(
-            os.path.join("..", "fonts", "fixedsys.ttf"), self.font_size
-        )
+        self.font = utils.load_font("source.fonts", "fixedsys.ttf", self.font_size)
 
     def update(self) -> None:
         """

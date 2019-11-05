@@ -1,12 +1,12 @@
 import pygame
 import typing
 import os
+from importlib import resources
 
-import utils
+from . import utils
 
 SPRITE_WIDTH = 15
 SPRITE_HEIGHT = 25
-MISSILE_VELOCITY = 7
 ANGLE_OFFSET = 90
 
 
@@ -15,10 +15,13 @@ class Missile(pygame.sprite.Sprite):
     Class to represent a fired missile :class:`pygame.sprite.Sprite`.
 
     :param game_surface: The :class:`pygame.Surface` to blit the missile onto
-    :param screen_width: Int width of the window in pixels
-    :param screen_height: Int height of the window in pixels
-    :param reticle_x: Current :math:`x` position of the reticle
-    :param reticle_y: Current :math:`y` position of the reticle
+    :param screen_width: :class:`int` width of the window in pixels
+    :param screen_height: :class:`int` height of the window in pixels
+    :param start_x: :math:`x` position to fire from
+    :param start_y: :math:`y` position to fire from
+    :param end_x: :math:`x` position to fire towards
+    :param end_y: :math:`y` position to fire towards
+    :param fire_velocity: Magnitude of the missile's launch velocity
     """
 
     asset = None
@@ -32,13 +35,12 @@ class Missile(pygame.sprite.Sprite):
         start_y: typing.Union[int, float],
         end_x: typing.Union[int, float],
         end_y: typing.Union[int, float],
+        fire_velocity: typing.Union[int, float]
     ) -> None:
         super().__init__()
 
         if Missile.asset is None:
-            Missile.asset = pygame.image.load(
-                os.path.join("..", "images", "missile.png")
-            ).convert_alpha()
+            Missile.asset = utils.load_image("source.images", "missile.png").convert_alpha()
         self.asset = Missile.asset
 
         self.game_surface = game_surface
@@ -48,7 +50,7 @@ class Missile(pygame.sprite.Sprite):
         self.x, self.y = start_x, start_y
         self.end_x, self.end_y = end_x, end_y
         self.velocity_x, self.velocity_y = utils.vector_from_positions(
-            self.x, self.y, self.end_x, self.end_y, MISSILE_VELOCITY
+            self.x, self.y, self.end_x, self.end_y, fire_velocity
         )
 
         self.image = pygame.Surface(

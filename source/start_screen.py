@@ -5,8 +5,8 @@ class StartScreen:
     """
     Class to contain start screen functionality.
 
-    :param screen_width: Int width of the window in pixels
-    :param screen_height: Int height of the window in pixels
+    :param screen_width: :class:`int` width of the window in pixels
+    :param screen_height: :class:`int` height of the window in pixels
     """
 
     def __init__(self, screen_width: int, screen_height: int) -> None:
@@ -20,7 +20,7 @@ class StartScreen:
         Renders the start_screen text and draws it onto the game surface.
 
         :param surface: :class:`pygame.Surface` to draw the text onto
-        :param font: Font to render the text with
+        :param font: :class:`pygame.font.Font` to render the text with
         :return: None
         """
         welcome_surface = font.render(

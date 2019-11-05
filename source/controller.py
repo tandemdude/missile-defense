@@ -3,13 +3,13 @@ import os
 import math
 import typing
 
-from reticle import Reticle
-from missile import Missile
-from wave import Wave
-from score import Score
-from lives import Lives
-from game_over import GameOver
-from tower import Tower
+from .reticle import Reticle
+from .missile import Missile
+from .wave import Wave
+from .score import Score
+from .lives import Lives
+from .game_over import GameOver
+from .tower import Tower
 
 # Constants
 MAX_MISSILES = 5
@@ -19,6 +19,7 @@ TIME_BETWEEN_WAVES = 1
 FRAME_RATE = 60
 LIVES = 3
 FONT_SIZE = 24
+PLAYER_MISSILE_VELOCITY = 7
 
 
 def calculate_enemies_for_wave(
@@ -29,10 +30,10 @@ def calculate_enemies_for_wave(
     Exponential equation ensures the difficulty progression is non-linear
     meaning the number of enemies does not increase at a constant rate.
 
-    :param initial_enemies: The starting number of enemies for the zeroth wave
-    :param wave_number: The current wave number
-    :param constant: The enemy constant, usually a float between 0 and 1
-    :return: Integer number of enemies for the given wave
+    :param initial_enemies: The :class:`int` starting number of enemies for the zeroth wave
+    :param wave_number: The :class:`int` current wave number
+    :param constant: The enemy constant, usually a :class:`float` between 0 and 1
+    :return: :class:`int` amount of enemies for the given wave
     """
     return round(initial_enemies + (wave_number ** 2 * constant))
 
@@ -44,8 +45,8 @@ def calculate_wave_spawn_period(wave_number: int) -> float:
     This gives a surd curve meaning that for the first 5 waves, the amount of time increases
     at a faster rate than for later waves, hence increasing the late-game difficulty.
 
-    :param wave_number: The current wave number
-    :return: Float amount of seconds that enemies will spawn over
+    :param wave_number: The :class:`int` current wave number
+    :return: :class:`float` amount of seconds that enemies will spawn over
     """
     return 5 * math.sqrt(4 * wave_number) + 5
 
@@ -73,7 +74,7 @@ def is_colliding(rect1: pygame.Rect, rect2: pygame.Rect) -> bool:
 
     :param rect1: :class:`pygame.Rect` instance
     :param rect2: :class:`pygame.Rect` instance
-    :return: Bool to indicate whether or not the rects are colliding
+    :return: :class:`bool` to indicate whether or not the rects are colliding
     """
     return rect1.colliderect(rect2)
 
@@ -105,8 +106,8 @@ class Controller:
     :class:`source.wave.Wave` and :class:`source.enemy.Enemy` class.
 
     :param game_surface: The game's window where sprites will be drawn
-    :param screen_width: Int width of the window in pixels
-    :param screen_height: Int height of the window in pixels
+    :param screen_width: :class:`int` width of the window in pixels
+    :param screen_height: :class:`int` height of the window in pixels
     """
 
     def __init__(
@@ -120,7 +121,7 @@ class Controller:
 
         self.control_scheme = ControlScheme()
         self.reticle = Reticle(self.game_surface, self.screen_width, self.screen_height)
-        self.tower = Tower(self.game_surface, self.screen_width, self.screen_height, self.get_current_enemies)
+        self.tower = Tower(self.game_surface, self.screen_width, self.screen_height, self.get_current_enemies, 5)
         self.missiles = []
 
         self.wave_number = 0
@@ -156,7 +157,7 @@ class Controller:
         Function passed to :class:`source.tower.Tower` on init. When called, returns a list
         of all enemies in the current wave.
 
-        :return: List of all enemies in the current wave
+        :return: :class:`list` of all enemies in the current wave
         """
         return None if self.current_wave is None else self.current_wave.get_all_enemies()
 
@@ -193,6 +194,7 @@ class Controller:
         :return: None
         """
         if len(self.missiles) < MAX_MISSILES:
+            reticle_position = self.reticle.current_position()
             self.missiles.append(
                 Missile(
                     self.game_surface,
@@ -200,8 +202,9 @@ class Controller:
                     self.screen_height,
                     self.screen_width // 2,
                     self.screen_height,
-                    self.reticle.x,
-                    self.reticle.y,
+                    reticle_position[0],
+                    reticle_position[1],
+                    PLAYER_MISSILE_VELOCITY
                 )
             )
 
@@ -279,7 +282,7 @@ class Controller:
         Only updates what needs to be updated,
         ie, does not update the game_over screen if the game_over conditions have not been met.
 
-        :return: List of all instances that need to be updated in a given frame
+        :return: :class:`list` of all instances that need to be updated in a given frame
         """
         if self.game_over:
             to_be_updated = [self.score, self.lives, self.game_over_screen]

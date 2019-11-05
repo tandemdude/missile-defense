@@ -1,6 +1,9 @@
 import pygame
 import os
 import typing
+from importlib import resources
+
+from . import utils
 
 # Constants
 RETICLE_SPEED = 6.5
@@ -16,8 +19,8 @@ def clamp(
     bounds.
 
     :param n: The number to clamp
-    :param maxn: Int upper bound
-    :param minn: Int lower bound
+    :param maxn: :class:`int` upper bound
+    :param minn: :class:`int` lower bound
     :return: The clamped number
     """
     return max(min(maxn, n), minn)
@@ -28,16 +31,14 @@ class Reticle:
     Class to represent the player's targeting reticle.
 
     :param game_surface: The :class:`pygame.Surface` to draw the reticle onto
-    :param screen_width: Int width of the window in pixels
-    :param screen_height: Int height of the window in pixels
+    :param screen_width: :class:`int` width of the window in pixels
+    :param screen_height: :class:`int` height of the window in pixels
     """
 
     def __init__(
         self, game_surface: pygame.Surface, screen_width: int, screen_height: int
     ) -> None:
-        self.asset = pygame.image.load(
-            os.path.join("..", "images", "reticle.png")
-        ).convert_alpha()
+        self.asset = utils.load_image("source.images", "reticle.png").convert_alpha()
         self.asset_width, self.asset_height = (
             self.asset.get_width(),
             self.asset.get_height(),
@@ -63,7 +64,7 @@ class Reticle:
         """
         Get the reticle's current x, y position on the game surface.
 
-        :return: Tuple containing the x, y coordinates of the reticle.
+        :return: :class:`tuple` containing the x, y coordinates of the reticle.
         """
         return self.x, self.y
 
@@ -71,7 +72,7 @@ class Reticle:
         """
         Alter the moving_up flag to indicate whether the reticle is moving upwards.
 
-        :param enable: Bool representing whether or not the reticle should be moving up.
+        :param enable: Optional[:class:`bool`] representing whether or not the reticle should be moving up.
         :return: None
         """
         self.moving_up = enable
@@ -80,7 +81,7 @@ class Reticle:
         """
         Alter the moving_down flag to indicate whether the reticle is moving downwards.
 
-        :param enable: Bool representing whether or not the reticle should be moving down.
+        :param enable: Optional[:class:`bool`] representing whether or not the reticle should be moving down.
         :return: None
         """
         self.moving_down = enable
@@ -89,7 +90,7 @@ class Reticle:
         """
         Alter the moving_left flag to indicate whether the reticle is moving to the left.
 
-        :param enable: Bool representing whether or not the reticle should be moving left.
+        :param enable: Optional[:class:`bool`] representing whether or not the reticle should be moving left.
         :return: None
         """
         self.moving_left = enable
@@ -98,7 +99,7 @@ class Reticle:
         """
         Alter the moving_right flag to indicate whether the reticle is moving to the right.
 
-        :param enable: Bool representing whether or not the reticle should be moving right.
+        :param enable: Optional[:class:`bool`] representing whether or not the reticle should be moving right.
         :return: None
         """
         self.moving_right = enable

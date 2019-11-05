@@ -1,6 +1,8 @@
 import math
 import pygame
 import typing
+import os
+from importlib import resources
 
 
 def vector_from_positions(
@@ -19,7 +21,7 @@ def vector_from_positions(
     :param end_x: Final x coordinate
     :param end_y: Final y coordinate
     :param constant: Velocity constant
-    :return: Tuple x, y velocity vector
+    :return: :class:`tuple` x, y velocity vector
     """
     velocity_x = (
         constant * (end_x - x) / math.sqrt(((end_y - y) ** 2) + ((end_x - x) ** 2))
@@ -49,3 +51,15 @@ def get_angle_positions(
     """
     radius, angle = pygame.math.Vector2(end_x - x, end_y - y).as_polar()
     return -angle - offset
+
+
+def load_image(package, path):
+    with resources.path(package, path) as image_path:
+        image_path = os.path.relpath(image_path)
+    return pygame.image.load(image_path)
+
+
+def load_font(package, path, size):
+    with resources.path(package, path) as font_path:
+        font_path = os.path.relpath(font_path)
+    return pygame.font.Font(font_path, size)
