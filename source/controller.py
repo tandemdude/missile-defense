@@ -10,6 +10,7 @@ from .score import Score
 from .lives import Lives
 from .game_over import GameOver
 from .tower import Tower
+from .highscore import HighscoreTable
 
 # Constants
 MAX_MISSILES = 5
@@ -142,6 +143,13 @@ class Controller:
         self.score = Score(
             self.game_surface, self.screen_width, self.screen_height, FONT_SIZE
         )
+        self.highscores_table = HighscoreTable(self.game_surface, self.screen_width, self.screen_height)
+        self.score_saved = False
+
+    def save_score(self) -> None:
+        if not self.score_saved:
+            self.highscores_table.add_new_score("AAA", self.score.value)
+            self.score_saved = True
 
     def enemy_hit_ground(self) -> None:
         """
@@ -285,7 +293,8 @@ class Controller:
         :return: :class:`list` of all instances that need to be updated in a given frame
         """
         if self.game_over:
-            to_be_updated = [self.score, self.lives, self.game_over_screen]
+            self.save_score()
+            to_be_updated = [self.score, self.lives, self.game_over_screen, self.highscores_table]
         else:
             to_be_updated = self.missiles + [self.reticle, self.score, self.lives, self.tower]
             # Ensures that update_all does not attempt to update NoneType

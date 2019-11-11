@@ -54,12 +54,26 @@ def get_angle_positions(
 
 
 def load_image(package, path):
+    """
+    Calculates the angle between any set of two x, y coordinates.
+
+    :param package: Package path to resource
+    :param path: Filename of resource
+    :return: :class:`pygame.Surface` containing loaded resource
+    """
     with resources.path(package, path) as image_path:
         image_path = os.path.relpath(image_path)
     return pygame.image.load(image_path)
 
 
 def load_font(package, path, size):
+    """
+    Calculates the angle between any set of two x, y coordinates.
+
+    :param package: Package path to resource
+    :param path: Filename of resource
+    :return: :class:`pygame.font.Font` for the loaded font
+    """
     with resources.path(package, path) as font_path:
         font_path = os.path.relpath(font_path)
     return pygame.font.Font(font_path, size)
