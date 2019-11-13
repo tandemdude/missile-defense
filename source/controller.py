@@ -1,5 +1,4 @@
 import pygame
-import os
 import math
 import typing
 
@@ -193,7 +192,7 @@ class Controller:
         number_of_enemies = calculate_enemies_for_wave(
             INITIAL_ENEMIES, self.wave_number, ENEMY_CONSTANT
         )
-        # Instantiate a new :class:`souce.wave.Wave` from given parameters
+        # Instantiate a new :class:`source.wave.Wave` from given parameters
         self.current_wave = Wave(
             number_of_enemies,
             calculate_wave_spawn_period(self.wave_number) * FRAME_RATE,

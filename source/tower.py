@@ -1,9 +1,7 @@
 import pygame
 import math
 import typing
-import os
 import copy
-from importlib import resources
 
 from .missile import Missile
 from . import enemy
@@ -67,13 +65,26 @@ class Tower(pygame.sprite.Sprite):
         )
         self.image = copy.copy(self.original_image)
 
-    def calculate_distance(self, enemy) -> typing.Union[int, float]:
+    def calculate_distance(self, enemy: enemy.Enemy) -> typing.Union[int, float]:
+        """
+        Calculates the straight-line distance from the tower's location
+        and a given enemy instance
+
+        :param enemy: :class:`source.enemy.Enemy` to calculate the distance to
+        :return: Union[:class:`int`, :class:`float`] distance between the tower and enemy
+        """
         x_diff = self.x - enemy.x
         y_diff = self.y - enemy.y
         diagonal_distance = math.sqrt((x_diff ** 2) + (y_diff ** 2))
         return diagonal_distance
 
     def find_nearest_enemy_in_range(self) -> typing.Optional[enemy.Enemy]:
+        """
+        Checks if there is an enemy in range of the tower and returns the closest
+        if multiple are found
+
+        :return: Nearest Optional[:class:`source.enemy.Enemy`] in range
+        """
         closest = [None, 1000000]
         current_enemies = self.get_enemies_func()
         for enemy in [] if current_enemies is None else current_enemies:
@@ -85,17 +96,35 @@ class Tower(pygame.sprite.Sprite):
             return closest[0]
 
     def increment_frames(self) -> None:
+        """
+        Increments :attr:`source.tower.Tower.frames_since_last_fired` by one,
+        wrapping back to 0 once the tower fires
+
+        :return:
+        """
         self.frames_since_last_fired += 1
         if self.frames_since_last_fired > self.fire_rate:
             self.frames_since_last_fired = 0
 
-    def point_towards_enemy(self, enemy):
+    def point_towards_enemy(self, enemy) -> None:
+        """
+        Rotates the tower to point towards the nearest enemy in its range
+
+        :param enemy: :class:`source.enemy.Enemy` to point towards
+        :return: None
+        """
         self.image = pygame.transform.rotate(
             self.original_image,
             utils.get_angle_positions(self.x, self.y, enemy.x, enemy.y, ANGLE_OFFSET),
         )
 
     def fire_towards_nearest_in_range_enemy(self) -> None:
+        """
+        Fires a projectile towards the nearest enemy if
+        the frames counter specifies
+
+        :return: None
+        """
         if self.frames_since_last_fired == 0:
             nearest_enemy = self.find_nearest_enemy_in_range()
             if nearest_enemy is None:
@@ -118,6 +147,12 @@ class Tower(pygame.sprite.Sprite):
                 )
 
     def update(self) -> None:
+        """
+        Blits the tower's image onto the game surface
+        and updates all missiles currently travelling fired by the tower
+
+        :return: None
+        """
         self.fire_towards_nearest_in_range_enemy()
         self.game_surface.blit(self.image, (self.x, self.y))
         for missile in self.missiles[:]:

@@ -1,8 +1,6 @@
 import pygame
 import random
-import os
 import typing
-from importlib import resources
 
 from .enemy import Enemy
 from . import utils
@@ -52,7 +50,7 @@ class Wave:
 
     def register_enemies(self) -> None:
         """
-        Adds a specific amount of enemies to the :attr:`Wave.enemies` :class:`pygame.sprite.Group`, all are spawned at the same time.
+        Adds a specific amount of enemies to the :attr:`source.wave.Wave.enemies` :class:`pygame.sprite.Group`, all are spawned at the same time.
 
         .. note::
             This method is no longer used.
@@ -73,7 +71,7 @@ class Wave:
 
     def register_enemy(self) -> None:
         """
-        Adds a single :class:`source.enemy.Enemy` to the :attr:`Wave.enemies` :class:`pygame.sprite.Group`. Enemies spawn as soon as they are registered.
+        Adds a single :class:`source.enemy.Enemy` to the :attr:`source.wave.Wave.enemies` :class:`pygame.sprite.Group`. Enemies spawn as soon as they are registered.
 
         :return: None
         """
@@ -131,7 +129,7 @@ class Wave:
 
     def update(self) -> None:
         """
-        Calls the update method on the :attr:`Wave.enemies` :class:`pygame.sprite.Group` and increments the frames since start counter.
+        Calls the update method on the :attr:`souce.wave.Wave.enemies` :class:`pygame.sprite.Group` and increments the frames since start counter.
         Draws the wave counter onto the surface.
 
         :return: None

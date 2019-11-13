@@ -1,5 +1,4 @@
 import pygame
-import os
 import typing
 import requests
 
@@ -14,14 +13,14 @@ PADDING_BOTTOM = 5
 
 class HighscoreRow:
     """
-	Class to represent a single row in the :class:`source.highscore.HighscoreTable`
-	Contains the display name and score of a player
+    Class to represent a single row in the :class:`source.highscore.HighscoreTable`
+    Contains the display name and score of a player
 
-	:param name: The :class:`str` display name of the player
-	:param score: The :class:`int` score of the player
-	"""
+    :param name: The :class:`str` display name of the player
+    :param score: The :class:`int` score of the player
+    """
 
-    def __init__(self, name: str, score: int):
+    def __init__(self, name: str, score: int) -> None:
         self.name = name
         self.score = score
         self.font = utils.load_font("source.fonts", "fixedsys.ttf", FONT_SIZE)
@@ -33,17 +32,17 @@ class HighscoreRow:
 
 class HighscoreTable:
     """
-	Class to represent a table of global or local highscores
-	There should only be one instance of this initialised at any time
+    Class to represent a table of global or local highscores
+    There should only be one instance of this initialised at any time
 
-	:param game_surface: The :class:`pygame.Surface` to draw the table onto
-	:param screen_width: The :class:`int` width of the screen in pixels
-	:param screen_height: The :class:`int` height of the screen in pixels
-	"""
+    :param game_surface: The :class:`pygame.Surface` to draw the table onto
+    :param screen_width: The :class:`int` width of the screen in pixels
+    :param screen_height: The :class:`int` height of the screen in pixels
+    """
 
     def __init__(
         self, game_surface: pygame.Surface, screen_width: int, screen_height: int
-    ):
+    ) -> None:
         db_utils.create_database_and_table_if_not_exists()
         self.screen_width = screen_width
         self.screen_height = screen_height
@@ -56,7 +55,15 @@ class HighscoreTable:
         self.global_fetch_succeeded = False
         self.connected_to_internet = global_api_utils.is_connected()
 
-    def add_new_score(self, name: str, score: int):
+    def add_new_score(self, name: str, score: int) -> None:
+        """
+        Save a score to both the local database and remote global
+        database if the computer is connected to the internet
+
+        :param name: :class:`str` name to store
+        :param score: :class:`int` score to store
+        :return: None
+        """
         # Add a score to the local database and also POST it to the
         # api if the computer is connected to the internet
         db_utils.insert_score(name, score)
@@ -64,7 +71,14 @@ class HighscoreTable:
             global_api_utils.post_new_score(name, score)
         self.update_highscore_surface()
 
-    def generate_rows(self):
+    def generate_rows(self) -> typing.List[HighscoreRow]:
+        """
+        Gets highscore data from the appropriate source, be that local
+        or global and parse the data into :class:`source.highscore.HighscoreRow` instances
+        to be rendered by :func:`source.highscore.HighscoreTable.render`
+
+        :return: :class:`list` of :class:`source.highscore.HighscoreRow` instances
+        """
         # TODO: Refactor this IF to remove duplication
         # Get highscore data from the api if the computer is
         # connected to the internet else fetch the local ones
@@ -87,7 +101,13 @@ class HighscoreTable:
             parsed_rows.append(HighscoreRow(row[0], row[1]))
         return parsed_rows
 
-    def render(self):
+    def render(self) -> pygame.Surface:
+        """
+        Renders the highscores into a table creating a :class:`pygame.Surface` which is displayed
+        to the user on game over
+
+        :return: :class:`pygame.Surface` to blit to the game surface
+        """
         # Render the highscore table header depending on if the scores are local or global
         title_text = (
             "Global High Scores" if self.global_fetch_succeeded else "Local High Scores"
@@ -133,12 +153,23 @@ class HighscoreTable:
 
         return highscore_surface
 
-    def update_highscore_surface(self):
+    def update_highscore_surface(self) -> None:
+        """
+        Regenerates the highscore surface when called, updating
+        any values that are no longer accurate
+
+        :return: None
+        """
         # Check if the computer is connected to the internet
         self.connected_to_internet = global_api_utils.is_connected()
         # Generate rows and render the highscore surface
         self.rows = self.generate_rows()
         self.surface_to_draw = self.render()
 
-    def update(self):
-        åself.game_surface.blit(self.surface_to_draw, (0, 0))
+    def update(self) -> None:
+        """
+        Draws the highscore table onto the game surface
+
+        :return: None
+        """
+        self.game_surface.blit(self.surface_to_draw, (0, 0))
