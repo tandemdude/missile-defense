@@ -309,19 +309,20 @@ class Controller:
         :return: :class:`list` of all instances that need to be updated in a given frame
         """
         if self.internal_game_over:
-            to_be_updated = [
-                self.score,
-                self.lives,
-            ]
+            to_be_updated = [self.score, self.lives]
 
             if self.text_input is None:
-                self.text_input = TextInput(self.game_surface, self.screen_width, self.screen_height, "fixedsys.ttf", FONT_SIZE, 3)
+                self.text_input = TextInput(
+                    self.game_surface,
+                    self.screen_width,
+                    self.screen_height,
+                    "fixedsys.ttf",
+                    FONT_SIZE,
+                    3,
+                )
             elif not self.text_input.listening:
                 self.save_score(str(self.text_input))
-                to_be_updated += [
-                    self.game_over_screen,
-                    self.highscores_table,
-                ]
+                to_be_updated += [self.game_over_screen, self.highscores_table]
                 self.game_over = True
 
             if self.text_input is not None and self.text_input.listening:

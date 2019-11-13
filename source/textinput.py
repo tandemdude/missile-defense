@@ -39,7 +39,7 @@ ALLOWED_KEYS = {
     pygame.K_w: "W",
     pygame.K_x: "X",
     pygame.K_y: "Y",
-    pygame.K_z: "Z"
+    pygame.K_z: "Z",
 }
 
 
@@ -79,14 +79,21 @@ class TextInput:
         game_surface_center = self.game_surface.get_rect().center
 
         input_title = "Type your name, press Enter when finished."
-        input_title_surface = self.font.render(input_title, True, pygame.Color("#FFFFFF"))
+        input_title_surface = self.font.render(
+            input_title, True, pygame.Color("#FFFFFF")
+        )
         input_title_rect = input_title_surface.get_rect()
-        input_title_rect.center = (game_surface_center[0], game_surface_center[1] - self.font_size)
+        input_title_rect.center = (
+            game_surface_center[0],
+            game_surface_center[1] - self.font_size,
+        )
         self.game_surface.blit(input_title_surface, input_title_rect)
 
         input_text = " ".join(self.text)
         input_text += " _" * (3 - len(self.text))
-        input_surface = self.font.render(input_text.strip(), True, pygame.Color("#FFFFFF"))
+        input_surface = self.font.render(
+            input_text.strip(), True, pygame.Color("#FFFFFF")
+        )
         input_surface_rect = input_surface.get_rect()
         input_surface_rect.center = game_surface_center
         self.game_surface.blit(input_surface, input_surface_rect)

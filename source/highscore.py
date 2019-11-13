@@ -13,13 +13,14 @@ PADDING_BOTTOM = 5
 
 
 class HighscoreRow:
-	"""
+    """
 	Class to represent a single row in the :class:`source.highscore.HighscoreTable`
 	Contains the display name and score of a player
 
 	:param name: The :class:`str` display name of the player
 	:param score: The :class:`int` score of the player
 	"""
+
     def __init__(self, name: str, score: int):
         self.name = name
         self.score = score
@@ -31,7 +32,7 @@ class HighscoreRow:
 
 
 class HighscoreTable:
-	"""
+    """
 	Class to represent a table of global or local highscores
 	There should only be one instance of this initialised at any time
 
@@ -39,6 +40,7 @@ class HighscoreTable:
 	:param screen_width: The :class:`int` width of the screen in pixels
 	:param screen_height: The :class:`int` height of the screen in pixels
 	"""
+
     def __init__(
         self, game_surface: pygame.Surface, screen_width: int, screen_height: int
     ):
@@ -55,8 +57,8 @@ class HighscoreTable:
         self.connected_to_internet = global_api_utils.is_connected()
 
     def add_new_score(self, name: str, score: int):
-    	# Add a score to the local database and also POST it to the
-    	# api if the computer is connected to the internet
+        # Add a score to the local database and also POST it to the
+        # api if the computer is connected to the internet
         db_utils.insert_score(name, score)
         if self.connected_to_internet:
             global_api_utils.post_new_score(name, score)
@@ -78,15 +80,15 @@ class HighscoreTable:
             raw_rows = db_utils.get_high_scores()
             self.global_fetch_succeeded = False
 
-        # Loop through the raw response from the api or database and
-        # reformat each to the format that self.render() is expecting
+            # Loop through the raw response from the api or database and
+            # reformat each to the format that self.render() is expecting
         parsed_rows = []
         for row in raw_rows:
             parsed_rows.append(HighscoreRow(row[0], row[1]))
         return parsed_rows
 
     def render(self):
-    	# Render the highscore table header depending on if the scores are local or global
+        # Render the highscore table header depending on if the scores are local or global
         title_text = (
             "Global High Scores" if self.global_fetch_succeeded else "Local High Scores"
         )
@@ -112,8 +114,8 @@ class HighscoreTable:
             # Move the coordinate for the next row downwards
             next_row_midtop[1] += FONT_SIZE
 
-        # Displays a message to the user if the global high scores
-        # couldn't be fetched from the api
+            # Displays a message to the user if the global high scores
+            # couldn't be fetched from the api
         if not self.global_fetch_succeeded:
             footer_surface = self.font.render(
                 "Global fetch failed: displaying local scores only.",
@@ -132,11 +134,11 @@ class HighscoreTable:
         return highscore_surface
 
     def update_highscore_surface(self):
-    	# Check if the computer is connected to the internet
+        # Check if the computer is connected to the internet
         self.connected_to_internet = global_api_utils.is_connected()
         # Generate rows and render the highscore surface
         self.rows = self.generate_rows()
         self.surface_to_draw = self.render()
 
     def update(self):
-        self.game_surface.blit(self.surface_to_draw, (0, 0))
+        åself.game_surface.blit(self.surface_to_draw, (0, 0))
