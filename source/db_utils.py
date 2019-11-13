@@ -1,5 +1,4 @@
 import sqlite3
-from importlib import resources
 
 
 CREATE_TABLE_STATEMENT = """
@@ -19,8 +18,6 @@ SELECT name, score FROM scores
 ORDER BY score DESC LIMIT 10;
 """
 
-# with resources.path("source.database", "highscores.db") as db_path:
-# 	DB_PATH = os.path.relpath(db_path)
 DB_PATH = "highscores.db"
 
 
