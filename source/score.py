@@ -1,6 +1,4 @@
 import pygame
-import os
-from importlib import resources
 
 from . import utils
 

@@ -44,6 +44,19 @@ ALLOWED_KEYS = {
 
 
 class TextInput:
+    """
+    Utility class designed to provide a simple method to
+    take text input from the user from a selection of permitted
+    characters when required
+
+    :param game_surface: The game's :class:`pygame.Surface`
+    :param screen_width: :class:`int` width of the window in pixels
+    :param screen_height: :class:`int` height of the window in pixels
+    :param font_name: :class:`str` name of the font file
+    :param font_size: :class:`int` size of the font
+    :param char_limit: :class:`int` maximum number of characters the input will take
+    """
+
     def __init__(
         self,
         game_surface: pygame.Surface,
@@ -52,7 +65,7 @@ class TextInput:
         font_name: str,
         font_size: int,
         char_limit: int,
-    ):
+    ) -> None:
         self.game_surface = game_surface
         self.screen_width = screen_width
         self.screen_height = screen_height
@@ -62,10 +75,25 @@ class TextInput:
         self.char_limit = char_limit
         self.listening = True
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        Converts the list of characters into a :class:`str` name
+        of the player and returns it
+
+        :return: :class:`str` name of the player
+        """
         return "".join(self.text)
 
-    def process_event(self, event):
+    def process_event(self, event) -> None:
+        """
+        Takes a :class:`pygame.event.Event` which is then checked to see
+        if it is a keydown and if it is an accepted character or a functional key,
+        in this case backspace or return.
+        Performs the necessary action based off the key type
+
+        :param event: A :class:`pygame.event.Event` instance to be processed
+        :return: None
+        """
         if self.listening:
             if event.type == pygame.KEYDOWN:
                 if event.key in ALLOWED_KEYS and len(self.text) < self.char_limit:
@@ -75,7 +103,13 @@ class TextInput:
                 elif event.key == pygame.K_RETURN and len(self.text) == self.char_limit:
                     self.listening = False
 
-    def draw(self):
+    def draw(self) -> None:
+        """
+        Generates the text input interface :class:`pygame.Surface` and
+        blits it onto the game's screen
+
+        :return: None
+        """
         game_surface_center = self.game_surface.get_rect().center
 
         input_title = "Type your name, press Enter when finished."
@@ -98,5 +132,11 @@ class TextInput:
         input_surface_rect.center = game_surface_center
         self.game_surface.blit(input_surface, input_surface_rect)
 
-    def update(self):
+    def update(self) -> None:
+        """
+        Calls :func:`source.textinput.TextInput.draw` to generate and blit
+        the surface onto the screen
+
+        :return: None
+        """
         self.draw()

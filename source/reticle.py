@@ -1,7 +1,5 @@
 import pygame
-import os
 import typing
-from importlib import resources
 
 from . import utils
 

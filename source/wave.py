@@ -1,8 +1,6 @@
 import pygame
 import random
-import os
 import typing
-from importlib import resources
 
 from .enemy import Enemy
 from . import utils

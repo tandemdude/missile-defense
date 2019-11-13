@@ -107,7 +107,31 @@ Highscore
 ----
 
 
+TextInput
+=========
+.. automodule:: source.textinput
+    :members:
+
+----
+
+
 Utils
 =====
 .. automodule:: source.utils
    :members:
+
+----
+
+
+Database Utils
+==============
+.. automodule:: source.db_utils
+    :members:
+
+----
+
+
+API Utils
+=========
+.. automodule:: source.global_api_utils
+    :members:
