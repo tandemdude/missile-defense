@@ -41,7 +41,9 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__(sprite_group)
 
         if Enemy.spritesheet is None:
-            Enemy.spritesheet = utils.load_image("source.images", "enemy_spritesheet.png").convert_alpha()
+            Enemy.spritesheet = utils.load_image(
+                "source.images", "enemy_spritesheet.png"
+            ).convert_alpha()
         self.asset = Enemy.spritesheet
 
         self.screen_width = screen_width

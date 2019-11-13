@@ -35,12 +35,14 @@ class Missile(pygame.sprite.Sprite):
         start_y: typing.Union[int, float],
         end_x: typing.Union[int, float],
         end_y: typing.Union[int, float],
-        fire_velocity: typing.Union[int, float]
+        fire_velocity: typing.Union[int, float],
     ) -> None:
         super().__init__()
 
         if Missile.asset is None:
-            Missile.asset = utils.load_image("source.images", "missile.png").convert_alpha()
+            Missile.asset = utils.load_image(
+                "source.images", "missile.png"
+            ).convert_alpha()
         self.asset = Missile.asset
 
         self.game_surface = game_surface
@@ -77,7 +79,12 @@ class Missile(pygame.sprite.Sprite):
             self.x += self.velocity_x
             self.y += self.velocity_y
 
-        if 0 > self.x or self.x > self.screen_width or self.y < 0 or self.y > self.screen_height:
+        if (
+            0 > self.x
+            or self.x > self.screen_width
+            or self.y < 0
+            or self.y > self.screen_height
+        ):
             self.visible = False
 
         if self.visible:

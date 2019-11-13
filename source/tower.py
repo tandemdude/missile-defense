@@ -27,7 +27,14 @@ class Tower(pygame.sprite.Sprite):
 
     asset = None
 
-    def __init__(self, game_surface, screen_width, screen_height, get_enemies_func, missile_velocity):
+    def __init__(
+        self,
+        game_surface,
+        screen_width,
+        screen_height,
+        get_enemies_func,
+        missile_velocity,
+    ):
         super().__init__()
 
         if Tower.asset is None:
@@ -55,7 +62,9 @@ class Tower(pygame.sprite.Sprite):
             (self.asset.get_width(), self.asset.get_height()), pygame.SRCALPHA
         )
         self.original_image.blit(self.asset, (0, 0))
-        self.original_image = pygame.transform.scale(self.original_image, (SPRITE_WIDTH, SPRITE_HEIGHT))
+        self.original_image = pygame.transform.scale(
+            self.original_image, (SPRITE_WIDTH, SPRITE_HEIGHT)
+        )
         self.image = copy.copy(self.original_image)
 
     def calculate_distance(self, enemy) -> typing.Union[int, float]:
@@ -83,9 +92,7 @@ class Tower(pygame.sprite.Sprite):
     def point_towards_enemy(self, enemy):
         self.image = pygame.transform.rotate(
             self.original_image,
-            utils.get_angle_positions(
-                self.x, self.y, enemy.x, enemy.y, ANGLE_OFFSET
-            ),
+            utils.get_angle_positions(self.x, self.y, enemy.x, enemy.y, ANGLE_OFFSET),
         )
 
     def fire_towards_nearest_in_range_enemy(self) -> None:
@@ -99,22 +106,20 @@ class Tower(pygame.sprite.Sprite):
                 image_rect.topleft = self.x, self.y
                 self.missiles.append(
                     Missile(
-                        self.game_surface, 
-                        self.screen_width, 
-                        self.screen_height, 
-                        self.x, 
-                        self.y, 
-                        nearest_enemy.x, 
+                        self.game_surface,
+                        self.screen_width,
+                        self.screen_height,
+                        self.x,
+                        self.y,
+                        nearest_enemy.x,
                         nearest_enemy.y,
-                        self.missile_velocity
+                        self.missile_velocity,
                     )
                 )
 
     def update(self) -> None:
         self.fire_towards_nearest_in_range_enemy()
-        self.game_surface.blit(
-            self.image, (self.x, self.y)
-        )
+        self.game_surface.blit(self.image, (self.x, self.y))
         for missile in self.missiles[:]:
             missile.update()
             if not missile.visible:

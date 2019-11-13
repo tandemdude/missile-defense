@@ -11,6 +11,7 @@ from .lives import Lives
 from .game_over import GameOver
 from .tower import Tower
 from .highscore import HighscoreTable
+from .textinput import TextInput
 
 # Constants
 MAX_MISSILES = 5
@@ -122,7 +123,13 @@ class Controller:
 
         self.control_scheme = ControlScheme()
         self.reticle = Reticle(self.game_surface, self.screen_width, self.screen_height)
-        self.tower = Tower(self.game_surface, self.screen_width, self.screen_height, self.get_current_enemies, 5)
+        self.tower = Tower(
+            self.game_surface,
+            self.screen_width,
+            self.screen_height,
+            self.get_current_enemies,
+            5,
+        )
         self.missiles = []
 
         self.wave_number = 0
@@ -138,17 +145,21 @@ class Controller:
             self.game_surface, self.screen_width, self.screen_height, FONT_SIZE
         )
 
+        self.internal_game_over = False
         self.game_over = False
 
         self.score = Score(
             self.game_surface, self.screen_width, self.screen_height, FONT_SIZE
         )
-        self.highscores_table = HighscoreTable(self.game_surface, self.screen_width, self.screen_height)
+        self.highscores_table = HighscoreTable(
+            self.game_surface, self.screen_width, self.screen_height
+        )
         self.score_saved = False
+        self.text_input = None
 
-    def save_score(self) -> None:
+    def save_score(self, name: str) -> None:
         if not self.score_saved:
-            self.highscores_table.add_new_score("AAA", self.score.value)
+            self.highscores_table.add_new_score(name, self.score.value)
             self.score_saved = True
 
     def enemy_hit_ground(self) -> None:
@@ -167,7 +178,9 @@ class Controller:
 
         :return: :class:`list` of all enemies in the current wave
         """
-        return None if self.current_wave is None else self.current_wave.get_all_enemies()
+        return (
+            None if self.current_wave is None else self.current_wave.get_all_enemies()
+        )
 
     def create_new_wave(self) -> None:
         """
@@ -212,7 +225,7 @@ class Controller:
                     self.screen_height,
                     reticle_position[0],
                     reticle_position[1],
-                    PLAYER_MISSILE_VELOCITY
+                    PLAYER_MISSILE_VELOCITY,
                 )
             )
 
@@ -250,6 +263,9 @@ class Controller:
                 self.reticle.up(False)
             elif event.key == self.control_scheme.down:
                 self.reticle.down(False)
+
+        if self.text_input is not None:
+            self.text_input.process_event(event)
 
     def check_collisions(self, missile_list) -> None:
         """
@@ -292,14 +308,36 @@ class Controller:
 
         :return: :class:`list` of all instances that need to be updated in a given frame
         """
-        if self.game_over:
-            self.save_score()
-            to_be_updated = [self.score, self.lives, self.game_over_screen, self.highscores_table]
+        if self.internal_game_over:
+            to_be_updated = [
+                self.score,
+                self.lives,
+            ]
+
+            if self.text_input is None:
+                self.text_input = TextInput(self.game_surface, self.screen_width, self.screen_height, "fixedsys.ttf", FONT_SIZE, 3)
+            elif not self.text_input.listening:
+                self.save_score(str(self.text_input))
+                to_be_updated += [
+                    self.game_over_screen,
+                    self.highscores_table,
+                ]
+                self.game_over = True
+
+            if self.text_input is not None and self.text_input.listening:
+                to_be_updated += [self.text_input]
+
         else:
-            to_be_updated = self.missiles + [self.reticle, self.score, self.lives, self.tower]
+            to_be_updated = self.missiles + [
+                self.reticle,
+                self.score,
+                self.lives,
+                self.tower,
+            ]
             # Ensures that update_all does not attempt to update NoneType
             if self.current_wave is not None:
                 to_be_updated += [self.current_wave]
+
         return to_be_updated
 
     def create_new_wave_if_required(self) -> None:
@@ -344,7 +382,7 @@ class Controller:
 
         # Transfers game into the game_over state if all lives have been lost, or runs wave logic
         if self.lives == 0:
-            self.game_over = True
+            self.internal_game_over = True
         else:
             self.create_new_wave_if_required()
             self.check_collisions(self.missiles)
