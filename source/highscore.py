@@ -13,6 +13,13 @@ PADDING_BOTTOM = 5
 
 
 class HighscoreRow:
+	"""
+	Class to represent a single row in the :class:`source.highscore.HighscoreTable`
+	Contains the display name and score of a player
+
+	:param name: The :class:`str` display name of the player
+	:param score: The :class:`int` score of the player
+	"""
     def __init__(self, name: str, score: int):
         self.name = name
         self.score = score
@@ -24,6 +31,14 @@ class HighscoreRow:
 
 
 class HighscoreTable:
+	"""
+	Class to represent a table of global or local highscores
+	There should only be one instance of this initialised at any time
+
+	:param game_surface: The :class:`pygame.Surface` to draw the table onto
+	:param screen_width: The :class:`int` width of the screen in pixels
+	:param screen_height: The :class:`int` height of the screen in pixels
+	"""
     def __init__(
         self, game_surface: pygame.Surface, screen_width: int, screen_height: int
     ):
@@ -40,13 +55,18 @@ class HighscoreTable:
         self.connected_to_internet = global_api_utils.is_connected()
 
     def add_new_score(self, name: str, score: int):
+    	# Add a score to the local database and also POST it to the
+    	# api if the computer is connected to the internet
         db_utils.insert_score(name, score)
         if self.connected_to_internet:
             global_api_utils.post_new_score(name, score)
         self.update_highscore_surface()
 
     def generate_rows(self):
-        # TODO: Reformat this IF to remove duplication
+        # TODO: Refactor this IF to remove duplication
+        # Get highscore data from the api if the computer is
+        # connected to the internet else fetch the local ones
+        # from the database
         if self.connected_to_internet:
             try:
                 raw_rows = global_api_utils.get_high_scores()
@@ -58,12 +78,15 @@ class HighscoreTable:
             raw_rows = db_utils.get_high_scores()
             self.global_fetch_succeeded = False
 
+        # Loop through the raw response from the api or database and
+        # reformat each to the format that self.render() is expecting
         parsed_rows = []
         for row in raw_rows:
             parsed_rows.append(HighscoreRow(row[0], row[1]))
         return parsed_rows
 
     def render(self):
+    	# Render the highscore table header depending on if the scores are local or global
         title_text = (
             "Global High Scores" if self.global_fetch_succeeded else "Local High Scores"
         )
@@ -71,18 +94,26 @@ class HighscoreTable:
         title_surface_rect = title_surface.get_rect()
         title_surface_rect.midtop = (self.screen_width // 2, PADDING_TOP)
 
+        # Create a transparent surface the same dimentions as the game window
         highscore_surface = pygame.Surface(
             (self.screen_width, self.screen_height), pygame.SRCALPHA
         )
+        # Draw the table header onto the highscore surface
         highscore_surface.blit(title_surface, title_surface_rect)
 
+        # Coordinate for the first row of the highscores table
         next_row_midtop = [self.screen_width // 2, PADDING_TOP + FONT_SIZE]
+        # Loops through all HighscoreRow objects in self.rows and renders
+        # each one, then draws them onto the highscore surface
         for row in self.rows:
             row_rect = row.rendered_row.get_rect()
             row_rect.midtop = next_row_midtop
             highscore_surface.blit(row.rendered_row, row_rect)
+            # Move the coordinate for the next row downwards
             next_row_midtop[1] += FONT_SIZE
 
+        # Displays a message to the user if the global high scores
+        # couldn't be fetched from the api
         if not self.global_fetch_succeeded:
             footer_surface = self.font.render(
                 "Global fetch failed: displaying local scores only.",
@@ -90,16 +121,20 @@ class HighscoreTable:
                 pygame.Color("#FF0000"),
             )
             footer_surface_rect = footer_surface.get_rect()
+            # Position the message in the bottom centre of the screen
             footer_surface_rect.midbottom = (
                 self.screen_width // 2,
                 self.screen_height - PADDING_BOTTOM,
             )
+            # Draws the message onto the highscore surface
             highscore_surface.blit(footer_surface, footer_surface_rect)
 
         return highscore_surface
 
     def update_highscore_surface(self):
+    	# Check if the computer is connected to the internet
         self.connected_to_internet = global_api_utils.is_connected()
+        # Generate rows and render the highscore surface
         self.rows = self.generate_rows()
         self.surface_to_draw = self.render()
 

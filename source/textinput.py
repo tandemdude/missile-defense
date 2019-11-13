@@ -78,7 +78,7 @@ class TextInput:
     def draw(self):
         game_surface_center = self.game_surface.get_rect().center
 
-        input_title = "Type name then press Enter"
+        input_title = "Type your name, press Enter when finished."
         input_title_surface = self.font.render(input_title, True, pygame.Color("#FFFFFF"))
         input_title_rect = input_title_surface.get_rect()
         input_title_rect.center = (game_surface_center[0], game_surface_center[1] - self.font_size)

@@ -99,6 +99,14 @@ StartScreen
 ----
 
 
+Highscore
+=========
+.. automodule:: source.highscore
+   :members:
+
+----
+
+
 Utils
 =====
 .. automodule:: source.utils
