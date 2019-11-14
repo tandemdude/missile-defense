@@ -5,8 +5,8 @@
 ###### Created by thomm.o
 ---
 # Overview
-Missile Defense is a game designed to combine the classic: Atari Missile Command and a typical tower defense
-game into one. This project is programmed using python and the pygame library as the submission for my
+Missile Defence is a game designed to combine the classic: Atari Missile Command and a typical tower defense
+game into one. This project is programmed using Python and the pygame library as the submission for my
 A-Level computer science course. Feel free to download and play it yourself - your scores will be uploaded
 to my database and visible to anyone if you happen to score in the top 10. Local highscores are implemented
 as well, they will display instead of the global scores if your device is not connected to the internet.
@@ -30,7 +30,7 @@ as well, they will display instead of the global scores if your device is not co
     If using windows replace `python3` with `py` or just `python`
 
 ---
-# Runnnig The Game
+# Runnning The Game
 To run the game, navigate to the root folder of the project through command line and run the command:
 
 `python3 -m source`
