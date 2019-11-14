@@ -20,10 +20,15 @@ class HighscoreRow:
     :param score: The :class:`int` score of the player
     """
 
+    font = None
+
     def __init__(self, name: str, score: int) -> None:
+        if HighscoreRow.font is None:
+            HighscoreRow.font = utils.load_font("source.fonts", "fixedsys.ttf", FONT_SIZE)
+        self.font = HighscoreRow.font
+
         self.name = name
         self.score = score
-        self.font = utils.load_font("source.fonts", "fixedsys.ttf", FONT_SIZE)
         self.string_to_render = f"{self.name} - {self.score}"
         self.rendered_row = self.font.render(
             self.string_to_render, True, pygame.Color("#FFFFFF")
