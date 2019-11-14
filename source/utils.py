@@ -2,7 +2,7 @@ import math
 import pygame
 import typing
 import os
-from importlib import resources
+import importlib_resources as resources
 
 
 def vector_from_positions(

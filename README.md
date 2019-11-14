@@ -12,7 +12,7 @@ to my database and visible to anyone if you happen to score in the top 10. Local
 as well, they will display instead of the global scores if your device is not connected to the internet.
 
 # Installation
-1. Ensure that you have Python 3.7.x installed, 3.7.5 can be downloaded from [here](https://www.python.org/downloads/release/python-375/)
+1. Ensure that you have Python 3.6.x or higher installed, 3.7.5 can be downloaded from [here](https://www.python.org/downloads/release/python-375/)
 2. Download the project's zip file from gitlab or alternatively run:
     
     `git clone https://gitlab.com/tandemdude/a-level-project.git`
@@ -28,3 +28,13 @@ as well, they will display instead of the global scores if your device is not co
     `python3 -m pip install -r requirements.txt` in Linux or OSX
 
     If using windows replace `python3` with `py` or just `python`
+
+---
+# Runnnig The Game
+To run the game, navigate to the root folder of the project through command line and run the command:
+
+`python3 -m source`
+
+If using windows, replace `python3` with `py` or just `python`
+
+A game window should then appear
