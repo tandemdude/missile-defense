@@ -122,13 +122,7 @@ class Controller:
 
         self.control_scheme = ControlScheme()
         self.reticle = Reticle(self.game_surface, self.screen_width, self.screen_height)
-        self.tower = Tower(
-            self.game_surface,
-            self.screen_width,
-            self.screen_height,
-            self.get_current_enemies,
-            5,
-        )
+        self.towers = []
         self.missiles = []
 
         self.wave_number = 0
@@ -332,9 +326,10 @@ class Controller:
                 self.reticle,
                 self.score,
                 self.lives,
-                self.tower,
             ]
-            # Ensures that update_all does not attempt to update NoneType
+            # Ensures that update_all does not attempt to update a NoneType
+            if len(self.towers) > 0:
+                to_be_updated += self.towers
             if self.current_wave is not None:
                 to_be_updated += [self.current_wave]
 
@@ -386,7 +381,6 @@ class Controller:
         else:
             self.create_new_wave_if_required()
             self.check_collisions(self.missiles)
-            self.check_collisions(self.tower.missiles)
             self.check_if_wave_finished()
 
         # Gets all instances that need to be updated in a given frame and calls update() on each in turn

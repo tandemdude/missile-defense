@@ -79,20 +79,18 @@ class HighscoreTable:
 
         :return: :class:`list` of :class:`source.highscore.HighscoreRow` instances
         """
-        # TODO: Refactor this IF to remove duplication
         # Get highscore data from the api if the computer is
-        # connected to the internet else fetch the local ones
-        # from the database
+        # connected to the internet
         if self.connected_to_internet:
             try:
                 raw_rows = global_api_utils.get_high_scores()
                 self.global_fetch_succeeded = True
             except (requests.exceptions.HTTPError, ConnectionError):
-                raw_rows = db_utils.get_high_scores()
                 self.global_fetch_succeeded = False
-        else:
+        # If global highscores could not be fetched then get the
+        # local ones instead
+        if not self.global_fetch_succeeded:
             raw_rows = db_utils.get_high_scores()
-            self.global_fetch_succeeded = False
 
             # Loop through the raw response from the api or database and
             # reformat each to the format that self.render() is expecting

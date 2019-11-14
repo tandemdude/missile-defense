@@ -27,11 +27,13 @@ class Tower(pygame.sprite.Sprite):
 
     def __init__(
         self,
-        game_surface,
-        screen_width,
-        screen_height,
-        get_enemies_func,
-        missile_velocity,
+        game_surface: pygame.Surface,
+        screen_width: int,
+        screen_height: int,
+        x_pos: int,
+        y_pos: int,
+        get_enemies_func: typing.Callable[[None], typing.Optional[typing.List]],
+        missile_velocity: int
     ):
         super().__init__()
 
@@ -53,8 +55,8 @@ class Tower(pygame.sprite.Sprite):
         self.missiles = []
         self.missile_velocity = missile_velocity
 
-        self.x = self.screen_width / 4
-        self.y = self.screen_height - 100
+        self.x = x_pos
+        self.y = y_pos
 
         self.original_image = pygame.Surface(
             (self.asset.get_width(), self.asset.get_height()), pygame.SRCALPHA
