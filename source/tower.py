@@ -36,7 +36,7 @@ class Tower(pygame.sprite.Sprite):
         x_pos: int,
         y_pos: int,
         get_enemies_func: typing.Callable[[None], typing.Optional[typing.List]],
-        missile_velocity: int
+        missile_velocity: int,
     ):
         super().__init__()
 
@@ -49,7 +49,6 @@ class Tower(pygame.sprite.Sprite):
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.get_enemies_func = get_enemies_func
-
 
         self.range = 300
         self.fire_rate = 50
@@ -70,15 +69,15 @@ class Tower(pygame.sprite.Sprite):
         self.unplaced_marker = pygame.Surface((SPRITE_WIDTH, SPRITE_HEIGHT))
         self.unplaced_marker.fill(pygame.Color("#FFFFFF"))
 
-        unplaced_marker_center = pygame.Surface((SPRITE_WIDTH-4, SPRITE_HEIGHT-4))
+        unplaced_marker_center = pygame.Surface((SPRITE_WIDTH - 4, SPRITE_HEIGHT - 4))
         unplaced_marker_center.fill(pygame.Color("#000000"))
 
         price_marker = self.font.render(str(self.price), True, pygame.Color("#FFFFFF"))
         position_to_blit = (
-            SPRITE_WIDTH - price_marker.get_width() * 1.5, 
-            SPRITE_HEIGHT - price_marker.get_height() * 2
+            SPRITE_WIDTH - price_marker.get_width() * 1.5,
+            SPRITE_HEIGHT - price_marker.get_height() * 2,
         )
-        
+
         self.unplaced_marker.blit(unplaced_marker_center, (2, 2))
         self.unplaced_marker.blit(price_marker, position_to_blit)
 

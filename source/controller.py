@@ -191,14 +191,15 @@ class Controller:
     def initialise_towers(self):
         return [
             Tower(
-                self.game_surface, 
-                self.screen_width, 
-                self.screen_height, 
-                x, 
-                y, 
-                self.get_current_enemies, 
-                TOWER_MISSILE_VELOCITY
-            ) for x, y in POSSIBLE_TOWER_POSITIONS
+                self.game_surface,
+                self.screen_width,
+                self.screen_height,
+                x,
+                y,
+                self.get_current_enemies,
+                TOWER_MISSILE_VELOCITY,
+            )
+            for x, y in POSSIBLE_TOWER_POSITIONS
         ]
 
     def create_new_wave(self) -> None:
@@ -286,7 +287,6 @@ class Controller:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 self.place_tower(event.pos)
-
 
         if self.text_input is not None:
             self.text_input.process_event(event)
@@ -422,8 +422,8 @@ class Controller:
                 break
             else:
                 tower_to_place = None
-        #index_of_tower = reticle_rect.collidelist(list_of_tower_rects)
-        #tower_to_place = self.towers[index_of_tower] if index_of_tower != -1 else None
+        # index_of_tower = reticle_rect.collidelist(list_of_tower_rects)
+        # tower_to_place = self.towers[index_of_tower] if index_of_tower != -1 else None
 
         if tower_to_place is not None and not tower_to_place.placed:
             if self.balance.value >= tower_to_place.price:

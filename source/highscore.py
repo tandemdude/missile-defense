@@ -24,7 +24,9 @@ class HighscoreRow:
 
     def __init__(self, name: str, score: int) -> None:
         if HighscoreRow.font is None:
-            HighscoreRow.font = utils.load_font("source.fonts", "fixedsys.ttf", FONT_SIZE)
+            HighscoreRow.font = utils.load_font(
+                "source.fonts", "fixedsys.ttf", FONT_SIZE
+            )
         self.font = HighscoreRow.font
 
         self.name = name
@@ -89,7 +91,7 @@ class HighscoreTable:
         if self.connected_to_internet:
             raw_rows = global_api_utils.get_high_scores()
             self.global_fetch_succeeded = True
-        
+
         else:
             # If global highscores could not be fetched then get the
             # local ones instead
