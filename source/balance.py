@@ -7,7 +7,16 @@ BALANCE_LENGTH = 8
 
 
 class Balance:
-    def __init__(self, game_surface, screen_width, screen_height, font_size):
+    """
+    Class to contain balance counter functionality.
+
+    :param game_surface: The :class:`pygame.Surface` to draw the balance onto
+    :param screen_width: :class:`int` width of the window in pixels
+    :param screen_height: :class:`int` height of the window in pixels
+    :param font_size: :class:`int` height of the font in pixels
+    """
+
+    def __init__(self, game_surface: pygame.Surface, screen_width: int, screen_height: int, font_size: int):
 
         self.game_surface = game_surface
         self.screen_width = screen_width

@@ -83,6 +83,14 @@ Score
 ----
 
 
+Balance
+=======
+.. automodule:: source.balance
+    :members:
+
+----
+
+
 GameOver
 ========
 .. automodule:: source.game_over
