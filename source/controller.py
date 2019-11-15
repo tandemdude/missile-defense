@@ -90,10 +90,10 @@ class ControlScheme:
     """
 
     def __init__(self) -> None:
-        self.up = pygame.K_UP
-        self.down = pygame.K_DOWN
-        self.left = pygame.K_LEFT
-        self.right = pygame.K_RIGHT
+        self.up = pygame.K_w
+        self.down = pygame.K_s
+        self.left = pygame.K_a
+        self.right = pygame.K_d
         self.fire = pygame.K_SPACE
 
 
@@ -272,8 +272,6 @@ class Controller:
                 self.reticle.down()
             elif event.key == self.control_scheme.fire:
                 self.trigger_fire_missile()
-            elif event.key == pygame.K_p:
-                self.place_tower()
 
         elif event.type == pygame.KEYUP:
             if event.key == self.control_scheme.left:
@@ -284,6 +282,11 @@ class Controller:
                 self.reticle.up(False)
             elif event.key == self.control_scheme.down:
                 self.reticle.down(False)
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                self.place_tower(event.pos)
+
 
         if self.text_input is not None:
             self.text_input.process_event(event)
@@ -401,7 +404,7 @@ class Controller:
                 self.frames_to_next_wave = TIME_BETWEEN_WAVES * FRAME_RATE
                 self.counting_down = True
 
-    def place_tower(self) -> None:
+    def place_tower(self, mouse_position: typing.Tuple[int]) -> None:
         list_of_tower_rects = []
         for tower in self.towers:
             if not tower.placed:
@@ -413,8 +416,14 @@ class Controller:
                 list_of_tower_rects.append(tower_rect)
 
         reticle_rect = get_rect_of_instance(self.reticle)
-        index_of_tower = reticle_rect.collidelist(list_of_tower_rects)
-        tower_to_place = self.towers[index_of_tower] if index_of_tower != -1 else None
+        for index, tower_rect in enumerate(list_of_tower_rects, start=0):
+            if tower_rect.collidepoint(mouse_position):
+                tower_to_place = self.towers[index]
+                break
+            else:
+                tower_to_place = None
+        #index_of_tower = reticle_rect.collidelist(list_of_tower_rects)
+        #tower_to_place = self.towers[index_of_tower] if index_of_tower != -1 else None
 
         if tower_to_place is not None and not tower_to_place.placed:
             if self.balance.value >= tower_to_place.price:
