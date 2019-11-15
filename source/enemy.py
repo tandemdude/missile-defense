@@ -55,7 +55,8 @@ class Enemy(pygame.sprite.Sprite):
         self.respawn = False
         self.hit_ground = False
         self.current_frame = 0
-        self.value = 150
+        self.score_value = 150
+        self.balance_value = 5
 
         self.frames = []
         self.create_animation_frames()

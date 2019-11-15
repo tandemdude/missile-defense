@@ -20,7 +20,10 @@ class Tower(pygame.sprite.Sprite):
     :param game_surface: The :class:`pygame.Surface` to draw the tower onto
     :param screen_width: :class:`int` width of the window in pixels
     :param screen_height: :class:`int` height of the window in pixels
+    :param x_pos: :class:`int` :math:`x` position of the tower
+    :param y_pos: :class:`int` :math:`y` postition of the tower
     :param get_enemies_func: Function called to get all enemies currently on the screen
+    :param missile_velocity: :class:`int` velocity of the tower's missiles
     """
 
     asset = None
@@ -40,23 +43,44 @@ class Tower(pygame.sprite.Sprite):
         if Tower.asset is None:
             Tower.asset = utils.load_image("source.images", "tower.png").convert_alpha()
         self.asset = Tower.asset
+        self.font = utils.load_font("source.fonts", "fixedsys.ttf", 10)
 
         self.game_surface = game_surface
         self.screen_width = screen_width
         self.screen_height = screen_height
         self.get_enemies_func = get_enemies_func
 
+
         self.range = 300
-        self.fire_rate = 10
+        self.fire_rate = 50
         self.projectile_speed = 5
         self.all_enemies = None
         self.frames_since_last_fired = 0
+
+        self.price = 150
 
         self.missiles = []
         self.missile_velocity = missile_velocity
 
         self.x = x_pos
         self.y = y_pos
+
+        self.placed = False
+
+        self.unplaced_marker = pygame.Surface((SPRITE_WIDTH, SPRITE_HEIGHT))
+        self.unplaced_marker.fill(pygame.Color("#FFFFFF"))
+
+        unplaced_marker_center = pygame.Surface((SPRITE_WIDTH-4, SPRITE_HEIGHT-4))
+        unplaced_marker_center.fill(pygame.Color("#000000"))
+
+        price_marker = self.font.render(str(self.price), True, pygame.Color("#FFFFFF"))
+        position_to_blit = (
+            SPRITE_WIDTH - price_marker.get_width() * 1.5, 
+            SPRITE_HEIGHT - price_marker.get_height() * 2
+        )
+        
+        self.unplaced_marker.blit(unplaced_marker_center, (2, 2))
+        self.unplaced_marker.blit(price_marker, position_to_blit)
 
         self.original_image = pygame.Surface(
             (self.asset.get_width(), self.asset.get_height()), pygame.SRCALPHA
@@ -66,6 +90,9 @@ class Tower(pygame.sprite.Sprite):
             self.original_image, (SPRITE_WIDTH, SPRITE_HEIGHT)
         )
         self.image = copy.copy(self.original_image)
+
+    def place(self):
+        self.placed = True
 
     def calculate_distance(self, enemy: enemy.Enemy) -> typing.Union[int, float]:
         """
@@ -155,11 +182,15 @@ class Tower(pygame.sprite.Sprite):
 
         :return: None
         """
-        self.fire_towards_nearest_in_range_enemy()
-        self.game_surface.blit(self.image, (self.x, self.y))
-        for missile in self.missiles[:]:
-            missile.update()
-            if not missile.visible:
-                self.missiles.remove(missile)
+        if self.placed:
+            self.fire_towards_nearest_in_range_enemy()
+            self.game_surface.blit(self.image, (self.x, self.y))
+            for missile in self.missiles[:]:
+                missile.update()
+                if not missile.visible:
+                    self.missiles.remove(missile)
 
-        self.increment_frames()
+            self.increment_frames()
+
+        else:
+            self.game_surface.blit(self.unplaced_marker, (self.x, self.y))

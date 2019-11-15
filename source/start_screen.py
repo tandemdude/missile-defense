@@ -24,7 +24,7 @@ class StartScreen:
         :return: None
         """
         welcome_surface = font.render(
-            "Welcome to Missile Defense", True, pygame.Color("#ffffff")
+            "Welcome to Missile Defence", True, pygame.Color("#ffffff")
         )
         welcome_rect = welcome_surface.get_rect()
         welcome_rect.center = surface.get_rect().center

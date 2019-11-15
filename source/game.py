@@ -19,7 +19,7 @@ class Game:
 
     def __init__(self, start_screen) -> None:
         pygame.init()
-        pygame.display.set_caption("Missile Defense")
+        pygame.display.set_caption("Missile Defence")
         # Create a display with the dimensions specified by the constants
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.start_screen = start_screen

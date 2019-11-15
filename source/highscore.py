@@ -87,14 +87,12 @@ class HighscoreTable:
         # Get highscore data from the api if the computer is
         # connected to the internet
         if self.connected_to_internet:
-            try:
-                raw_rows = global_api_utils.get_high_scores()
-                self.global_fetch_succeeded = True
-            except (requests.exceptions.HTTPError, ConnectionError):
-                self.global_fetch_succeeded = False
-        # If global highscores could not be fetched then get the
-        # local ones instead
-        if not self.global_fetch_succeeded:
+            raw_rows = global_api_utils.get_high_scores()
+            self.global_fetch_succeeded = True
+        
+        else:
+            # If global highscores could not be fetched then get the
+            # local ones instead
             raw_rows = db_utils.get_high_scores()
 
             # Loop through the raw response from the api or database and

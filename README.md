@@ -30,7 +30,7 @@ as well, they will display instead of the global scores if your device is not co
     If using windows replace `python3` with `py` or just `python`
 
 ---
-# Runnning The Game
+# Running The Game
 To run the game, navigate to the root folder of the project through command line and run the command:
 
 `python3 -m source`
