@@ -20,7 +20,7 @@ class Balance:
 		"""
 		Increments the balance counter by a given amount.
 
-		:param amt: :class:`int` to increase the score by
+		:param amt: :class:`int` to increase the balance by
 		:return: None
 		"""
 		self.value += amt
@@ -29,7 +29,7 @@ class Balance:
 		"""
 		Decrements the balance counter by a given amount.
 
-		:param amt: :class:`int` to increase the score by
+		:param amt: :class:`int` to decrease the balance by
 		:return: None
 		"""
 		self.value -= amt
@@ -38,7 +38,7 @@ class Balance:
 		"""
 		Converts the balance value to a padded string to be rendered
 
-		:return: :class:`str` formatted score
+		:return: :class:`str` formatted balance
 		"""
 		str_balance = str(self.value)
 		zero_padding = "0" * (BALANCE_LENGTH - len(str_balance))
