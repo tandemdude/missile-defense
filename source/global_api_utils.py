@@ -16,7 +16,7 @@ def parse_high_scores(payload) -> typing.List[typing.Tuple[str, int]]:
     generate the rows with
 
     :param payload: :class:`dict` containing name and score data
-    :return: :class:`list` of :class:`tuple` containing name, score pairs
+    :return: :class:`list`[:class:`tuple`[:class:`str`, :class:`int`]] of name, score pairs
     """
     list_of_scores = payload["scores"]
     parsed_scores = []
@@ -44,7 +44,7 @@ def get_high_scores() -> typing.List[typing.Tuple[str, int]]:
     Sends a GET request to the api endpoint to fetch the
     top 10 highest scores from the global high score database
 
-    :return: :class:`list` of :class:`tuple` containing name, score pairs
+    :return: :class:`list`[:class:`tuple`[:class:`str`, :class:`int`]] of name, score pairs
     """
     resp = requests.get(f"{BASE_URL}{GET_ENDPOINT}")
     resp.raise_for_status()

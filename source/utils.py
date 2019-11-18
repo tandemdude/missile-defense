@@ -46,14 +46,14 @@ def get_angle_positions(
     :param y: Start y coordinate
     :param end_x: Final x coordinate
     :param end_y: Final y coordinate
-    :param offset: An angle amount in degrees to offset the output by
-    :return: Angle in degrees
+    :param offset: :class:`int` angle amount in degrees to offset the output by
+    :return: :class:`float` angle in degrees
     """
     radius, angle = pygame.math.Vector2(end_x - x, end_y - y).as_polar()
     return -angle - offset
 
 
-def load_image(package, path):
+def load_image(package, path) -> pygame.Surface:
     """
     Calculates the angle between any set of two x, y coordinates.
 
@@ -66,7 +66,7 @@ def load_image(package, path):
     return pygame.image.load(image_path)
 
 
-def load_font(package, path, size):
+def load_font(package, path, size) -> pygame.font.Font:
     """
     Calculates the angle between any set of two x, y coordinates.
 

@@ -16,7 +16,13 @@ class Balance:
     :param font_size: :class:`int` height of the font in pixels
     """
 
-    def __init__(self, game_surface: pygame.Surface, screen_width: int, screen_height: int, font_size: int):
+    def __init__(
+        self,
+        game_surface: pygame.Surface,
+        screen_width: int,
+        screen_height: int,
+        font_size: int,
+    ):
 
         self.game_surface = game_surface
         self.screen_width = screen_width
@@ -27,38 +33,38 @@ class Balance:
 
     def increment(self, amt: int) -> None:
         """
-		Increments the balance counter by a given amount.
+        Increments the balance counter by a given amount.
 
-		:param amt: :class:`int` to increase the balance by
-		:return: None
-		"""
+        :param amt: :class:`int` to increase the balance by
+        :return: None
+        """
         self.value += amt
 
     def decrement(self, amt: int) -> None:
         """
-		Decrements the balance counter by a given amount.
+        Decrements the balance counter by a given amount.
 
-		:param amt: :class:`int` to decrease the balance by
-		:return: None
-		"""
+        :param amt: :class:`int` to decrease the balance by
+        :return: None
+        """
         self.value -= amt
 
     def balance_to_text(self) -> str:
         """
-		Converts the balance value to a padded string to be rendered
+        Converts the balance value to a padded string to be rendered
 
-		:return: :class:`str` formatted balance
-		"""
+        :return: :class:`str` formatted balance
+        """
         str_balance = str(self.value)
         zero_padding = "0" * (BALANCE_LENGTH - len(str_balance))
         return "CREDITS " + zero_padding + str_balance
 
     def update(self) -> None:
         """
-		Renders the balance onto the game surface.
+        Renders the balance onto the game surface.
 
-		:return: None
-		"""
+        :return: None
+        """
         text_surface = self.font.render(
             self.balance_to_text(), True, pygame.Color("#ffffff")
         )

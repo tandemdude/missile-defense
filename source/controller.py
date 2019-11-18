@@ -23,7 +23,7 @@ LIVES = 3
 FONT_SIZE = 24
 PLAYER_MISSILE_VELOCITY = 7
 TOWER_MISSILE_VELOCITY = 5
-POSSIBLE_TOWER_POSITIONS = [(100, 550), (200, 550), (600, 550), (700, 550)]
+POSSIBLE_TOWER_POSITIONS = [(100, 550), (200, 550), (565, 550), (665, 550)]
 
 
 def calculate_enemies_for_wave(
@@ -61,10 +61,11 @@ def get_rect_of_instance(instance) -> pygame.Rect:
     Returns a pygame.Rect in the correct position.
 
     :param instance: An object that has an image attribute
-    :return: pygame.Rect in the correct position
+    :return: :class:`pygame.Rect` in the correct position
     """
     rect = instance.image.get_rect()
-    rect.x, rect.y = instance.x, instance.y
+    rect.x = instance.x, 
+    rect.y = instance.y
     return rect
 
 
@@ -132,7 +133,7 @@ class Controller:
         self.frames_to_next_wave = 0
         self.counting_down = False
 
-        self.towers = self.initialise_towers()
+        self.towers = self.create_towers()
 
         self.lives = Lives(
             self.game_surface, self.screen_width, self.screen_height, FONT_SIZE, LIVES
@@ -162,7 +163,7 @@ class Controller:
         Stores the name submitted by the player with their
         score into the databases.
 
-        :param name: :class`str` player name to be stored
+        :param name: :class:`str` player name to be stored
         """
         if not self.score_saved:
             self.highscores_table.add_new_score(name, self.score.value)
@@ -188,7 +189,7 @@ class Controller:
             None if self.current_wave is None else self.current_wave.get_all_enemies()
         )
 
-    def initialise_towers(self):
+    def create_towers(self):
         return [
             Tower(
                 self.game_surface,
@@ -405,6 +406,16 @@ class Controller:
                 self.counting_down = True
 
     def place_tower(self, mouse_position: typing.Tuple[int]) -> None:
+        """
+        Place a tower in an empty position when the mouse is clicked.
+        Checks where the mouse cursor is and if it is colliding with
+        an empty tower position. If the tower is not already placed
+        then place a tower at that position if the player has enough
+        credits.
+
+        :param mouse_position: :class:`tuple`[:class:`int`] containing cursor's x, y coordinate
+        :return: None 
+        """
         list_of_tower_rects = []
         for tower in self.towers:
             if not tower.placed:
@@ -422,8 +433,6 @@ class Controller:
                 break
             else:
                 tower_to_place = None
-        # index_of_tower = reticle_rect.collidelist(list_of_tower_rects)
-        # tower_to_place = self.towers[index_of_tower] if index_of_tower != -1 else None
 
         if tower_to_place is not None and not tower_to_place.placed:
             if self.balance.value >= tower_to_place.price:

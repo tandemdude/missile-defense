@@ -91,6 +91,11 @@ class Tower(pygame.sprite.Sprite):
         self.image = copy.copy(self.original_image)
 
     def place(self):
+        """
+        Mark the tower as placed
+
+        :return: None
+        """
         self.placed = True
 
     def calculate_distance(self, enemy: enemy.Enemy) -> typing.Union[int, float]:
@@ -128,7 +133,7 @@ class Tower(pygame.sprite.Sprite):
         Increments :attr:`source.tower.Tower.frames_since_last_fired` by one,
         wrapping back to 0 once the tower fires
 
-        :return:
+        :return: None
         """
         self.frames_since_last_fired += 1
         if self.frames_since_last_fired > self.fire_rate:

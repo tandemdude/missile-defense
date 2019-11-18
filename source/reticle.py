@@ -13,13 +13,13 @@ def clamp(
     minn: typing.Union[int, float] = 0,
 ) -> typing.Union[int, float]:
     """
-    Ensures that a given number, n, if between a set of upper and lower
+    Ensures that a given number, n, is between a set of upper and lower
     bounds.
 
-    :param n: The number to clamp
-    :param maxn: :class:`int` upper bound
-    :param minn: :class:`int` lower bound
-    :return: The clamped number
+    :param n: Union[:class:`int`, :class:`float`] number to clamp
+    :param maxn: Union[:class:`int`, :class:`float`] upper bound
+    :param minn: Union[:class:`int`, :class:`float`] lower bound
+    :return: Union[:class:`int`, :class:`float`] clamped number
     """
     return max(min(maxn, n), minn)
 
@@ -58,11 +58,11 @@ class Reticle:
         self.image.blit(self.asset, (0, 0))
         self.image = pygame.transform.scale(self.image, (50, 50))
 
-    def current_position(self) -> tuple:
+    def current_position(self) -> typing.Tuple[int]:
         """
         Get the reticle's current x, y position on the game surface.
 
-        :return: :class:`tuple` containing the x, y coordinates of the reticle.
+        :return: :class:`tuple`[:class:`int`] containing the x, y coordinates of the reticle.
         """
         return self.x, self.y
 

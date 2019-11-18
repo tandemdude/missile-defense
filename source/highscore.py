@@ -75,7 +75,10 @@ class HighscoreTable:
         # api if the computer is connected to the internet
         db_utils.insert_score(name, score)
         if self.connected_to_internet:
-            global_api_utils.post_new_score(name, score)
+            try:
+                global_api_utils.post_new_score(name, score)
+            except:
+                self.connected_to_internet = False
         self.update_highscore_surface()
 
     def generate_rows(self) -> typing.List[HighscoreRow]:

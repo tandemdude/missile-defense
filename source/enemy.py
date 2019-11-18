@@ -73,20 +73,20 @@ class Enemy(pygame.sprite.Sprite):
         for x in range(NUMBER_OF_FRAMES):
             self.frames.append(self.asset.subsurface(((5 + x * 220, 5), FRAME_SIZE)))
 
-    def random_start_position(self) -> tuple:
+    def random_start_position(self) -> typing.Tuple[int]:
         """
         Defines a random x coordinate at the top of the screen where the enemy spawns.
 
-        :return: :class:`tuple` x, y coordinate
+        :return: :class:`tuple`[:class:`int`] x, y coordinate
         """
         return random.randint(0, self.screen_width - SPRITE_WIDTH), 0
 
-    def random_aim_position(self) -> tuple:
+    def random_aim_position(self) -> typing.Tuple[int]:
         """
         Defines a random x coordinate at the bottom of the screen where the enemy
         is aimed towards.
 
-        :return: :class:`tuple` x, y coordinate
+        :return: :class:`tuple`[:class:`int`] x, y coordinate
         """
         return (
             random.randint(0, self.screen_width - SPRITE_WIDTH),

@@ -1,4 +1,5 @@
 import sqlite3
+import typing
 
 
 CREATE_TABLE_STATEMENT = """
@@ -49,12 +50,12 @@ def insert_score(name: str, score: int) -> None:
         db.commit()
 
 
-def get_high_scores() -> list:
+def get_high_scores() -> typing.Tuple[typing.Tuple[str, int]]:
     """
     Function to get the top 10 scores from the database
     in the correct order
 
-    :return: :class:`tuple` containing tuples of name, score pairs
+    :return: :class:`tuple`[:class:`tuple`[:class:`str`, :class:`int]] of name, score pairs
     """
     with sqlite3.connect(DB_PATH) as db:
         cursor = db.cursor()
