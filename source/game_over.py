@@ -37,7 +37,7 @@ class GameOver:
         game_over_rect.center = self.game_surface.get_rect().center
         self.game_surface.blit(game_over_surface, game_over_rect)
         restart_msg_surface = self.font.render(
-            "Press [Y] to restart or [N] to quit", True, pygame.Color("#ff0000")
+            "Press [Y] to return to menu or [N] to quit", True, pygame.Color("#ff0000")
         )
         restart_msg_rect = restart_msg_surface.get_rect()
         restart_msg_rect.center = (

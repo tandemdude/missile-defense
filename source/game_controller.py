@@ -16,7 +16,7 @@ from .textinput import TextInput
 # Constants
 MAX_MISSILES = 5
 INITIAL_ENEMIES = 5
-ENEMY_CONSTANT = 0.7
+ENEMY_CONSTANTS = {"EASY": 0.5, "NORMAL": 0.8, "HARD": 1.3}
 TIME_BETWEEN_WAVES = 1
 FRAME_RATE = 60
 LIVES = 3
@@ -64,7 +64,7 @@ def get_rect_of_instance(instance) -> pygame.Rect:
     :return: :class:`pygame.Rect` in the correct position
     """
     rect = instance.image.get_rect()
-    rect.x = instance.x, 
+    rect.x = instance.x
     rect.y = instance.y
     return rect
 
@@ -84,21 +84,7 @@ def is_colliding(rect1: pygame.Rect, rect2: pygame.Rect) -> bool:
     return rect1.colliderect(rect2)
 
 
-class ControlScheme:
-    """
-    Class to contain the current keybindings for
-    any actions that occur during gameplay.
-    """
-
-    def __init__(self) -> None:
-        self.up = pygame.K_w
-        self.down = pygame.K_s
-        self.left = pygame.K_a
-        self.right = pygame.K_d
-        self.fire = pygame.K_SPACE
-
-
-class Controller:
+class GameController:
     """
     Link class which acts as a bridge between the main game
     and all other instances being used throughout the game.
@@ -116,15 +102,20 @@ class Controller:
     """
 
     def __init__(
-        self, game_surface: pygame.Surface, screen_width: int, screen_height: int
+        self,
+        game_surface: pygame.Surface,
+        screen_width: int,
+        screen_height: int,
+        settings,
+        advance_state_func,
     ) -> None:
         self.game_surface = game_surface
         self.screen_width = screen_width
         self.screen_height = screen_height
+        self.settings = settings
+        self.advance_state_func = advance_state_func
 
-        self.running = False
-
-        self.control_scheme = ControlScheme()
+        self.control_scheme = self.settings.control_scheme
         self.reticle = Reticle(self.game_surface, self.screen_width, self.screen_height)
         self.missiles = []
 
@@ -212,7 +203,7 @@ class Controller:
         :return: None
         """
         number_of_enemies = calculate_enemies_for_wave(
-            INITIAL_ENEMIES, self.wave_number, ENEMY_CONSTANT
+            INITIAL_ENEMIES, self.wave_number, ENEMY_CONSTANTS[self.settings.difficulty]
         )
         # Instantiate a new :class:`source.wave.Wave` from given parameters
         self.current_wave = Wave(
@@ -260,8 +251,13 @@ class Controller:
         :param event: Any :class:`pygame.event.Event` instance
         :return: None
         """
-        if not self.running:
-            return
+        if self.internal_game_over and not self.text_input.listening:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_y:
+                    self.advance_state_func()
+                elif event.key == pygame.K_n:
+                    self.advance_state_func()
+                    self.advance_state_func()
 
         if event.type == pygame.KEYDOWN:
             if event.key == self.control_scheme.left:
@@ -446,9 +442,6 @@ class Controller:
 
         :return: None
         """
-        if not self.running:
-            return
-
         # Transfers game into the game_over state if all lives have been lost, or runs wave logic
         if self.lives == 0:
             self.internal_game_over = True
