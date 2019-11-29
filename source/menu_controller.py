@@ -13,16 +13,26 @@ COLOURS = {
 
 
 class Button:
+    """
+
+    :param game_surface:
+    :param text:
+    :param font_size:
+    :param position_x:
+    :param position_y:
+    :param pressed_funcs:
+    :param size:
+    """
     def __init__(
         self,
-        game_surface,
-        text,
-        font_size,
-        position_x,
-        position_y,
-        pressed_funcs,
-        size=None,
-    ):
+        game_surface: pygame.Surface,
+        text: str,
+        font_size: int,
+        position_x: int,
+        position_y: int,
+        pressed_funcs: typing.List[typing.Callable],
+        size: typing.Tuple[int] = None,
+    ) -> None:
         self.game_surface = game_surface
 
         if size is None:
@@ -44,24 +54,45 @@ class Button:
 
         self.pressed_funcs = pressed_funcs
 
-    def on_press(self):
+    def on_press(self) -> None:
+        """
+
+        :return:
+        """
         for func in self.pressed_funcs:
             func()
 
-    def check_if_pressed(self, mouse_position):
+    def check_if_pressed(self, mouse_position: typing.Tuple[typing.Union[int, float]]) -> None:
+        """
+
+        :param mouse_position:
+        :return:
+        """
         button_rect = self.image.get_rect()
         button_rect.topleft = (self.x, self.y)
         if button_rect.collidepoint(mouse_position):
             self.on_press()
 
-    def update(self):
+    def update(self) -> None:
+        """
+
+        :return:
+        """
         self.game_surface.blit(self.image, (self.x, self.y))
 
 
 class MenuController:
+    """
+
+    :param game_surface:
+    :param screen_width:
+    :param screen_height:
+    :param settings:
+    :param advance_state_func:
+    """
     def __init__(
         self, game_surface, screen_width, screen_height, settings, advance_state_func
-    ):
+    ) -> None:
         self.game_surface = game_surface
         self.screen_width = screen_width
         self.screen_height = screen_height
@@ -227,39 +258,88 @@ class MenuController:
             ),
         ]
 
-    def open_docs_in_browser(self):
+    @staticmethod
+    def open_docs_in_browser() -> None:
+        """
+
+        :return:
+        """
         webbrowser.open("https://tandemdude.gitlab.io/a-level-project")
 
-    def open_source_code_in_browser(self):
+    @staticmethod
+    def open_source_code_in_browser() -> None:
+        """
+
+        :return:
+        """
         webbrowser.open("https://gitlab.com/tandemdude/a-level-project")
 
-    def settings_state(self):
-        self.state = "SETTINGS"
+    @staticmethod
+    def centre_rect(surface, position) -> None:
+        """
 
-    def menu_state(self):
-        self.state = "MENU"
-
-    def listen_up(self):
-        self.listening_up = True
-
-    def listen_down(self):
-        self.listening_down = True
-
-    def listen_left(self):
-        self.listening_left = True
-
-    def listen_right(self):
-        self.listening_right = True
-
-    def listen_fire(self):
-        self.listening_fire = True
-
-    def centre_rect(self, surface, position):
+        :param surface:
+        :param position:
+        :return:
+        """
         surface_rect = surface.get_rect()
         surface_rect.center = position
         return surface_rect
 
-    def render_menu_background(self):
+    def settings_state(self) -> None:
+        """
+
+        :return:
+        """
+        self.state = "SETTINGS"
+
+    def menu_state(self) -> None:
+        """
+
+        :return:
+        """
+        self.state = "MENU"
+
+    def listen_up(self) -> None:
+        """
+
+        :return:
+        """
+        self.listening_up = True
+
+    def listen_down(self) -> None:
+        """
+
+        :return:
+        """
+        self.listening_down = True
+
+    def listen_left(self) -> None:
+        """
+
+        :return:
+        """
+        self.listening_left = True
+
+    def listen_right(self) -> None:
+        """
+
+        :return:
+        """
+        self.listening_right = True
+
+    def listen_fire(self) -> None:
+        """
+
+        :return:
+        """
+        self.listening_fire = True
+
+    def render_menu_background(self) -> None:
+        """
+
+        :return:
+        """
         welcome_text = self.title_font.render(
             "Missile Defence", True, pygame.Color("#FFFFFF")
         )
@@ -270,7 +350,11 @@ class MenuController:
             ),
         )
 
-    def render_settings_background(self):
+    def render_settings_background(self) -> None:
+        """
+
+        :return:
+        """
         settings_title = self.title_font.render(
             "Settings", True, pygame.Color("#FFFFFF")
         )
@@ -309,7 +393,12 @@ class MenuController:
             self.centre_rect(keybinds_label, (self.screen_width - 150, 150)),
         )
 
-    def render_current_difficulty(self, target):
+    def render_current_difficulty(self, target: pygame.Surface) -> None:
+        """
+
+        :param target:
+        :return:
+        """
         current_difficulty = self.text_font.render(
             self.settings.difficulty, True, COLOURS[self.settings.difficulty]
         )
@@ -317,7 +406,12 @@ class MenuController:
             current_difficulty, self.centre_rect(current_difficulty, (150, 380))
         )
 
-    def render_current_controls(self, target):
+    def render_current_controls(self, target: pygame.Surface) -> None:
+        """
+
+        :param target:
+        :return:
+        """
         up = self.text_font.render(
             f"UP - {pygame.key.name(self.settings.control_scheme.up)}",
             True,
@@ -352,7 +446,12 @@ class MenuController:
             )
             vertical_offset += 50
 
-    def check_if_any_button_pressed(self, mouse_position):
+    def check_if_any_button_pressed(self, mouse_position: typing.Tuple[typing.Union[int, float]]) -> None:
+        """
+
+        :param mouse_position:
+        :return:
+        """
         if self.state == "MENU":
             for button in self.menu_buttons:
                 button.check_if_pressed(mouse_position)
@@ -360,7 +459,12 @@ class MenuController:
             for button in self.settings_buttons:
                 button.check_if_pressed(mouse_position)
 
-    def submit_key(self, key):
+    def submit_key(self, key: int) -> None:
+        """
+
+        :param key:
+        :return:
+        """
         if self.listening_up:
             self.settings.change_keybind("up", key)
             self.listening_up = False
@@ -377,7 +481,12 @@ class MenuController:
             self.settings.change_keybind("fire", key)
             self.listening_fire = False
 
-    def process_event(self, event):
+    def process_event(self, event: pygame.event.Event) -> None:
+        """
+
+        :param event:
+        :return:
+        """
         if any(
             [
                 self.listening_up,
@@ -395,13 +504,21 @@ class MenuController:
             if event.button == 1:
                 self.check_if_any_button_pressed(event.pos)
 
-    def get_what_needs_to_be_updated(self):
+    def get_what_needs_to_be_updated(self) -> typing.List[Button]:
+        """
+
+        :return:
+        """
         if self.state == "MENU":
             return self.menu_buttons
         elif self.state == "SETTINGS":
             return self.settings_buttons
 
-    def update_all(self):
+    def update_all(self) -> None:
+        """
+
+        :return:
+        """
         if self.state == "MENU":
             self.game_surface.blit(self.menu_background, (0, 0))
         elif self.state == "SETTINGS":
