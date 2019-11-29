@@ -1,4 +1,5 @@
 import pygame
+import os
 
 from .game_controller import GameController
 from .menu_controller import MenuController
@@ -17,9 +18,12 @@ class Game:
     """
 
     def __init__(self) -> None:
+        # Centre the game window on the monitor
+        os.environ['SDL_VIDEO_CENTERED'] = '1'
+        # Initialise pygame and set the game window caption
         pygame.init()
         pygame.display.set_caption("Missile Defence")
-
+        # Create a default instance of settings
         self.settings = Settings()
 
         self.states = ["START", "PLAYING", "RESTART", "QUIT"]
