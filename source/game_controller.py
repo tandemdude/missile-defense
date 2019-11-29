@@ -99,6 +99,8 @@ class GameController:
     :param game_surface: The game's window where sprites will be drawn
     :param screen_width: :class:`int` width of the window in pixels
     :param screen_height: :class:`int` height of the window in pixels
+    :param settings: :class:`source.settings.Settings` instance
+    :param advance_state_func: Procedure to advance the game state
     """
 
     def __init__(
@@ -107,7 +109,7 @@ class GameController:
         screen_width: int,
         screen_height: int,
         settings,
-        advance_state_func,
+        advance_state_func: typing.Callable,
     ) -> None:
         self.game_surface = game_surface
         self.screen_width = screen_width
@@ -165,7 +167,7 @@ class GameController:
         Callback function passed into Wave on instantiation. Provides a method for the enemies to
         tell the :class:`source.controller.Controller` class when to decrement the lives counter.
 
-        :return: None
+        :return: `None`
         """
         self.lives.decrement()
 
@@ -200,7 +202,7 @@ class GameController:
         of enemies to be spawned in the wave.
         Increments the current wave number by 1.
 
-        :return: None
+        :return: `None`
         """
         number_of_enemies = calculate_enemies_for_wave(
             INITIAL_ENEMIES, self.wave_number, ENEMY_CONSTANTS[self.settings.difficulty]
@@ -224,7 +226,7 @@ class GameController:
         Check if the maximum amount of missiles are already on the screen and
         instantiate a new one if the limit has not been reached.
 
-        :return: None
+        :return: `None`
         """
         if len(self.missiles) < MAX_MISSILES:
             reticle_position = self.reticle.current_position()
@@ -249,7 +251,7 @@ class GameController:
         TODO: Reformat this to use switch/case type syntax to prevent large IF blocks?
 
         :param event: Any :class:`pygame.event.Event` instance
-        :return: None
+        :return: `None`
         """
         if self.internal_game_over and not self.text_input.listening:
             if event.type == pygame.KEYDOWN:
@@ -293,7 +295,7 @@ class GameController:
         Check if any sprites are colliding such that
         a missile or enemy needs to be removed from the display.
 
-        :return: None
+        :return: `None`
         """
         for missile in missile_list[:]:  # Loop through a copy of self.missiles
             # Check if a missile has flown out of bounds and remove it if necessary
@@ -422,7 +424,6 @@ class GameController:
                 tower_rect = get_rect_of_instance(tower)
                 list_of_tower_rects.append(tower_rect)
 
-        reticle_rect = get_rect_of_instance(self.reticle)
         for index, tower_rect in enumerate(list_of_tower_rects, start=0):
             if tower_rect.collidepoint(mouse_position):
                 tower_to_place = self.towers[index]

@@ -31,23 +31,23 @@ class Balance:
         self.font = utils.load_font("source.fonts", "fixedsys.ttf", self.font_size)
         self.value = 0
 
-    def increment(self, amt: int) -> None:
+    def increment(self, amount: int) -> None:
         """
         Increments the balance counter by a given amount.
 
-        :param amt: :class:`int` to increase the balance by
-        :return: None
+        :param amount: :class:`int` to increase the balance by
+        :return: `None`
         """
-        self.value += amt
+        self.value += amount
 
-    def decrement(self, amt: int) -> None:
+    def decrement(self, amount: int) -> None:
         """
         Decrements the balance counter by a given amount.
 
-        :param amt: :class:`int` to decrease the balance by
-        :return: None
+        :param amount: :class:`int` to decrease the balance by
+        :return: `None`
         """
-        self.value -= amt
+        self.value -= amount
 
     def balance_to_text(self) -> str:
         """
@@ -63,7 +63,7 @@ class Balance:
         """
         Renders the balance onto the game surface.
 
-        :return: None
+        :return: `None`
         """
         text_surface = self.font.render(
             self.balance_to_text(), True, pygame.Color("#ffffff")

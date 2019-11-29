@@ -42,7 +42,7 @@ class Lives:
         Decrements the current life count by 1 each time it is called. Life count
         cannot be less than 0.
 
-        :return: None
+        :return: `None`
         """
         self.lives -= 1 if self.lives > 0 else 0
 
@@ -50,7 +50,7 @@ class Lives:
         """
         Draws the life counter onto the game surface each time this is called.
 
-        :return: None
+        :return: `None`
         """
         white, red = pygame.Color("#ffffff"), pygame.Color("#ff0000")
         colour = red if self.lives <= 1 else white

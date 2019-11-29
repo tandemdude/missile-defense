@@ -30,7 +30,7 @@ class GameOver:
         """
         Draws the game_over text onto the game surface each time this is called.
 
-        :return: None
+        :return: `None`
         """
         game_over_surface = self.font.render("GAME OVER", True, pygame.Color("#ff0000"))
         game_over_rect = game_over_surface.get_rect()

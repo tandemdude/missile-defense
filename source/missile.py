@@ -71,7 +71,7 @@ class Missile(pygame.sprite.Sprite):
         Moves the :class:`pygame.sprite.Sprite` on the game surface if required and draws it if the missile
         is currently visible.
 
-        :return: None
+        :return: `None`
         """
         if self.moving:
             self.x += self.velocity_x

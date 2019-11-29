@@ -55,7 +55,7 @@ class Wave:
         .. note::
             This method is no longer used.
 
-        :return: None
+        :return: `None`
         """
         for _ in range(self.number_of_enemies):
             self.enemies.add(
@@ -73,7 +73,7 @@ class Wave:
         """
         Adds a single :class:`source.enemy.Enemy` to the :attr:`source.wave.Wave.enemies` :class:`pygame.sprite.Group`. Enemies spawn as soon as they are registered.
 
-        :return: None
+        :return: `None`
         """
         self.enemies.add(
             Enemy(
@@ -91,7 +91,7 @@ class Wave:
         Checks whether sufficient time has passed to spawn a new :class:`source.enemy.Enemy`.
         If it has, a new enemy is registered.
 
-        :return: None
+        :return: `None`
         """
         if self.frames_since_start in self.enemy_spawn_times:
             for _ in range(self.enemy_spawn_times.count(self.frames_since_start)):
@@ -102,7 +102,7 @@ class Wave:
         Renders and draws the current wave number onto the game surface.
         Acts as an indicator to the user as to when the wave ends/a new wave begins.
 
-        :return: None
+        :return: `None`
         """
         text_surface = self.font.render(
             f"Wave {self.num}", True, pygame.Color("#ffffff")
@@ -115,7 +115,7 @@ class Wave:
         """
         Marks the wave as unfinished.
 
-        :return: None
+        :return: `None`
         """
         self.finished = False
 
@@ -132,7 +132,7 @@ class Wave:
         Calls the update method on the :attr:`souce.wave.Wave.enemies` :class:`pygame.sprite.Group` and increments the frames since start counter.
         Draws the wave counter onto the surface.
 
-        :return: None
+        :return: `None`
         """
         self.draw_wave_number()
         self.register_new_enemy_if_required()

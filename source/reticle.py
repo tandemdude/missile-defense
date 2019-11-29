@@ -58,7 +58,7 @@ class Reticle:
         self.image.blit(self.asset, (0, 0))
         self.image = pygame.transform.scale(self.image, (50, 50))
 
-    def current_position(self) -> typing.Tuple[int]:
+    def current_position(self) -> typing.Tuple[int, int]:
         """
         Get the reticle's current x, y position on the game surface.
 
@@ -71,7 +71,7 @@ class Reticle:
         Alter the moving_up flag to indicate whether the reticle is moving upwards.
 
         :param enable: Optional[:class:`bool`] representing whether or not the reticle should be moving up.
-        :return: None
+        :return: `None`
         """
         self.moving_up = enable
 
@@ -80,7 +80,7 @@ class Reticle:
         Alter the moving_down flag to indicate whether the reticle is moving downwards.
 
         :param enable: Optional[:class:`bool`] representing whether or not the reticle should be moving down.
-        :return: None
+        :return: `None`
         """
         self.moving_down = enable
 
@@ -89,7 +89,7 @@ class Reticle:
         Alter the moving_left flag to indicate whether the reticle is moving to the left.
 
         :param enable: Optional[:class:`bool`] representing whether or not the reticle should be moving left.
-        :return: None
+        :return: `None`
         """
         self.moving_left = enable
 
@@ -98,7 +98,7 @@ class Reticle:
         Alter the moving_right flag to indicate whether the reticle is moving to the right.
 
         :param enable: Optional[:class:`bool`] representing whether or not the reticle should be moving right.
-        :return: None
+        :return: `None`
         """
         self.moving_right = enable
 
@@ -106,7 +106,7 @@ class Reticle:
         """
         Move the reticle in directions indicated by the flags and draw it onto the game surface.
 
-        :return: None
+        :return: `None`
         """
         if self.moving_up:
             self.y -= self.speed

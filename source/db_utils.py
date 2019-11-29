@@ -1,7 +1,6 @@
 import sqlite3
 import typing
 
-
 CREATE_TABLE_STATEMENT = """
 CREATE TABLE IF NOT EXISTS scores(
 	name text NOT NULL,
@@ -27,7 +26,7 @@ def create_database_and_table_if_not_exists() -> None:
     Procedure to create a SQLite database file and
     the necessary table for scores to be stored
 
-    :return: None
+    :return: `None`
     """
     with sqlite3.connect(DB_PATH) as db:
         cursor = db.cursor()
@@ -42,7 +41,7 @@ def insert_score(name: str, score: int) -> None:
 
     :param name: The :class:`str` name to be stored
     :param score: The :class:`int` score to be stored
-    :return: None
+    :return: `None`
     """
     with sqlite3.connect(DB_PATH) as db:
         cursor = db.cursor()
@@ -55,7 +54,7 @@ def get_high_scores() -> typing.Tuple[typing.Tuple[str, int]]:
     Function to get the top 10 scores from the database
     in the correct order
 
-    :return: :class:`tuple`[:class:`tuple`[:class:`str`, :class:`int]] of name, score pairs
+    :return: :class:`tuple` of name, score pairs
     """
     with sqlite3.connect(DB_PATH) as db:
         cursor = db.cursor()

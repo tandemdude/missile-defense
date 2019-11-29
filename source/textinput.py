@@ -92,7 +92,7 @@ class TextInput:
         Performs the necessary action based off the key type
 
         :param event: A :class:`pygame.event.Event` instance to be processed
-        :return: None
+        :return: `None`
         """
         if self.listening:
             if event.type == pygame.KEYDOWN:
@@ -108,7 +108,7 @@ class TextInput:
         Generates the text input interface :class:`pygame.Surface` and
         blits it onto the game's screen
 
-        :return: None
+        :return: `None`
         """
         game_surface_center = self.game_surface.get_rect().center
 
@@ -137,6 +137,6 @@ class TextInput:
         Calls :func:`source.textinput.TextInput.draw` to generate and blit
         the surface onto the screen
 
-        :return: None
+        :return: `None`
         """
         self.draw()

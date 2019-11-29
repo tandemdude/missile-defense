@@ -14,8 +14,6 @@ class Game:
     """
     Class to initialise pygame and contain the main game loop.
     Initialises the game surface and the :class:`pygame.time.Clock`.
-
-    :param start_screen: Instance of the :class:`source.start_screen.StartScreen` class to display when game begins
     """
 
     def __init__(self) -> None:
@@ -65,11 +63,16 @@ class Game:
         Quit out of pygame. Method can be static as it does not require access
         to any attributes defined in self.
 
-        :return: None
+        :return: `None`
         """
         pygame.quit()
 
-    def advance_state(self):
+    def advance_state(self) -> None:
+        """
+        Move the game into the next state.
+
+        :return: `None`
+        """
         self.state = self.states.pop(0)
 
     def run(self) -> None:
@@ -78,11 +81,8 @@ class Game:
         game loop. Handles passing of events to the controller as well
         as flipping the display each frame.
 
-        :return: None
+        :return: `None`
         """
-        # Initialise an instance of the Controller class, which manages communication
-        # between all other instances used during the running of the game
-
         # Create the main game loop, broken out of when the user quits
         while self.running:
             controller = self.controllers[self.state]
@@ -119,7 +119,7 @@ def main() -> None:
     Creates a while loop to instantiate a new :class:`source.game.Game` object each time the user
     restarts, or quits out of the program when prompted.
 
-    :return: None
+    :return: `None`
     """
     while True:
         # Create a new instance of Game each loop to slightly increase memory

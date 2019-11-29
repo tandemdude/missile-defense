@@ -94,7 +94,7 @@ class Tower(pygame.sprite.Sprite):
         """
         Mark the tower as placed
 
-        :return: None
+        :return: `None`
         """
         self.placed = True
 
@@ -133,7 +133,7 @@ class Tower(pygame.sprite.Sprite):
         Increments :attr:`source.tower.Tower.frames_since_last_fired` by one,
         wrapping back to 0 once the tower fires
 
-        :return: None
+        :return: `None`
         """
         self.frames_since_last_fired += 1
         if self.frames_since_last_fired > self.fire_rate:
@@ -144,7 +144,7 @@ class Tower(pygame.sprite.Sprite):
         Rotates the tower to point towards the nearest enemy in its range
 
         :param enemy: :class:`source.enemy.Enemy` to point towards
-        :return: None
+        :return: `None`
         """
         self.image = pygame.transform.rotate(
             self.original_image,
@@ -156,7 +156,7 @@ class Tower(pygame.sprite.Sprite):
         Fires a projectile towards the nearest enemy if
         the frames counter specifies
 
-        :return: None
+        :return: `None`
         """
         if self.frames_since_last_fired == 0:
             nearest_enemy = self.find_nearest_enemy_in_range()
@@ -184,7 +184,7 @@ class Tower(pygame.sprite.Sprite):
         Blits the tower's image onto the game surface
         and updates all missiles currently travelling fired by the tower
 
-        :return: None
+        :return: `None`
         """
         if self.placed:
             self.fire_towards_nearest_in_range_enemy()

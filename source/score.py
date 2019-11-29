@@ -33,18 +33,18 @@ class Score:
         """
         Resets the score counter to 0.
 
-        :return: None
+        :return: `None`
         """
         self.value = 0
 
-    def increment(self, amt: int) -> None:
+    def increment(self, amount: int) -> None:
         """
         Increments the score counter by a given amount.
 
-        :param amt: :class:`int` to increase the score by
-        :return: None
+        :param amount: :class:`int` to increase the score by
+        :return: `None`
         """
-        self.value += amt
+        self.value += amount
 
     def score_to_text(self) -> str:
         """
@@ -60,7 +60,7 @@ class Score:
         """
         Renders the score onto the game surface.
 
-        :return: None
+        :return: `None`
         """
         text_surface = self.font.render(
             self.score_to_text(), True, pygame.Color("#ffffff")

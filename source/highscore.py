@@ -69,7 +69,7 @@ class HighscoreTable:
 
         :param name: :class:`str` name to store
         :param score: :class:`int` score to store
-        :return: None
+        :return: `None`
         """
         # Add a score to the local database and also POST it to the
         # api if the computer is connected to the internet
@@ -164,7 +164,7 @@ class HighscoreTable:
         Regenerates the highscore surface when called, updating
         any values that are no longer accurate
 
-        :return: None
+        :return: `None`
         """
         # Check if the computer is connected to the internet
         self.connected_to_internet = global_api_utils.is_connected()
@@ -176,6 +176,6 @@ class HighscoreTable:
         """
         Draws the highscore table onto the game surface
 
-        :return: None
+        :return: `None`
         """
         self.game_surface.blit(self.surface_to_draw, (0, 0))
