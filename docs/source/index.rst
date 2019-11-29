@@ -19,9 +19,17 @@ Game
 ----
 
 
-Controller
-==========
-.. automodule:: source.controller
+Game Controller
+===============
+.. automodule:: source.game_controller
+   :members:
+
+----
+
+
+Menu Controller
+===============
+.. automodule:: source.menu_controller
    :members:
 
 ----
@@ -99,14 +107,6 @@ GameOver
 ----
 
 
-StartScreen
-===========
-.. automodule:: source.start_screen
-   :members:
-
-----
-
-
 Highscore
 =========
 .. automodule:: source.highscore
@@ -119,6 +119,14 @@ TextInput
 =========
 .. automodule:: source.textinput
     :members:
+
+----
+
+
+Settings
+===========
+.. automodule:: source.settings
+   :members:
 
 ----
 
