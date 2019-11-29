@@ -3,7 +3,6 @@ import typing
 import webbrowser
 import copy
 
-from .start_screen import StartScreen
 from . import utils
 
 COLOURS = {
@@ -22,11 +21,11 @@ class Button:
         position_x,
         position_y,
         pressed_funcs,
-        size="auto",
+        size=None,
     ):
         self.game_surface = game_surface
 
-        if size == "auto":
+        if size is None:
             self.size_x = len(text) * font_size
             self.size_y = font_size + 2
         else:
@@ -133,6 +132,14 @@ class MenuController:
             ),
             Button(
                 self.game_surface,
+                "CODE",
+                24,
+                self.screen_width - 55,
+                self.screen_height - 50,
+                [self.open_source_code_in_browser],
+            ),
+            Button(
+                self.game_surface,
                 "QUIT",
                 24,
                 55,
@@ -223,6 +230,9 @@ class MenuController:
     def open_docs_in_browser(self):
         webbrowser.open("https://tandemdude.gitlab.io/a-level-project")
 
+    def open_source_code_in_browser(self):
+        webbrowser.open("https://gitlab.com/tandemdude/a-level-project")
+
     def settings_state(self):
         self.state = "SETTINGS"
 
@@ -251,7 +261,7 @@ class MenuController:
 
     def render_menu_background(self):
         welcome_text = self.title_font.render(
-            "Missile Defense", True, pygame.Color("#FFFFFF")
+            "Missile Defence", True, pygame.Color("#FFFFFF")
         )
         self.menu_background.blit(
             welcome_text,

@@ -253,9 +253,9 @@ class GameController:
         """
         if self.internal_game_over and not self.text_input.listening:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_y:
+                if event.key == pygame.K_RETURN:
                     self.advance_state_func()
-                elif event.key == pygame.K_n:
+                elif event.key == pygame.K_ESCAPE:
                     self.advance_state_func()
                     self.advance_state_func()
 
