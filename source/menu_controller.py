@@ -14,14 +14,16 @@ COLOURS = {
 
 class Button:
     """
+    Reusable class designed to act as a button which is clickable by the player.
+    Takes a list of functions to be run when the button is clicked.
 
-    :param game_surface:
-    :param text:
-    :param font_size:
-    :param position_x:
-    :param position_y:
-    :param pressed_funcs:
-    :param size:
+    :param game_surface: :class:`pygame.Surface` to draw button onto
+    :param text: :class:`str` text to label the button with
+    :param font_size: :class:`int` font size in pixels
+    :param position_x: :class:`int` :math:`x` position of the button's centre
+    :param position_y: :class:`int` :math:`y` position of the button's centre
+    :param pressed_funcs: :class:`list`[Callable] functions to call in order on button press
+    :param size: Optional[:class:`tuple`] of :class:`int` width and height of the button. If unspecified, size is calculated automatically
     """
     def __init__(
         self,
@@ -56,17 +58,20 @@ class Button:
 
     def on_press(self) -> None:
         """
+        Loops through each function to be executed on button press and calls them
 
-        :return:
+        :return: `None`
         """
         for func in self.pressed_funcs:
             func()
 
     def check_if_pressed(self, mouse_position: typing.Tuple[typing.Union[int, float]]) -> None:
         """
+        Checks if the mouse cursor is colliding with the button and calls :func:`source.menu_controller.Button.on_press` if
+        a collision is found
 
-        :param mouse_position:
-        :return:
+        :param mouse_position: Tuple[Union[:class:`int`, :class:`float`]] current mouse cursor position
+        :return: `None`
         """
         button_rect = self.image.get_rect()
         button_rect.topleft = (self.x, self.y)
@@ -75,23 +80,26 @@ class Button:
 
     def update(self) -> None:
         """
+        Draws the button onto the game :class:`pygame.Surface`
 
-        :return:
+        :return: `None`
         """
         self.game_surface.blit(self.image, (self.x, self.y))
 
 
 class MenuController:
     """
+    Class to control the menu state of the game, containing functionality
+    including buttons for taking user choices and inputs for changing settings.
 
-    :param game_surface:
-    :param screen_width:
-    :param screen_height:
-    :param settings:
-    :param advance_state_func:
+    :param game_surface: :class:`pygame.Surface` representing the game's window
+    :param screen_width: :class:`int` width of the screen in pixels
+    :param screen_height: :class:`int` height of the screen in pixels
+    :param settings: Instance of :class:`source.settings.Settings`
+    :param advance_state_func: Function which advances the game's state when called
     """
     def __init__(
-        self, game_surface, screen_width, screen_height, settings, advance_state_func
+        self, game_surface: pygame.Surface, screen_width: int, screen_height: int, settings, advance_state_func: typing.Callable
     ) -> None:
         self.game_surface = game_surface
         self.screen_width = screen_width
@@ -261,26 +269,30 @@ class MenuController:
     @staticmethod
     def open_docs_in_browser() -> None:
         """
+        Opens the project docs page in a browser
 
-        :return:
+        :return: `None`
         """
         webbrowser.open("https://tandemdude.gitlab.io/a-level-project")
 
     @staticmethod
     def open_source_code_in_browser() -> None:
         """
+        Opens the git repo page in a browser
 
         :return:
         """
         webbrowser.open("https://gitlab.com/tandemdude/a-level-project")
 
     @staticmethod
-    def centre_rect(surface, position) -> None:
+    def centre_rect(surface: pygame.Surface, position: typing.Tuple[int]) -> pygame.Rect:
         """
+        Centres the :class:`pygame.Rect` of a :class:`pygame.Surface` at a
+        specified x,y coordinate.
 
-        :param surface:
-        :param position:
-        :return:
+        :param surface: :class:`pygame.Surface` to centre the rect of
+        :param position: Tuple[:class:`int`] :math:`x, y` coordinate to centre at
+        :return: :class:`pygame.Rect` centred in the correct position
         """
         surface_rect = surface.get_rect()
         surface_rect.center = position
@@ -288,57 +300,70 @@ class MenuController:
 
     def settings_state(self) -> None:
         """
+        Change the controller into the settings screen state
 
-        :return:
+        :return: `None`
         """
         self.state = "SETTINGS"
 
     def menu_state(self) -> None:
         """
-
-        :return:
+        Change the controller into the menu screen state
+    
+        :return: `None`
         """
         self.state = "MENU"
 
     def listen_up(self) -> None:
         """
+        Mark the controller as listening for an input to bind to
+        the reticle up key
 
-        :return:
+        :return: `None`
         """
         self.listening_up = True
 
     def listen_down(self) -> None:
         """
+        Mark the controller as listening for an input to bind to
+        the reticle down key
 
-        :return:
+        :return: `None`
         """
         self.listening_down = True
 
     def listen_left(self) -> None:
         """
+        Mark the controller as listening for an input to bind to
+        the reticle left key
 
-        :return:
+        :return: `None`
         """
         self.listening_left = True
 
     def listen_right(self) -> None:
         """
+        Mark the controller as listening for an input to bind to
+        the reticle right key
 
-        :return:
+        :return: `None`
         """
         self.listening_right = True
 
     def listen_fire(self) -> None:
         """
+        Mark the controller as listening for an input to bind to
+        the missile fire key
 
-        :return:
+        :return: `None`
         """
         self.listening_fire = True
 
     def render_menu_background(self) -> None:
         """
+        Render the menu screen with any text and images required
 
-        :return:
+        :return: `None`
         """
         welcome_text = self.title_font.render(
             "Missile Defence", True, pygame.Color("#FFFFFF")
@@ -352,8 +377,9 @@ class MenuController:
 
     def render_settings_background(self) -> None:
         """
+        Render the settings screen with any text and images required
 
-        :return:
+        :return: `None`
         """
         settings_title = self.title_font.render(
             "Settings", True, pygame.Color("#FFFFFF")
@@ -395,9 +421,11 @@ class MenuController:
 
     def render_current_difficulty(self, target: pygame.Surface) -> None:
         """
+        Render the current difficulty into a :class:`pygame.Surface` and blit it
+        onto the target :class:`pygame.Surface`
 
-        :param target:
-        :return:
+        :param target: :class:`pygame.Surface` to draw difficulty onto
+        :return: `None`
         """
         current_difficulty = self.text_font.render(
             self.settings.difficulty, True, COLOURS[self.settings.difficulty]
@@ -408,6 +436,8 @@ class MenuController:
 
     def render_current_controls(self, target: pygame.Surface) -> None:
         """
+        Render the current control scheme into multiple :class:`pygame.Surface` and blit them
+        onto the target :class:`pygame.Surface` accounting for a vertical offset between them
 
         :param target:
         :return:
@@ -448,9 +478,11 @@ class MenuController:
 
     def check_if_any_button_pressed(self, mouse_position: typing.Tuple[typing.Union[int, float]]) -> None:
         """
+        Loop through the list of :class:`source.menu_controller.Button` instances for the current
+        game state and call :func:`source.menu_controller.Button.check_if_pressed` on each
 
-        :param mouse_position:
-        :return:
+        :param mouse_position: Tuple[Union[:class:`int`, :class:`float`]] position of the mouse cursor
+        :return: `None`
         """
         if self.state == "MENU":
             for button in self.menu_buttons:
@@ -461,9 +493,10 @@ class MenuController:
 
     def submit_key(self, key: int) -> None:
         """
+        Submit a new key for a direction's keybinding
 
-        :param key:
-        :return:
+        :param key: :class:`int` pygame key constant
+        :return: `None`
         """
         if self.listening_up:
             self.settings.change_keybind("up", key)
@@ -483,9 +516,12 @@ class MenuController:
 
     def process_event(self, event: pygame.event.Event) -> None:
         """
+        Check for a KEYDOWN event if the controller is listening for a new key
+        input else check for a MOUSEBUTTONDOWN event and check if the player
+        has clicked on a button.
 
-        :param event:
-        :return:
+        :param event: :class:`pygame.event.Event` to process
+        :return: `None`
         """
         if any(
             [
@@ -506,8 +542,10 @@ class MenuController:
 
     def get_what_needs_to_be_updated(self) -> typing.List[Button]:
         """
+        Return the list of :class:`source.menu_controller.Button` which need
+        to be updated in any given frame depending on the controller's state.
 
-        :return:
+        :return: List[:class:`source.menu_controller.Button`]
         """
         if self.state == "MENU":
             return self.menu_buttons
@@ -516,8 +554,11 @@ class MenuController:
 
     def update_all(self) -> None:
         """
+        Blit the menu or settings screen onto the game's :class:`pygame.Surface`, update
+        all instances required in a given frame and blit a separate background if the controller
+        is listening for a key input.
 
-        :return:
+        :return: `None`
         """
         if self.state == "MENU":
             self.game_surface.blit(self.menu_background, (0, 0))
