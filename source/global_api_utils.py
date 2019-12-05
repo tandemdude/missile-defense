@@ -1,6 +1,7 @@
+from concurrent import futures
 import requests
 import typing
-import socket
+import time
 
 
 BASE_URL = "http://missiledefense.ddns.net"
@@ -25,44 +26,44 @@ def parse_high_scores(payload) -> typing.List[typing.Tuple[str, int]]:
     return parsed_scores
 
 
-def post_new_score(name: str, score: int) -> None:
-    """
-    Sends a POST request to the api endpoint to register
-    a new score into the global high scores database
+class APIWorker:
+    def __init__(self):
+        self.executor = futures.ThreadPoolExecutor(max_workers=2)
 
-    :param name: :class:`str` name to be stored
-    :param score: :class:`int` score to be stored
-    :return: `None`
-    """
-    json_to_send = {"name": name, "score": score}
-    resp = requests.post(f"{BASE_URL}{POST_ENDPOINT}", json=json_to_send)
-    resp.raise_for_status()
+    def _post_score(self, name: str, score: int) -> None:
+        """
+        Sends a POST request to the api endpoint to register
+        a new score into the global high scores database
 
+        :param name: :class:`str` name to be stored
+        :param score: :class:`int` score to be stored
+        :return: `None`
+        """
+        try:
+            json_to_send = {"name": name, "score": score}
+            resp = requests.post(f"{BASE_URL}{POST_ENDPOINT}", json=json_to_send)
+            resp.raise_for_status()
+        except:
+            pass
 
-def get_high_scores() -> typing.List[typing.Tuple[str, int]]:
-    """
-    Sends a GET request to the api endpoint to fetch the
-    top 10 highest scores from the global high score database
+    def _get_scores(self) -> typing.List[typing.Tuple[str, int]]:
+        """
+        Sends a GET request to the api endpoint to fetch the
+        top 10 highest scores from the global high score database
 
-    :return: :class:`list` of name, score pairs
-    """
-    resp = requests.get(f"{BASE_URL}{GET_ENDPOINT}")
-    resp.raise_for_status()
-    return parse_high_scores(resp.json())
+        :return: :class:`list` of name, score pairs
+        """
+        try:
+            resp = requests.get(f"{BASE_URL}{GET_ENDPOINT}", timeout=5)
+            resp.raise_for_status()
+            response = resp.json()
+        except:
+            response = "FAILED"
+        finally:
+            return response
 
+    def post_score(self, name, score):
+        return self.executor.submit(self._post_score, name, score)
 
-def is_connected() -> bool:
-    """
-    Attempts to open a websocket connection to google's servers in order
-    to find out whether or not the computer is connected to the internet
-
-    :return: :class:`bool` indicating whether or not the computer is connected to the internet
-    """
-    try:
-        host = socket.gethostbyname(REMOTE_SERVER)
-        s = socket.create_connection((host, 80), 2)
-        s.close()
-        return True
-    except:
-        pass
-    return False
+    def get_scores(self):
+        return self.executor.submit(self._get_scores)

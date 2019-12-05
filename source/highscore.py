@@ -1,3 +1,4 @@
+import concurrent
 import pygame
 import typing
 import requests
@@ -58,9 +59,19 @@ class HighscoreTable:
         self.rows = []
         self.num_rows = len(self.rows)
         self.visible = False
+        self.loading_surface = self.render_loading_surface()
         self.surface_to_draw = None
+        self.request_running = False
         self.global_fetch_succeeded = False
-        self.connected_to_internet = global_api_utils.is_connected()
+        self.api_worker = global_api_utils.APIWorker()
+        self.request_future = None
+
+    @staticmethod
+    def parse_scores(raw_rows):
+        parsed_rows = []
+        for row in raw_rows:
+            parsed_rows.append(HighscoreRow(row[0], row[1]))
+        return parsed_rows
 
     def add_new_score(self, name: str, score: int) -> None:
         """
@@ -71,15 +82,9 @@ class HighscoreTable:
         :param score: :class:`int` score to store
         :return: `None`
         """
-        # Add a score to the local database and also POST it to the
-        # api if the computer is connected to the internet
         db_utils.insert_score(name, score)
-        if self.connected_to_internet:
-            try:
-                global_api_utils.post_new_score(name, score)
-            except:
-                self.connected_to_internet = False
-        self.update_highscore_surface()
+        self.api_worker.post_score(name=name, score=score)
+        self.generate_rows()
 
     def generate_rows(self) -> typing.List[HighscoreRow]:
         """
@@ -89,23 +94,8 @@ class HighscoreTable:
 
         :return: :class:`list` of :class:`source.highscore.HighscoreRow` instances
         """
-        # Get highscore data from the api if the computer is
-        # connected to the internet
-        if self.connected_to_internet:
-            raw_rows = global_api_utils.get_high_scores()
-            self.global_fetch_succeeded = True
-
-        else:
-            # If global highscores could not be fetched then get the
-            # local ones instead
-            raw_rows = db_utils.get_high_scores()
-
-            # Loop through the raw response from the api or database and
-            # reformat each to the format that self.render() is expecting
-        parsed_rows = []
-        for row in raw_rows:
-            parsed_rows.append(HighscoreRow(row[0], row[1]))
-        return parsed_rows
+        self.request_running = True
+        self.request_future = self.api_worker.get_scores()
 
     def render(self) -> pygame.Surface:
         """
@@ -159,17 +149,27 @@ class HighscoreTable:
 
         return highscore_surface
 
-    def update_highscore_surface(self) -> None:
-        """
-        Regenerates the highscore surface when called, updating
-        any values that are no longer accurate
+    def render_loading_surface(self):
+        title_surface = self.font.render("Loading High Scores...", True, pygame.Color("#FFFFFF"))
+        title_surface_rect = title_surface.get_rect()
+        title_surface_rect.midtop = (self.screen_width // 2, PADDING_TOP)
 
-        :return: `None`
-        """
-        # Check if the computer is connected to the internet
-        self.connected_to_internet = global_api_utils.is_connected()
-        # Generate rows and render the highscore surface
-        self.rows = self.generate_rows()
+        loading_surface = pygame.Surface(
+            (self.screen_width, self.screen_height), pygame.SRCALPHA
+        )
+        loading_surface.blit(title_surface, title_surface_rect)
+        return loading_surface
+
+    def regenerate_highscores_from_api(self, payload):
+        self.request_running = False
+        raw_rows = global_api_utils.parse_high_scores(payload)
+        self.rows = self.parse_scores(raw_rows)
+        self.surface_to_draw = self.render()
+
+    def regenerate_highscores_from_db(self):
+        self.request_running = False
+        raw_rows = db_utils.get_high_scores()
+        self.rows = self.parse_scores(raw_rows)
         self.surface_to_draw = self.render()
 
     def update(self) -> None:
@@ -178,4 +178,19 @@ class HighscoreTable:
 
         :return: `None`
         """
+        if self.request_running:
+            try:
+                response = self.request_future.result(timeout=0.05)
+                completed = True
+            except concurrent.futures.TimeoutError:
+                completed = False
+            if completed:
+                if response == "FAILED":
+                    self.regenerate_highscores_from_db()
+                else:
+                    self.global_fetch_succeeded = True                    
+                    self.regenerate_highscores_from_api(response)
+            else:
+                self.surface_to_draw = self.loading_surface
+
         self.game_surface.blit(self.surface_to_draw, (0, 0))
