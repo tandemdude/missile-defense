@@ -2,9 +2,12 @@ import pygame
 import typing
 import webbrowser
 import copy
+import random
 
+from .missile import Missile
 from . import utils
 
+MISSILE_LIMIT = 10
 COLOURS = {
     "EASY": pygame.Color("#77DD77"),
     "NORMAL": pygame.Color("#FFB347"),
@@ -107,6 +110,8 @@ class MenuController:
         self.settings = settings
         self.advance_state_func = advance_state_func
 
+        self.decorative_missiles = []
+
         self.listening_up = False
         self.listening_down = False
         self.listening_left = False
@@ -121,6 +126,10 @@ class MenuController:
         )
 
         self.settings_background = pygame.Surface(
+            (self.screen_width, self.screen_height), pygame.SRCALPHA
+        )
+
+        self.instructions_background = pygame.Surface(
             (self.screen_width, self.screen_height), pygame.SRCALPHA
         )
 
@@ -141,6 +150,7 @@ class MenuController:
 
         self.render_menu_background()
         self.render_settings_background()
+        self.render_instructions_background()
 
         self.state = "MENU"
 
@@ -150,16 +160,27 @@ class MenuController:
                 "START GAME",
                 24,
                 self.screen_width // 2,
-                self.screen_height // 2,
+                self.screen_height // 2 - 50,
                 [self.advance_state_func],
+                (200, 26),
             ),
             Button(
                 self.game_surface,
                 "SETTINGS",
                 24,
                 self.screen_width // 2,
-                self.screen_height // 2 + 50,
+                self.screen_height // 2,
                 [self.settings_state],
+                (200, 26),
+            ),
+            Button(
+                self.game_surface,
+                "INSTRUCTIONS",
+                24,
+                self.screen_width // 2,
+                self.screen_height // 2 + 50,
+                [self.instructions_state],
+                (200, 26),
             ),
             Button(
                 self.game_surface,
@@ -266,6 +287,17 @@ class MenuController:
             ),
         ]
 
+        self.instructions_buttons = [
+            Button(
+                self.game_surface,
+                "BACK",
+                24,
+                55,
+                self.screen_height - 20,
+                [self.menu_state],
+            ),
+        ]
+
     @staticmethod
     def open_docs_in_browser() -> None:
         """
@@ -305,6 +337,14 @@ class MenuController:
         :return: `None`
         """
         self.state = "SETTINGS"
+
+    def instructions_state(self) -> None:
+        """
+        Change the controller into the instructions screen state
+    
+        :return: `None`
+        """
+        self.state = "INSTRUCTIONS"
 
     def menu_state(self) -> None:
         """
@@ -372,6 +412,31 @@ class MenuController:
             welcome_text,
             self.centre_rect(
                 welcome_text, (self.screen_width // 2, self.screen_height // 2 - 250)
+            ),
+        )
+
+    def render_instructions_background(self) -> None:
+        """
+        Render the menu screen with any text and images required
+
+        :return: `None`
+        """
+        instructions_title = self.title_font.render(
+            "Instructions", True, pygame.Color("#FFFFFF")
+        )
+        self.instructions_background.blit(
+            instructions_title,
+            self.centre_rect(
+                instructions_title, (self.screen_width // 2, self.screen_height // 2 - 250)
+            ),
+        )
+        instructions_text = self.text_font.render(
+            "To Be Written...", True, pygame.Color("#FFFFFF")
+        )
+        self.instructions_background.blit(
+            instructions_text,
+            self.centre_rect(
+                instructions_text, (self.screen_width // 2, self.screen_height // 2)
             ),
         )
 
@@ -476,6 +541,21 @@ class MenuController:
             )
             vertical_offset += 50
 
+    def fire_decorative_missile(self):
+        if len(self.decorative_missiles) < MISSILE_LIMIT:
+            self.decorative_missiles.append(
+                Missile(
+                    self.game_surface,
+                    self.screen_width,
+                    self.screen_height,
+                    random.randint(0, self.screen_width),
+                    self.screen_height,
+                    random.randint(0, self.screen_width),
+                    random.randint(0, 3*(self.screen_height // 4)),
+                    5,
+                )
+            )
+
     def check_if_any_button_pressed(self, mouse_position: typing.Tuple[typing.Union[int, float]]) -> None:
         """
         Loop through the list of :class:`source.menu_controller.Button` instances for the current
@@ -489,6 +569,9 @@ class MenuController:
                 button.check_if_pressed(mouse_position)
         elif self.state == "SETTINGS":
             for button in self.settings_buttons:
+                button.check_if_pressed(mouse_position)
+        elif self.state == "INSTRUCTIONS":
+            for button in self.instructions_buttons:
                 button.check_if_pressed(mouse_position)
 
     def submit_key(self, key: int) -> None:
@@ -547,10 +630,19 @@ class MenuController:
 
         :return: List[:class:`source.menu_controller.Button`]
         """
+        to_be_updated = []
+
+        if self.decorative_missiles:
+            to_be_updated += self.decorative_missiles
+
         if self.state == "MENU":
-            return self.menu_buttons
+            to_be_updated += self.menu_buttons
         elif self.state == "SETTINGS":
-            return self.settings_buttons
+            to_be_updated += self.settings_buttons
+        elif self.state == "INSTRUCTIONS":
+            to_be_updated += self.instructions_buttons
+
+        return to_be_updated
 
     def update_all(self) -> None:
         """
@@ -560,6 +652,10 @@ class MenuController:
 
         :return: `None`
         """
+        to_be_updated = self.get_what_needs_to_be_updated()
+        for instance in to_be_updated:
+            instance.update()
+
         if self.state == "MENU":
             self.game_surface.blit(self.menu_background, (0, 0))
         elif self.state == "SETTINGS":
@@ -567,10 +663,13 @@ class MenuController:
             self.render_current_difficulty(background_to_blit)
             self.render_current_controls(background_to_blit)
             self.game_surface.blit(background_to_blit, (0, 0))
+        elif self.state == "INSTRUCTIONS":
+            self.game_surface.blit(self.instructions_background, (0, 0))
 
-        to_be_updated = self.get_what_needs_to_be_updated()
-        for instance in to_be_updated:
-            instance.update()
+        self.fire_decorative_missile()
+        for missile in self.decorative_missiles:
+            if not missile.visible:
+                self.decorative_missiles.remove(missile)
 
         if any(
             [
