@@ -31,10 +31,10 @@ as well, they will display instead of the global scores if your device is not co
 
 ---
 # Running The Game
-To run the game, navigate to the root folder of the project through command line and run the command:
+To run the game, navigate to the project's folder.
+There should be a file named `start.py`. Run this file either by double clicking it,
+or by running it via command line with the command `python3 start.py`.
 
-`python3 -m source`
-
-If using windows, replace `python3` with `py` or just `python`
+If using windows replace `python3` with `py` or just `python`
 
 A game window should then appear
