@@ -15,9 +15,9 @@ as well, they will display instead of the global scores if your device is not co
 1. Ensure that you have Python 3.6.x or higher installed, 3.7.5 can be downloaded from [here](https://www.python.org/downloads/release/python-375/)
 2. Download the project's zip file from gitlab or alternatively run:
     
-    `git clone https://gitlab.com/tandemdude/a-level-project.git`
+    `git clone https://github.com/tandemdude/missile-defense.git`
 
-    To pull the latest files from gitlab directly
+    To pull the latest files from github directly
 
 3. Open a command prompt window and navigate to the project's folder using `cd <target-directory-path/name>`
     
